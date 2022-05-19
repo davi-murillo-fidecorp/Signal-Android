@@ -31,6 +31,7 @@ import org.whispersystems.signalservice.api.crypto.UnidentifiedAccessPair;
 import org.whispersystems.signalservice.api.crypto.UntrustedIdentityException;
 import org.whispersystems.signalservice.api.messages.SendMessageResult;
 import org.whispersystems.signalservice.api.messages.SignalServiceDataMessage;
+import org.whispersystems.signalservice.api.messages.multidevice.SignalServiceSyncMessage;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
 import org.whispersystems.signalservice.api.push.exceptions.ProofRequiredException;
 import org.whispersystems.signalservice.api.push.exceptions.ServerRejectedException;
@@ -136,7 +137,7 @@ public class PushTextSendJob extends PushSendJob {
       database.markAsPush(record.getId());
       RetrieveProfileJob.enqueue(recipientId);
     } catch (ProofRequiredException e) {
-      handleProofRequiredException(context, e, record.getRecipient(), record.getThreadId(), messageId, false);
+      handleProofRequiredException(e, record.getRecipient(), record.getThreadId(), messageId, false);
     }
 
     SignalLocalMetrics.IndividualMessageSend.onJobFinished(messageId);
@@ -187,7 +188,7 @@ public class PushTextSendJob extends PushSendJob {
                                                                            .asEndSessionMessage(message.isEndSession())
                                                                            .build();
 
-      if (Util.equals(SignalStore.account().getAci(), address.getServiceId())) {
+      if (Util.equals(SignalStore.account().getAci(), address.getAci())) {
         Optional<UnidentifiedAccessPair> syncAccess  = UnidentifiedAccessUtil.getAccessForSync(context);
 
         SignalLocalMetrics.IndividualMessageSend.onDeliveryStarted(messageId);

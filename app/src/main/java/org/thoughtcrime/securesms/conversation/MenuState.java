@@ -22,6 +22,7 @@ final class MenuState {
   private final boolean resend;
   private final boolean copy;
   private final boolean delete;
+  private final boolean info;
   private final boolean reactions;
 
   private MenuState(@NonNull Builder builder) {
@@ -32,6 +33,7 @@ final class MenuState {
     resend         = builder.resend;
     copy           = builder.copy;
     delete         = builder.delete;
+    info           = builder.info;
     reactions      = builder.reactions;
   }
 
@@ -61,6 +63,10 @@ final class MenuState {
 
   boolean shouldShowDeleteAction() {
     return delete;
+  }
+
+  boolean shouldShowInfoAction() {
+    return info;
   }
 
   boolean shouldShowReactions() {
@@ -148,12 +154,13 @@ final class MenuState {
                                              ((MediaMmsMessageRecord)messageRecord).containsMediaSlide() &&
                                              ((MediaMmsMessageRecord)messageRecord).getSlideDeck().getStickerSlide() == null)
              .shouldShowForwardAction(shouldShowForwardAction)
-             .shouldShowDetailsAction(!actionMessage && !conversationRecipient.isReleaseNotes())
+             .shouldShowDetailsAction(!actionMessage)
              .shouldShowReplyAction(canReplyToMessage(conversationRecipient, actionMessage, messageRecord, shouldShowMessageRequest, isNonAdminInAnnouncementGroup));
     }
 
     return builder.shouldShowCopyAction(!actionMessage && !remoteDelete && hasText)
                   .shouldShowDeleteAction(!hasInMemory && onlyContainsCompleteMessages(selectedParts))
+                  .shouldShowInfoAction(!conversationRecipient.isReleaseNotes())
                   .shouldShowReactions(!conversationRecipient.isReleaseNotes())
                   .build();
   }
@@ -209,6 +216,7 @@ final class MenuState {
     private boolean resend;
     private boolean copy;
     private boolean delete;
+    private boolean info;
     private boolean reactions;
 
     @NonNull Builder shouldShowForwardAction(boolean forward) {
@@ -243,6 +251,11 @@ final class MenuState {
 
     @NonNull Builder shouldShowDeleteAction(boolean delete) {
       this.delete = delete;
+      return this;
+    }
+
+    @NonNull Builder shouldShowInfoAction(boolean info) {
+      this.info = info;
       return this;
     }
 

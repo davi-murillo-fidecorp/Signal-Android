@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import org.signal.core.util.logging.Log;
@@ -62,7 +61,7 @@ public class NewConversationActivity extends ContactSelectionActivity
   }
 
   @Override
-  public void onBeforeContactSelected(@NonNull Optional<RecipientId> recipientId, String number, @NonNull Consumer<Boolean> callback) {
+  public void onBeforeContactSelected(Optional<RecipientId> recipientId, String number, Consumer<Boolean> callback) {
     if (recipientId.isPresent()) {
       launch(Recipient.resolved(recipientId.get()));
     } else {
@@ -76,7 +75,7 @@ public class NewConversationActivity extends ContactSelectionActivity
         SimpleTask.run(getLifecycle(), () -> {
           Recipient resolved = Recipient.external(this, number);
 
-          if (!resolved.isRegistered() || !resolved.hasServiceId()) {
+          if (!resolved.isRegistered() || !resolved.hasAci()) {
             Log.i(TAG, "[onContactSelected] Not registered or no UUID. Doing a directory refresh.");
             try {
               DirectoryHelper.refreshDirectoryFor(this, resolved, false);

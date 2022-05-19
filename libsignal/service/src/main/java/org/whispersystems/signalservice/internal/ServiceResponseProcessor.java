@@ -86,7 +86,7 @@ public abstract class ServiceResponseProcessor<T> {
   }
 
   protected boolean rateLimit() {
-    return response.getStatus() == 413 || response.getStatus() == 429;
+    return response.getStatus() == 413;
   }
 
   protected boolean expectationFailed() {

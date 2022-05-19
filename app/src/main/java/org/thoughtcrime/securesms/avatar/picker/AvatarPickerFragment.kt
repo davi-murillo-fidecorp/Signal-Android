@@ -244,8 +244,4 @@ class AvatarPickerFragment : Fragment(R.layout.avatar_picker_fragment) {
       }
       .execute()
   }
-
-  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-    Permissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
-  }
 }

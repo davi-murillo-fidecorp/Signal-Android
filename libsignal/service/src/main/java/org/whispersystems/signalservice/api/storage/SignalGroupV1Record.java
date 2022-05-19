@@ -6,7 +6,6 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import org.whispersystems.libsignal.logging.Log;
 import org.whispersystems.signalservice.api.util.ProtoUtil;
 import org.whispersystems.signalservice.internal.storage.protos.GroupV1Record;
-import org.whispersystems.signalservice.internal.storage.protos.GroupV2Record;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -137,16 +136,18 @@ public final class SignalGroupV1Record implements SignalRecord {
     private final StorageId             id;
     private final GroupV1Record.Builder builder;
 
-    public Builder(byte[] rawId, byte[] groupId, byte[] serializedUnknowns) {
-      this.id = StorageId.forGroupV1(rawId);
+    private byte[] unknownFields;
 
-      if (serializedUnknowns != null) {
-        this.builder = parseUnknowns(serializedUnknowns);
-      } else {
-        this.builder = GroupV1Record.newBuilder();
-      }
+    public Builder(byte[] rawId, byte[] groupId) {
+      this.id      = StorageId.forGroupV1(rawId);
+      this.builder = GroupV1Record.newBuilder();
 
       builder.setId(ByteString.copyFrom(groupId));
+    }
+
+    public Builder setUnknownFields(byte[] serializedUnknowns) {
+      this.unknownFields = serializedUnknowns;
+      return this;
     }
 
     public Builder setBlocked(boolean blocked) {
@@ -174,17 +175,18 @@ public final class SignalGroupV1Record implements SignalRecord {
       return this;
     }
 
-    private static GroupV1Record.Builder parseUnknowns(byte[] serializedUnknowns) {
-      try {
-        return GroupV1Record.parseFrom(serializedUnknowns).toBuilder();
-      } catch (InvalidProtocolBufferException e) {
-        Log.w(TAG, "Failed to combine unknown fields!", e);
-        return GroupV1Record.newBuilder();
-      }
-    }
-
     public SignalGroupV1Record build() {
-      return new SignalGroupV1Record(id, builder.build());
+      GroupV1Record proto = builder.build();
+
+      if (unknownFields != null) {
+        try {
+          proto = ProtoUtil.combineWithUnknownFields(proto, unknownFields);
+        } catch (InvalidProtocolBufferException e) {
+          Log.w(TAG, "Failed to combine unknown fields!", e);
+        }
+      }
+
+      return new SignalGroupV1Record(id, proto);
     }
   }
 }

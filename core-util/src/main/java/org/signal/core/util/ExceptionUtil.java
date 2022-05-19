@@ -2,7 +2,7 @@ package org.signal.core.util;
 
 import androidx.annotation.NonNull;
 
-import org.signal.core.util.logging.Scrubber;
+import org.thoughtcrime.securesms.logsubmit.util.Scrubber;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

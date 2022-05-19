@@ -1,6 +1,6 @@
 package org.whispersystems.signalservice.api;
 
-import org.whispersystems.signalservice.api.push.ServiceId;
+import org.whispersystems.signalservice.api.push.AccountIdentifier;
 
 /**
  * And extension of the normal protocol store interface that has additional methods that are needed
@@ -11,7 +11,7 @@ public interface SignalServiceDataStore {
   /**
    * @return A {@link SignalServiceAccountDataStore} for the specified account.
    */
-  SignalServiceAccountDataStore get(ServiceId accountIdentifier);
+  SignalServiceAccountDataStore get(AccountIdentifier accountIdentifier);
 
   /**
    * @return A {@link SignalServiceAccountDataStore} for the ACI account.

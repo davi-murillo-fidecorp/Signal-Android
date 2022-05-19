@@ -2,7 +2,6 @@ package org.whispersystems.signalservice.internal.serialize;
 
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.push.ACI;
-import org.whispersystems.signalservice.api.push.ServiceId;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
 import org.whispersystems.signalservice.internal.serialize.protos.AddressProto;
 
@@ -14,7 +13,7 @@ public final class SignalServiceAddressProtobufSerializer {
   public static AddressProto toProtobuf(SignalServiceAddress signalServiceAddress) {
     AddressProto.Builder builder = AddressProto.newBuilder();
 
-    builder.setUuid(signalServiceAddress.getServiceId().toByteString());
+    builder.setUuid(signalServiceAddress.getAci().toByteString());
 
     if(signalServiceAddress.getNumber().isPresent()){
       builder.setE164(signalServiceAddress.getNumber().get());
@@ -24,9 +23,9 @@ public final class SignalServiceAddressProtobufSerializer {
   }
 
   public static SignalServiceAddress fromProtobuf(AddressProto addressProto) {
-    ServiceId        serviceId = ServiceId.parseOrThrow(addressProto.getUuid().toByteArray());
-    Optional<String> number    = addressProto.hasE164()  ? Optional.of(addressProto.getE164()) : Optional.absent();
+    ACI              aci    = ACI.parseOrThrow(addressProto.getUuid().toByteArray());
+    Optional<String> number = addressProto.hasE164()  ? Optional.of(addressProto.getE164()) : Optional.absent();
 
-    return new SignalServiceAddress(serviceId, number);
+    return new SignalServiceAddress(aci, number);
   }
 }

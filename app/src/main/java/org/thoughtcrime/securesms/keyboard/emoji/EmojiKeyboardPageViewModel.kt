@@ -17,7 +17,7 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingModelList
 import org.thoughtcrime.securesms.util.livedata.LiveDataUtil
 
-class EmojiKeyboardPageViewModel(private val repository: EmojiKeyboardPageRepository) : ViewModel() {
+class EmojiKeyboardPageViewModel(repository: EmojiKeyboardPageRepository) : ViewModel() {
 
   private val internalSelectedKey = DefaultValueLiveData<String>(getStartingTab())
 
@@ -29,17 +29,19 @@ class EmojiKeyboardPageViewModel(private val repository: EmojiKeyboardPageReposi
   val categories: LiveData<MappingModelList>
 
   init {
+    repository.getEmoji(allEmojiModels::postValue)
+
     pages = LiveDataUtil.mapAsync(allEmojiModels) { models ->
       val list = MappingModelList()
       models.forEach { pageModel ->
-        if (RecentEmojiPageModel.KEY != pageModel.key) {
+        list += if (RecentEmojiPageModel.KEY == pageModel.key) {
+          EmojiHeader(pageModel.key, R.string.ReactWithAnyEmojiBottomSheetDialogFragment__recently_used)
+        } else {
           val category = EmojiCategory.forKey(pageModel.key)
-          list += EmojiHeader(pageModel.key, category.getCategoryLabel())
-          list += pageModel.toMappingModels()
-        } else if (pageModel.displayEmoji.isNotEmpty()) {
-          list += EmojiHeader(pageModel.key, R.string.ReactWithAnyEmojiBottomSheetDialogFragment__recently_used)
-          list += pageModel.toMappingModels()
+          EmojiHeader(pageModel.key, category.getCategoryLabel())
         }
+
+        list += pageModel.toMappingModels()
       }
 
       list
@@ -63,8 +65,8 @@ class EmojiKeyboardPageViewModel(private val repository: EmojiKeyboardPageReposi
     internalSelectedKey.value = key
   }
 
-  fun refreshRecentEmoji() {
-    repository.getEmoji(allEmojiModels::postValue)
+  fun addToRecents(emoji: String) {
+    RecentEmojiPageModel(ApplicationDependencies.getApplication(), TextSecurePreferences.RECENT_STORAGE_KEY).onCodePointSelected(emoji)
   }
 
   companion object {

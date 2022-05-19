@@ -48,7 +48,6 @@ import org.thoughtcrime.securesms.migrations.MigrationCompleteJob;
 import org.thoughtcrime.securesms.migrations.PassingMigrationJob;
 import org.thoughtcrime.securesms.migrations.PinOptOutMigration;
 import org.thoughtcrime.securesms.migrations.PinReminderMigrationJob;
-import org.thoughtcrime.securesms.migrations.PniAccountInitializationMigrationJob;
 import org.thoughtcrime.securesms.migrations.PniMigrationJob;
 import org.thoughtcrime.securesms.migrations.ProfileMigrationJob;
 import org.thoughtcrime.securesms.migrations.ProfileSharingUpdateMigrationJob;
@@ -82,7 +81,6 @@ public final class JobManagerFactories {
       put(AvatarGroupsV1DownloadJob.KEY,             new AvatarGroupsV1DownloadJob.Factory());
       put(AvatarGroupsV2DownloadJob.KEY,             new AvatarGroupsV2DownloadJob.Factory());
       put(BoostReceiptRequestResponseJob.KEY,        new BoostReceiptRequestResponseJob.Factory());
-      put(CheckServiceReachabilityJob.KEY,           new CheckServiceReachabilityJob.Factory());
       put(CleanPreKeysJob.KEY,                       new CleanPreKeysJob.Factory());
       put(ClearFallbackKbsEnclaveJob.KEY,            new ClearFallbackKbsEnclaveJob.Factory());
       put(ConversationShortcutUpdateJob.KEY,         new ConversationShortcutUpdateJob.Factory());
@@ -93,7 +91,6 @@ public final class JobManagerFactories {
       put(DownloadLatestEmojiDataJob.KEY,            new DownloadLatestEmojiDataJob.Factory());
       put(EmojiSearchIndexDownloadJob.KEY,           new EmojiSearchIndexDownloadJob.Factory());
       put(FcmRefreshJob.KEY,                         new FcmRefreshJob.Factory());
-      put(FontDownloaderJob.KEY,                     new FontDownloaderJob.Factory());
       put(GroupV1MigrationJob.KEY,                   new GroupV1MigrationJob.Factory());
       put(GroupCallUpdateSendJob.KEY,                new GroupCallUpdateSendJob.Factory());
       put(GroupCallPeekJob.KEY,                      new GroupCallPeekJob.Factory());
@@ -114,7 +111,6 @@ public final class JobManagerFactories {
       put(MultiDeviceKeysUpdateJob.KEY,              new MultiDeviceKeysUpdateJob.Factory());
       put(MultiDeviceMessageRequestResponseJob.KEY,  new MultiDeviceMessageRequestResponseJob.Factory());
       put(MultiDeviceOutgoingPaymentSyncJob.KEY,     new MultiDeviceOutgoingPaymentSyncJob.Factory());
-      put(MultiDevicePniIdentityUpdateJob.KEY,       new MultiDevicePniIdentityUpdateJob.Factory());
       put(MultiDeviceProfileContentUpdateJob.KEY,    new MultiDeviceProfileContentUpdateJob.Factory());
       put(MultiDeviceProfileKeyUpdateJob.KEY,        new MultiDeviceProfileKeyUpdateJob.Factory());
       put(MultiDeviceReadUpdateJob.KEY,              new MultiDeviceReadUpdateJob.Factory());
@@ -134,13 +130,12 @@ public final class JobManagerFactories {
       put(ProfileUploadJob.KEY,                      new ProfileUploadJob.Factory());
       put(PushDecryptMessageJob.KEY,                 new PushDecryptMessageJob.Factory());
       put(PushDecryptDrainedJob.KEY,                 new PushDecryptDrainedJob.Factory());
-      put(PushDistributionListSendJob.KEY,           new PushDistributionListSendJob.Factory());
+      put(PushProcessMessageJob.KEY,                 new PushProcessMessageJob.Factory());
       put(PushGroupSendJob.KEY,                      new PushGroupSendJob.Factory());
       put(PushGroupSilentUpdateSendJob.KEY,          new PushGroupSilentUpdateSendJob.Factory());
       put(PushGroupUpdateJob.KEY,                    new PushGroupUpdateJob.Factory());
       put(PushMediaSendJob.KEY,                      new PushMediaSendJob.Factory());
       put(PushNotificationReceiveJob.KEY,            new PushNotificationReceiveJob.Factory());
-      put(PushProcessMessageJob.KEY,                 new PushProcessMessageJob.Factory());
       put(PushTextSendJob.KEY,                       new PushTextSendJob.Factory());
       put(ReactionSendJob.KEY,                       new ReactionSendJob.Factory());
       put(RecipientChangedNumberJob.KEY,             new RecipientChangedNumberJob.Factory());
@@ -202,7 +197,6 @@ public final class JobManagerFactories {
       put(MigrationCompleteJob.KEY,                  new MigrationCompleteJob.Factory());
       put(PinOptOutMigration.KEY,                    new PinOptOutMigration.Factory());
       put(PinReminderMigrationJob.KEY,               new PinReminderMigrationJob.Factory());
-      put(PniAccountInitializationMigrationJob.KEY,  new PniAccountInitializationMigrationJob.Factory());
       put(PniMigrationJob.KEY,                       new PniMigrationJob.Factory());
       put(ProfileMigrationJob.KEY,                   new ProfileMigrationJob.Factory());
       put(ProfileSharingUpdateMigrationJob.KEY,      new ProfileSharingUpdateMigrationJob.Factory());

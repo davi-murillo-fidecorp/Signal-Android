@@ -80,10 +80,9 @@ public final class WebRtcUtil {
     }
 
     if (currentState.getLocalDeviceState().getActiveDevice() == SignalAudioManager.AudioDevice.EARPIECE ||
-        currentState.getLocalDeviceState().getActiveDevice() == SignalAudioManager.AudioDevice.NONE &&
-        currentState.getCallInfoState().getActivePeer() != null)
+        currentState.getLocalDeviceState().getActiveDevice() == SignalAudioManager.AudioDevice.NONE)
     {
-      webRtcInteractor.setDefaultAudioDevice(currentState.getCallInfoState().requireActivePeer().getId(), SignalAudioManager.AudioDevice.SPEAKER_PHONE, true);
+      webRtcInteractor.setDefaultAudioDevice(SignalAudioManager.AudioDevice.SPEAKER_PHONE, true);
     }
   }
 

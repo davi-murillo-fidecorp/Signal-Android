@@ -59,7 +59,6 @@ import androidx.core.view.ViewKt;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
@@ -93,7 +92,6 @@ import org.thoughtcrime.securesms.conversation.colors.RecyclerViewColorizer;
 import org.thoughtcrime.securesms.conversation.mutiselect.ConversationItemAnimator;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectItemDecoration;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectPart;
-import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardBottomSheet;
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragment;
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragmentArgs;
 import org.thoughtcrime.securesms.conversation.ui.error.EnableCallNotificationSettingsDialog;
@@ -123,8 +121,8 @@ import org.thoughtcrime.securesms.jobs.DirectoryRefreshJob;
 import org.thoughtcrime.securesms.jobs.MultiDeviceViewOnceOpenJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.linkpreview.LinkPreview;
-import org.thoughtcrime.securesms.longmessage.LongMessageFragment;
-import org.thoughtcrime.securesms.messagedetails.MessageDetailsFragment;
+import org.thoughtcrime.securesms.longmessage.LongMessageActivity;
+import org.thoughtcrime.securesms.messagedetails.MessageDetailsActivity;
 import org.thoughtcrime.securesms.messagerequests.MessageRequestState;
 import org.thoughtcrime.securesms.messagerequests.MessageRequestViewModel;
 import org.thoughtcrime.securesms.mms.GlideApp;
@@ -186,7 +184,7 @@ import java.util.concurrent.ExecutionException;
 import kotlin.Unit;
 
 @SuppressLint("StaticFieldLeak")
-public class ConversationFragment extends LoggingFragment implements MultiselectForwardBottomSheet.Callback {
+public class ConversationFragment extends LoggingFragment implements MultiselectForwardFragment.Callback {
   private static final String TAG = Log.tag(ConversationFragment.class);
 
   private static final int SCROLL_ANIMATION_THRESHOLD = 50;
@@ -224,6 +222,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   private Animation                   scrollButtonOutAnimation;
   private Animation                   mentionButtonOutAnimation;
   private OnScrollListener            conversationScrollListener;
+  private int                         pulsePosition = -1;
   private int                         lastSeenScrollOffset;
   private View                        toolbarShadow;
   private Stopwatch                   startupStopwatch;
@@ -400,7 +399,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
     GiphyMp4PlaybackController.attach(list, callback, maxPlayback);
     list.addItemDecoration(new GiphyMp4ItemDecoration(callback, translationY -> {
-      reactionsShade.setTranslationY(translationY + list.getHeight());
+      reactionsShade.setTranslationY(translationY);
       return Unit.INSTANCE;
     }), 0);
 
@@ -900,7 +899,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     }
 
     inlineDateDecoration = new StickyHeaderDecoration(adapter, false, false, ConversationAdapter.HEADER_TYPE_INLINE_DATE);
-    list.addItemDecoration(inlineDateDecoration, 0);
+    list.addItemDecoration(inlineDateDecoration);
   }
 
   public void setLastSeen(long lastSeen) {
@@ -909,7 +908,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     }
 
     lastSeenDecoration = new LastSeenHeader(getListAdapter(), lastSeen);
-    list.addItemDecoration(lastSeenDecoration, 0);
+    list.addItemDecoration(lastSeenDecoration);
   }
 
   private void handleCopyMessage(final Set<MultiselectPart> multiselectParts) {
@@ -1005,7 +1004,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   }
 
   private void handleDisplayDetails(ConversationMessage message) {
-    MessageDetailsFragment.create(message.getMessageRecord(), recipient.getId()).show(getChildFragmentManager(), null);
+    startActivity(MessageDetailsActivity.getIntentForMessageDetails(requireContext(), message.getMessageRecord(), recipient.getId(), threadId));
   }
 
   private void handleForwardMessageParts(Set<MultiselectPart> multiselectParts) {
@@ -1013,7 +1012,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
     MultiselectForwardFragmentArgs.create(requireContext(),
                                           multiselectParts,
-                                          args -> MultiselectForwardFragment.showBottomSheet(getChildFragmentManager(), args));
+                                          args -> MultiselectForwardFragment.show(getChildFragmentManager(), args));
   }
 
   private void handleResendMessage(final MessageRecord message) {
@@ -1055,7 +1054,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   private void performSave(final MediaMmsMessageRecord message) {
     List<SaveAttachmentTask.Attachment> attachments = Stream.of(message.getSlideDeck().getSlides())
                                                             .filter(s -> s.getUri() != null && (s.hasImage() || s.hasVideo() || s.hasAudio() || s.hasDocument()))
-                                                            .map(s -> new SaveAttachmentTask.Attachment(s.getUri(), s.getContentType(), message.getDateSent(), s.getFileName().orNull()))
+                                                            .map(s -> new SaveAttachmentTask.Attachment(s.getUri(), s.getContentType(), message.getDateReceived(), s.getFileName().orNull()))
                                                             .toList();
 
     if (!Util.isEmpty(attachments)) {
@@ -1189,13 +1188,17 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                                if (Math.abs(layoutManager.findFirstVisibleItemPosition() - p) < SCROLL_ANIMATION_THRESHOLD) {
                                  View child = layoutManager.findViewByPosition(position);
 
-                                 if (child == null || !layoutManager.isViewPartiallyVisible(child, true, false)) {
-                                   layoutManager.scrollToPositionWithOffset(p, list.getHeight() / 4);
+                                 if (child != null && layoutManager.isViewPartiallyVisible(child, true, false)) {
+                                   getListAdapter().pulseAtPosition(position);
+                                 } else {
+                                   pulsePosition = position;
                                  }
+
+                                 layoutManager.scrollToPositionWithOffset(p, list.getHeight() / 4);
                                } else {
                                  layoutManager.scrollToPositionWithOffset(p, list.getHeight() / 4);
+                                 getListAdapter().pulseAtPosition(position);
                                }
-                               getListAdapter().pulseAtPosition(position);
                              })
                          ))
                          .withOnInvalidPosition(() -> {
@@ -1303,9 +1306,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     }
   }
 
-  @Override
-  public void onDismissForwardSheet() {
-  }
 
   public interface ConversationFragmentListener extends VoiceNoteMediaControllerOwner {
     boolean isKeyboardOpen();
@@ -1376,6 +1376,11 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
         conversationDateHeader.show();
       } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
         conversationDateHeader.hide();
+
+        if (pulsePosition != -1) {
+          getListAdapter().pulseAtPosition(pulsePosition);
+          pulsePosition = -1;
+        }
       }
     }
 
@@ -1441,18 +1446,17 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
           Bitmap videoBitmap          = null;
           int    childAdapterPosition = list.getChildAdapterPosition(itemView);
 
-          GiphyMp4ProjectionPlayerHolder mp4Holder = null;
+          final GiphyMp4ProjectionPlayerHolder mp4Holder;
           if (childAdapterPosition != RecyclerView.NO_POSITION) {
             mp4Holder = giphyMp4ProjectionRecycler.getCurrentHolder(childAdapterPosition);
-            if (mp4Holder != null && mp4Holder.isVisible()) {
+            if (mp4Holder != null) {
               mp4Holder.pause();
               videoBitmap = mp4Holder.getBitmap();
               mp4Holder.hide();
-            } else {
-              mp4Holder = null;
             }
+          } else {
+            mp4Holder = null;
           }
-          final GiphyMp4ProjectionPlayerHolder finalMp4Holder = mp4Holder;
 
           ConversationItem conversationItem = (ConversationItem) itemView;
           Bitmap           bitmap           = ConversationItemSelection.snapshotView(conversationItem, list, messageRecord, videoBitmap);
@@ -1471,14 +1475,8 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                                                                                                      focusedView);
 
           bodyBubble.setVisibility(View.INVISIBLE);
-          conversationItem.reactionsView.setVisibility(View.INVISIBLE);
 
           ViewUtil.hideKeyboard(requireContext(), conversationItem);
-
-          boolean showScrollButtons = conversationViewModel.getShowScrollButtons();
-          if (showScrollButtons) {
-            conversationViewModel.setShowScrollButtons(false);
-          }
 
           listener.handleReaction(item.getConversationMessage(),
                                   new ReactionsToolbarListener(item.getConversationMessage()),
@@ -1486,10 +1484,10 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                                   new ConversationReactionOverlay.OnHideListener() {
                                     @Override public void startHide() {
                                       multiselectItemDecoration.hideShade(list);
-                                      ViewUtil.fadeOut(reactionsShade, getResources().getInteger(R.integer.reaction_scrubber_hide_duration), View.GONE);
                                     }
 
                                     @Override public void onHide() {
+                                      reactionsShade.setVisibility(View.GONE);
                                       list.setLayoutFrozen(false);
 
                                       if (selectedConversationModel.getAudioUri() != null) {
@@ -1500,17 +1498,12 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                                       WindowUtil.setLightNavigationBarFromTheme(requireActivity());
                                       clearFocusedItem();
 
-                                      if (finalMp4Holder != null) {
-                                        finalMp4Holder.show();
-                                        finalMp4Holder.resume();
+                                      if (mp4Holder != null) {
+                                        mp4Holder.show();
+                                        mp4Holder.resume();
                                       }
 
                                       bodyBubble.setVisibility(View.VISIBLE);
-                                      conversationItem.reactionsView.setVisibility(View.VISIBLE);
-
-                                      if (showScrollButtons) {
-                                        conversationViewModel.setShowScrollButtons(true);
-                                      }
                                     }
                                   });
         }
@@ -1569,7 +1562,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     @Override
     public void onMoreTextClicked(@NonNull RecipientId conversationRecipientId, long messageId, boolean isMms) {
       if (getContext() != null && getActivity() != null) {
-        LongMessageFragment.create(messageId, isMms).show(getChildFragmentManager(), null);
+        startActivity(LongMessageActivity.getIntent(getContext(), conversationRecipientId, messageId, isMms));
       }
     }
 
@@ -1852,12 +1845,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     @Override
     public void onDonateClicked() {
       if (SignalStore.donationsValues().isLikelyASustainer()) {
-        NavHostFragment navHostFragment = NavHostFragment.create(R.navigation.boosts);
-
-        requireActivity().getSupportFragmentManager()
-                         .beginTransaction()
-                         .add(navHostFragment, "boost_nav")
-                         .commitNow();
+        startActivity(AppSettingsActivity.boost(requireContext()));
       } else {
         startActivity(AppSettingsActivity.subscriptions(requireContext()));
       }

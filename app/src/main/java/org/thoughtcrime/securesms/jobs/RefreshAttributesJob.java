@@ -98,7 +98,7 @@ public class RefreshAttributesJob extends BaseJob {
     boolean phoneNumberDiscoverable = SignalStore.phoneNumberPrivacy().getPhoneNumberListingMode().isDiscoverable();
 
     String deviceName = SignalStore.account().getDeviceName();
-    byte[] encryptedDeviceName = (deviceName == null) ? null : DeviceNameCipher.encryptDeviceName(deviceName.getBytes(StandardCharsets.UTF_8), SignalStore.account().getAciIdentityKey());
+    byte[] encryptedDeviceName = (deviceName == null) ? null : DeviceNameCipher.encryptDeviceName(deviceName.getBytes(StandardCharsets.UTF_8), IdentityKeyUtil.getIdentityKeyPair(context));
 
     AccountAttributes.Capabilities capabilities = AppCapabilities.getCapabilities(kbsValues.hasPin() && !kbsValues.hasOptedOut());
     Log.i(TAG, "Calling setAccountAttributes() reglockV1? " + !TextUtils.isEmpty(registrationLockV1) + ", reglockV2? " + !TextUtils.isEmpty(registrationLockV2) + ", pin? " + kbsValues.hasPin() +
@@ -111,7 +111,6 @@ public class RefreshAttributesJob extends BaseJob {
                "\n    Sender Key? " + capabilities.isSenderKey() +
                "\n    Announcement Groups? " + capabilities.isAnnouncementGroup() +
                "\n    Change Number? " + capabilities.isChangeNumber() +
-               "\n    Stories? " + capabilities.isStories() +
                "\n    UUID? " + capabilities.isUuid());
 
     SignalServiceAccountManager signalAccountManager = ApplicationDependencies.getSignalServiceAccountManager();

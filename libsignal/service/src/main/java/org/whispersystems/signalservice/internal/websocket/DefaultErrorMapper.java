@@ -1,7 +1,6 @@
 package org.whispersystems.signalservice.internal.websocket;
 
 import org.whispersystems.libsignal.util.guava.Function;
-import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.push.exceptions.AuthorizationFailedException;
 import org.whispersystems.signalservice.api.push.exceptions.CaptchaRequiredException;
 import org.whispersystems.signalservice.api.push.exceptions.DeprecatedVersionException;
@@ -28,7 +27,6 @@ import org.whispersystems.signalservice.internal.util.Util;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A default implementation of a {@link ErrorMapper} that can parse most known application
@@ -102,11 +100,7 @@ public final class DefaultErrorMapper implements ErrorMapper {
           return e;
         }
       case 413:
-      case 429: {
-        long           retryAfterLong = Util.parseLong(getHeader.apply("Retry-After"), -1);
-        Optional<Long> retryAfter     = retryAfterLong != -1 ? Optional.of(TimeUnit.SECONDS.toMillis(retryAfterLong)) : Optional.absent();
-        return new RateLimitException(status, "Rate limit exceeded: " + status, retryAfter);
-      }
+        return new RateLimitException("Rate limit exceeded: " + status);
       case 417:
         return new ExpectationFailedException();
       case 423:

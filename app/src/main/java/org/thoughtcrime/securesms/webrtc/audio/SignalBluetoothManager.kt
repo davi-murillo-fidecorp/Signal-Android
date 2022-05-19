@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
  */
 class SignalBluetoothManager(
   private val context: Context,
-  private val audioManager: FullSignalAudioManager,
+  private val audioManager: SignalAudioManager,
   private val handler: SignalAudioHandler
 ) {
 

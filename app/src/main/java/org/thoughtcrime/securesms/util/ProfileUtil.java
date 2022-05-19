@@ -10,6 +10,7 @@ import org.signal.core.util.logging.Log;
 import org.signal.zkgroup.InvalidInputException;
 import org.signal.zkgroup.profiles.ProfileKey;
 import org.thoughtcrime.securesms.badges.models.Badge;
+import org.thoughtcrime.securesms.crypto.IdentityKeyUtil;
 import org.thoughtcrime.securesms.crypto.ProfileKeyUtil;
 import org.thoughtcrime.securesms.crypto.UnidentifiedAccessUtil;
 import org.thoughtcrime.securesms.database.RecipientDatabase;
@@ -191,7 +192,6 @@ public final class ProfileUtil {
    * successfully before persisting the change to disk.
    */
   public static void uploadProfileWithBadges(@NonNull Context context, @NonNull List<Badge> badges) throws IOException {
-    Log.d(TAG, "uploadProfileWithBadges()");
     try (StreamDetails avatar = AvatarHelper.getSelfProfileAvatarStream(context)) {
       uploadProfile(context,
                     Recipient.self().getProfileName(),
@@ -209,7 +209,6 @@ public final class ProfileUtil {
    * successfully before persisting the change to disk.
    */
   public static void uploadProfileWithName(@NonNull Context context, @NonNull ProfileName profileName) throws IOException {
-    Log.d(TAG, "uploadProfileWithName()");
     try (StreamDetails avatar = AvatarHelper.getSelfProfileAvatarStream(context)) {
       uploadProfile(context,
                     profileName,
@@ -227,7 +226,6 @@ public final class ProfileUtil {
    * successfully before persisting the change to disk.
    */
   public static void uploadProfileWithAbout(@NonNull Context context, @NonNull String about, @NonNull String emoji) throws IOException {
-    Log.d(TAG, "uploadProfileWithAbout()");
     try (StreamDetails avatar = AvatarHelper.getSelfProfileAvatarStream(context)) {
       uploadProfile(context,
                     Recipient.self().getProfileName(),
@@ -243,7 +241,6 @@ public final class ProfileUtil {
    * Uploads the profile based on all state that's already written to disk.
    */
   public static void uploadProfile(@NonNull Context context) throws IOException {
-    Log.d(TAG, "uploadProfile()");
     try (StreamDetails avatar = AvatarHelper.getSelfProfileAvatarStream(context)) {
       uploadProfileWithAvatar(context, avatar);
     }
@@ -255,14 +252,13 @@ public final class ProfileUtil {
    * successfully before persisting the change to disk.
    */
   public static void uploadProfileWithAvatar(@NonNull Context context, @Nullable StreamDetails avatar) throws IOException {
-    Log.d(TAG, "uploadProfileWithAvatar()");
-    uploadProfile(context,
-                  Recipient.self().getProfileName(),
-                  Optional.fromNullable(Recipient.self().getAbout()).or(""),
-                  Optional.fromNullable(Recipient.self().getAboutEmoji()).or(""),
-                  getSelfPaymentsAddressProtobuf(),
-                  avatar,
-                  Recipient.self().getBadges());
+      uploadProfile(context,
+                    Recipient.self().getProfileName(),
+                    Optional.fromNullable(Recipient.self().getAbout()).or(""),
+                    Optional.fromNullable(Recipient.self().getAboutEmoji()).or(""),
+                    getSelfPaymentsAddressProtobuf(),
+                    avatar,
+                    Recipient.self().getBadges());
   }
 
   private static void uploadProfile(@NonNull Context context,
@@ -280,7 +276,6 @@ public final class ProfileUtil {
                                   .map(Badge::getId)
                                   .collect(Collectors.toList());
 
-    Log.d(TAG, "Uploading " + (!profileName.isEmpty() ? "non-" : "") + "empty profile name.");
     Log.d(TAG, "Uploading " + (!Util.isEmpty(about) ? "non-" : "") + "empty about.");
     Log.d(TAG, "Uploading " + (!Util.isEmpty(aboutEmoji) ? "non-" : "") + "empty emoji.");
     Log.d(TAG, "Uploading " + (paymentsAddress != null ? "non-" : "") + "empty payments address.");
@@ -289,7 +284,7 @@ public final class ProfileUtil {
 
     ProfileKey                  profileKey     = ProfileKeyUtil.getSelfProfileKey();
     SignalServiceAccountManager accountManager = ApplicationDependencies.getSignalServiceAccountManager();
-    String                      avatarPath     = accountManager.setVersionedProfile(SignalStore.account().requireAci(),
+    String                      avatarPath     = accountManager.setVersionedProfile(Recipient.self().requireAci(),
                                                                                     profileKey,
                                                                                     profileName.serialize(),
                                                                                     about,
@@ -305,7 +300,7 @@ public final class ProfileUtil {
     if (!SignalStore.paymentsValues().mobileCoinPaymentsEnabled()) {
       return null;
     } else {
-      IdentityKeyPair         identityKeyPair = SignalStore.account().getAciIdentityKey();
+      IdentityKeyPair         identityKeyPair = IdentityKeyUtil.getIdentityKeyPair(ApplicationDependencies.getApplication());
       MobileCoinPublicAddress publicAddress   = ApplicationDependencies.getPayments()
                                                                        .getWallet()
                                                                        .getMobileCoinPublicAddress();
@@ -326,8 +321,8 @@ public final class ProfileUtil {
 
   private static @NonNull SignalServiceAddress toSignalServiceAddress(@NonNull Context context, @NonNull Recipient recipient) throws IOException {
     if (recipient.getRegistered() == RecipientDatabase.RegisteredState.NOT_REGISTERED) {
-      if (recipient.hasServiceId()) {
-        return new SignalServiceAddress(recipient.requireServiceId(), recipient.getE164().orNull());
+      if (recipient.hasAci()) {
+        return new SignalServiceAddress(recipient.requireAci(), recipient.getE164().orNull());
       } else {
         throw new IOException(recipient.getId() + " not registered!");
       }

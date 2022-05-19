@@ -131,7 +131,9 @@ public final class KeyValueStore implements KeyValueReader {
 
   /**
    * Forces the store to re-fetch all of it's data from the database.
+   * Should only be used for testing!
    */
+  @VisibleForTesting
   synchronized void resetCache() {
     dataSet = null;
     initializeIfNecessary();

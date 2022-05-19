@@ -26,14 +26,12 @@ message Envelope {
   optional string sourceE164      = 2;
   optional string sourceUuid      = 11;
   optional uint32 sourceDevice    = 7;
-  optional string destinationUuid = 13;
   optional string relay           = 3;
   optional uint64 timestamp       = 5;
   optional bytes  legacyMessage   = 6; // Contains an encrypted DataMessage
   optional bytes  content         = 8; // Contains an encrypted Content
   optional string serverGuid      = 9;
   optional uint64 serverTimestamp = 10;
-  // NEXT ID: 14
 }
 
 message Content {
@@ -45,7 +43,6 @@ message Content {
   optional TypingMessage  typingMessage                = 6;
   optional bytes          senderKeyDistributionMessage = 7;
   optional bytes          decryptionErrorMessage       = 8;
-  optional StoryMessage   storyMessage                 = 9;
 }
 
 message CallMessage {
@@ -145,7 +142,7 @@ message DataMessage {
     }
 
     optional uint64           id          = 1;
-    reserved                /*authorE164*/  2;
+    optional string           authorE164  = 2;
     optional string           authorUuid  = 5;
     optional string           text        = 3;
     repeated QuotedAttachment attachments = 4;
@@ -219,6 +216,14 @@ message DataMessage {
     optional string            organization    = 7;
   }
 
+  message Preview {
+    optional string            url         = 1;
+    optional string            title       = 2;
+    optional AttachmentPointer image       = 3;
+    optional string            description = 4;
+    optional uint64            date        = 5;
+  }
+
   message Sticker {
     optional bytes             packId    = 1;
     optional bytes             packKey   = 2;
@@ -230,7 +235,7 @@ message DataMessage {
   message Reaction {
     optional string emoji               = 1;
     optional bool   remove              = 2;
-    reserved      /*targetAuthorE164*/    3;
+    reserved     /* targetAuthorE164 */   3; // removed
     optional string targetAuthorUuid    = 4;
     optional uint64 targetSentTimestamp = 5;
   }
@@ -349,51 +354,6 @@ message TypingMessage {
     optional bytes  groupId   = 3;
 }
 
-message StoryMessage {
-  optional bytes             profileKey    = 1;
-  optional GroupContextV2    group         = 2;
-  oneof attachment {
-    AttachmentPointer fileAttachment = 3;
-    TextAttachment    textAttachment = 4;
-  }
-  optional bool              allowsReplies = 5;
-}
-
-message Preview {
-  optional string            url         = 1;
-  optional string            title       = 2;
-  optional AttachmentPointer image       = 3;
-  optional string            description = 4;
-  optional uint64            date        = 5;
-}
-
-message TextAttachment {
-  enum Style {
-    DEFAULT   = 0;
-    REGULAR   = 1;
-    BOLD      = 2;
-    SERIF     = 3;
-    SCRIPT    = 4;
-    CONDENSED = 5;
-  }
-
-  message Gradient {
-    optional uint32 startColor = 1;
-    optional uint32 endColor   = 2;
-    optional uint32 angle      = 3; // degrees
-  }
-
-  optional string  text                = 1;
-  optional Style   textStyle           = 2;
-  optional uint32  textForegroundColor = 3; // integer representation of hex color
-  optional uint32  textBackgroundColor = 4;
-  optional Preview preview             = 5;
-  oneof background {
-    Gradient gradient = 6;
-    uint32   color    = 7;
-  }
-}
-
 message Verified {
   enum State {
     DEFAULT    = 0;
@@ -401,7 +361,7 @@ message Verified {
     UNVERIFIED = 2;
   }
 
-  reserved      /*destinationE164*/ 1;
+  optional string destinationE164 = 1;
   optional string destinationUuid = 5;
   optional bytes  identityKey     = 2;
   optional State  state           = 3;
@@ -411,12 +371,12 @@ message Verified {
 message SyncMessage {
   message Sent {
     message UnidentifiedDeliveryStatus {
-      reserved      /*destinationE164*/ 1;
+      optional string destinationE164 = 1;
       optional string destinationUuid = 3;
       optional bool   unidentified    = 2;
     }
 
-    reserved                          /*destinationE164*/          1;
+    optional string                     destinationE164          = 1;
     optional string                     destinationUuid          = 7;
     optional uint64                     timestamp                = 2;
     optional DataMessage                message                  = 3;
@@ -448,29 +408,28 @@ message SyncMessage {
       BLOCKED       = 3;
       CONFIGURATION = 4;
       KEYS          = 5;
-      PNI_IDENTITY  = 6;
     }
 
     optional Type type = 1;
   }
 
   message Read {
-    reserved      /*senderE164*/ 1;
+    optional string senderE164 = 1;
     optional string senderUuid = 3;
     optional uint64 timestamp  = 2;
   }
 
   message Viewed {
-    reserved      /*senderE164*/ 1;
+    optional string senderE164 = 1;
     optional string senderUuid = 3;
-    optional uint64 timestamp  = 2;
+    optional uint64 timestamp = 2;
   }
 
   message Configuration {
     optional bool   readReceipts                   = 1;
     optional bool   unidentifiedDeliveryIndicators = 2;
     optional bool   typingIndicators               = 3;
-    reserved     /* linkPreviews */                  4;
+    reserved     /* linkPreviews */                  4; // removed
     optional uint32 provisioningVersion            = 5;
     optional bool   linkPreviews                   = 6;
   }
@@ -487,7 +446,7 @@ message SyncMessage {
   }
 
   message ViewOnceOpen {
-    reserved      /*senderE164*/ 1;
+    optional string senderE164 = 1;
     optional string senderUuid = 3;
     optional uint64 timestamp  = 2;
   }
@@ -507,11 +466,6 @@ message SyncMessage {
     optional bytes storageService = 1;
   }
 
-  message PniIdentity {
-    optional bytes publicKey  = 1;
-    optional bytes privateKey = 2;
-  }
-
   message MessageRequestResponse {
     enum Type {
       UNKNOWN          = 0;
@@ -521,7 +475,7 @@ message SyncMessage {
       BLOCK_AND_DELETE = 4;
     }
 
-    reserved      /*threadE164*/ 1;
+    optional string threadE164 = 1;
     optional string threadUuid = 2;
     optional bytes  groupId    = 3;
     optional Type   type       = 4;

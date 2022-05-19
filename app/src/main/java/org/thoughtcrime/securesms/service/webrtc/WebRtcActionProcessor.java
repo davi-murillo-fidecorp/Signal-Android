@@ -18,6 +18,7 @@ import org.thoughtcrime.securesms.components.sensors.Orientation;
 import org.thoughtcrime.securesms.components.webrtc.BroadcastVideoSink;
 import org.thoughtcrime.securesms.components.webrtc.EglBaseWrapper;
 import org.thoughtcrime.securesms.components.webrtc.GroupCallSafetyNumberChangeNotificationUtil;
+import org.thoughtcrime.securesms.crypto.IdentityKeyUtil;
 import org.thoughtcrime.securesms.database.SignalDatabase;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.events.CallParticipant;
@@ -214,7 +215,7 @@ public abstract class WebRtcActionProcessor {
 
     try {
       byte[] remoteIdentityKey = WebRtcUtil.getPublicKeyBytes(receivedOfferMetadata.getRemoteIdentityKey());
-      byte[] localIdentityKey  = WebRtcUtil.getPublicKeyBytes(SignalStore.account().getAciIdentityKey().getPublicKey().serialize());
+      byte[] localIdentityKey  = WebRtcUtil.getPublicKeyBytes(IdentityKeyUtil.getIdentityKey(context).serialize());
 
       webRtcInteractor.getCallManager().receivedOffer(callMetadata.getCallId(),
                                                       callMetadata.getRemotePeer(),
@@ -243,7 +244,7 @@ public abstract class WebRtcActionProcessor {
     return terminate(currentState, remotePeer);
   }
 
-  protected @NonNull WebRtcServiceState handleStartIncomingCall(@NonNull WebRtcServiceState currentState, @NonNull RemotePeer remotePeer, @NonNull OfferMessage.Type offerType) {
+  protected @NonNull WebRtcServiceState handleStartIncomingCall(@NonNull WebRtcServiceState currentState, @NonNull RemotePeer remotePeer) {
     Log.i(tag, "handleStartIncomingCall not processed");
     return currentState;
   }
@@ -251,45 +252,6 @@ public abstract class WebRtcActionProcessor {
   protected @NonNull WebRtcServiceState handleAcceptCall(@NonNull WebRtcServiceState currentState, boolean answerWithVideo) {
     Log.i(tag, "handleAcceptCall not processed");
     return currentState;
-  }
-
-  protected @NonNull WebRtcServiceState handleSetTelecomApproved(@NonNull WebRtcServiceState currentState, long callId) {
-    Log.i(tag, "handleSetTelecomApproved(): call_id: " + callId);
-
-    currentState = currentState.builder()
-                               .changeCallSetupState(new CallId(callId))
-                               .telecomApproved(true)
-                               .build();
-
-    return currentState;
-  }
-
-  protected @NonNull WebRtcServiceState handleDropCall(@NonNull WebRtcServiceState currentState, long callId) {
-    Log.i(tag, "handleDropCall(): call_id: " + callId);
-
-    CallId     id           = new CallId(callId);
-    RemotePeer callIdPeer   = currentState.getCallInfoState().getPeerByCallId(id);
-    RemotePeer activePeer   = currentState.getCallInfoState().getActivePeer();
-    boolean    isActivePeer = activePeer != null && activePeer.getCallId().equals(id);
-
-    try {
-      if (callIdPeer != null && currentState.getCallInfoState().getCallState() == WebRtcViewModel.State.CALL_INCOMING) {
-        webRtcInteractor.insertMissedCall(callIdPeer, callIdPeer.getCallStartTimestamp(), currentState.getCallSetupState(id).isRemoteVideoOffer());
-      }
-      webRtcInteractor.getCallManager().hangup();
-
-      currentState = currentState.builder()
-                                 .changeCallInfoState()
-                                 .callState(WebRtcViewModel.State.CALL_DISCONNECTED)
-                                 .groupCallState(WebRtcViewModel.GroupCallState.DISCONNECTED)
-                                 .build();
-
-      webRtcInteractor.postStateUpdate(currentState);
-
-      return terminate(currentState, isActivePeer ? activePeer : callIdPeer);
-    } catch (CallException e) {
-      return callFailure(currentState, "hangup() failed: ", e);
-    }
   }
 
   protected @NonNull WebRtcServiceState handleLocalRinging(@NonNull WebRtcServiceState currentState, @NonNull RemotePeer remotePeer) {
@@ -630,14 +592,14 @@ public abstract class WebRtcActionProcessor {
 
     RemotePeer activePeer = currentState.getCallInfoState().getActivePeer();
 
-    if (activePeer == null && remotePeer == null) {
+    if (activePeer == null) {
       Log.i(tag, "skipping with no active peer");
       return currentState;
-    } else if (activePeer != null && !activePeer.callIdEquals(remotePeer)) {
+    }
+
+    if (!activePeer.callIdEquals(remotePeer)) {
       Log.i(tag, "skipping remotePeer is not active peer");
       return currentState;
-    } else {
-      activePeer = remotePeer;
     }
 
     ApplicationDependencies.getAppForegroundObserver().removeListener(webRtcInteractor.getForegroundListener());
@@ -649,7 +611,6 @@ public abstract class WebRtcActionProcessor {
                                   (activePeer.getState() == CallState.CONNECTED);
     webRtcInteractor.stopAudio(playDisconnectSound);
 
-    webRtcInteractor.terminateCall(activePeer.getId());
     webRtcInteractor.updatePhoneState(LockManager.PhoneState.IDLE);
     webRtcInteractor.stopForegroundService();
 

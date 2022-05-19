@@ -2,9 +2,7 @@ package org.thoughtcrime.securesms.keyboard.emoji.search
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -17,11 +15,10 @@ import org.thoughtcrime.securesms.components.emoji.EmojiEventListener
 import org.thoughtcrime.securesms.components.emoji.EmojiPageView
 import org.thoughtcrime.securesms.components.emoji.EmojiPageViewGridAdapter
 import org.thoughtcrime.securesms.keyboard.emoji.KeyboardPageSearchView
-import org.thoughtcrime.securesms.util.ThemedFragment.themedInflate
+import org.thoughtcrime.securesms.keyboard.findListener
 import org.thoughtcrime.securesms.util.ViewUtil
-import org.thoughtcrime.securesms.util.fragments.requireListener
 
-class EmojiSearchFragment : Fragment(), EmojiPageViewGridAdapter.VariationSelectorListener {
+class EmojiSearchFragment : Fragment(R.layout.emoji_search_fragment), EmojiPageViewGridAdapter.VariationSelectorListener {
 
   private lateinit var viewModel: EmojiSearchViewModel
   private lateinit var callback: Callback
@@ -29,11 +26,7 @@ class EmojiSearchFragment : Fragment(), EmojiPageViewGridAdapter.VariationSelect
   override fun onAttach(context: Context) {
     super.onAttach(context)
 
-    callback = requireListener()
-  }
-
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    return themedInflate(R.layout.emoji_search_fragment, inflater, container)
+    callback = findListener<Callback>()!!
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,7 +36,7 @@ class EmojiSearchFragment : Fragment(), EmojiPageViewGridAdapter.VariationSelect
     viewModel = ViewModelProvider(this, factory)[EmojiSearchViewModel::class.java]
 
     val keyboardAwareLinearLayout: KeyboardAwareLinearLayout = view.findViewById(R.id.kb_aware_layout)
-    val eventListener: EmojiEventListener = requireListener()
+    val eventListener: EmojiEventListener = requireNotNull(findListener())
     val searchBar: KeyboardPageSearchView = view.findViewById(R.id.emoji_search_view)
     val resultsContainer: FrameLayout = view.findViewById(R.id.emoji_search_results_container)
     val noResults: TextView = view.findViewById(R.id.emoji_search_empty)

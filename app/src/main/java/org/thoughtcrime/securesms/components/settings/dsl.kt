@@ -17,9 +17,9 @@ fun configure(init: DSLConfiguration.() -> Unit): DSLConfiguration {
 }
 
 class DSLConfiguration {
-  private val children = arrayListOf<MappingModel<*>>()
+  private val children = arrayListOf<PreferenceModel<*>>()
 
-  fun customPref(customPreference: MappingModel<*>) {
+  fun customPref(customPreference: PreferenceModel<*>) {
     children.add(customPreference)
   }
 

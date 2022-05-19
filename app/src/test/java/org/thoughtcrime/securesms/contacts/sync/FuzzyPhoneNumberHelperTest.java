@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.thoughtcrime.securesms.contacts.sync.FuzzyPhoneNumberHelper.InputResult;
 import org.thoughtcrime.securesms.contacts.sync.FuzzyPhoneNumberHelper.OutputResult;
 import org.whispersystems.signalservice.api.push.ACI;
+import org.whispersystems.signalservice.api.util.UuidUtil;
 
 import java.util.Arrays;
 import java.util.Collections;

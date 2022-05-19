@@ -66,7 +66,7 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
         }
       )
 
-      clickPref(
+      /*clickPref(
         title = DSLSettingsText.from(R.string.preferences__linked_devices),
         icon = DSLSettingsIcon.from(R.drawable.ic_linked_devices_24),
         onClick = {
@@ -82,7 +82,7 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
             findNavController().safeNavigate(R.id.action_appSettingsFragment_to_paymentsActivity)
           }
         )
-      }
+      }*/
 
       dividerPref()
 
@@ -126,7 +126,7 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
         }
       )
 
-      dividerPref()
+      /*dividerPref()
 
       clickPref(
         title = DSLSettingsText.from(R.string.preferences__help),
@@ -190,6 +190,8 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
           }
         )
       }
+
+       */
     }
   }
 

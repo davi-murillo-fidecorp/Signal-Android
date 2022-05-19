@@ -6,10 +6,10 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import org.whispersystems.libsignal.logging.Log;
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.push.ACI;
-import org.whispersystems.signalservice.api.push.ServiceId;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
 import org.whispersystems.signalservice.api.util.OptionalUtil;
 import org.whispersystems.signalservice.api.util.ProtoUtil;
+import org.whispersystems.signalservice.api.util.UuidUtil;
 import org.whispersystems.signalservice.internal.storage.protos.ContactRecord;
 import org.whispersystems.signalservice.internal.storage.protos.ContactRecord.IdentityState;
 
@@ -38,7 +38,7 @@ public final class SignalContactRecord implements SignalRecord {
     this.proto            = proto;
     this.hasUnknownFields = ProtoUtil.hasUnknownFields(proto);
 
-    this.address     = new SignalServiceAddress(ServiceId.parseOrUnknown(proto.getServiceUuid()), proto.getServiceE164());
+    this.address     = new SignalServiceAddress(ACI.parseOrUnknown(proto.getServiceUuid()), proto.getServiceE164());
     this.givenName   = OptionalUtil.absentIfEmpty(proto.getGivenName());
     this.familyName  = OptionalUtil.absentIfEmpty(proto.getFamilyName());
     this.profileKey  = OptionalUtil.absentIfEmpty(proto.getProfileKey());
@@ -70,7 +70,7 @@ public final class SignalContactRecord implements SignalRecord {
         diff.add("E164");
       }
 
-      if (!Objects.equals(this.getAddress().getServiceId(), that.getAddress().getServiceId())) {
+      if (!Objects.equals(this.getAddress().getAci(), that.getAddress().getAci())) {
         diff.add("UUID");
       }
 
@@ -116,10 +116,6 @@ public final class SignalContactRecord implements SignalRecord {
 
       if (!Objects.equals(this.getMuteUntil(), that.getMuteUntil())) {
         diff.add("MuteUntil");
-      }
-
-      if (shouldHideStory() != that.shouldHideStory()) {
-        diff.add("HideStory");
       }
 
       if (!Objects.equals(this.hasUnknownFields(), that.hasUnknownFields())) {
@@ -188,10 +184,6 @@ public final class SignalContactRecord implements SignalRecord {
     return proto.getMutedUntilTimestamp();
   }
 
-  public boolean shouldHideStory() {
-    return proto.getHideStory();
-  }
-
   ContactRecord toProto() {
     return proto;
   }
@@ -214,17 +206,19 @@ public final class SignalContactRecord implements SignalRecord {
     private final StorageId             id;
     private final ContactRecord.Builder builder;
 
-    public Builder(byte[] rawId, SignalServiceAddress address, byte[] serializedUnknowns) {
-      this.id = StorageId.forContact(rawId);
+    private byte[] unknownFields;
 
-      if (serializedUnknowns != null) {
-        this.builder = parseUnknowns(serializedUnknowns);
-      } else {
-        this.builder = ContactRecord.newBuilder();
-      }
+    public Builder(byte[] rawId, SignalServiceAddress address) {
+      this.id      = StorageId.forContact(rawId);
+      this.builder = ContactRecord.newBuilder();
 
-      builder.setServiceUuid(address.getServiceId().toString());
+      builder.setServiceUuid(address.getAci().toString());
       builder.setServiceE164(address.getNumber().or(""));
+    }
+
+    public Builder setUnknownFields(byte[] serializedUnknowns) {
+      this.unknownFields = serializedUnknowns;
+      return this;
     }
 
     public Builder setGivenName(String givenName) {
@@ -282,22 +276,18 @@ public final class SignalContactRecord implements SignalRecord {
       return this;
     }
 
-    public Builder setHideStory(boolean hideStory) {
-      builder.setHideStory(hideStory);
-      return this;
-    }
-
-    private static ContactRecord.Builder parseUnknowns(byte[] serializedUnknowns) {
-      try {
-        return ContactRecord.parseFrom(serializedUnknowns).toBuilder();
-      } catch (InvalidProtocolBufferException e) {
-        Log.w(TAG, "Failed to combine unknown fields!", e);
-        return ContactRecord.newBuilder();
-      }
-    }
-
     public SignalContactRecord build() {
-      return new SignalContactRecord(id, builder.build());
+      ContactRecord proto = builder.build();
+
+      if (unknownFields != null) {
+        try {
+          proto = ProtoUtil.combineWithUnknownFields(proto, unknownFields);
+        } catch (InvalidProtocolBufferException e) {
+          Log.w(TAG, "Failed to combine unknown fields!", e);
+        }
+      }
+
+      return new SignalContactRecord(id, proto);
     }
   }
 }

@@ -91,7 +91,7 @@ public final class MultiDeviceOutgoingPaymentSyncJob extends BaseJob {
 
     Optional<SignalServiceAddress> uuid;
     if (!defrag && payment.getPayee().hasRecipientId()) {
-      uuid = Optional.of(new SignalServiceAddress(Recipient.resolved(payment.getPayee().requireRecipientId()).requireServiceId()));
+      uuid = Optional.of(new SignalServiceAddress(Recipient.resolved(payment.getPayee().requireRecipientId()).requireAci()));
     } else {
       uuid = Optional.absent();
     }

@@ -113,6 +113,10 @@ public class LegacyMigrationJob extends MigrationJob {
       throw new RetryLaterException();
     }
 
+    if (lastSeenVersion < CURVE25519_VERSION) {
+      IdentityKeyUtil.migrateIdentityKeys(context, masterSecret);
+    }
+
     if (lastSeenVersion < NO_V1_VERSION) {
       File v1sessions = new File(context.getFilesDir(), "sessions");
 
@@ -130,7 +134,7 @@ public class LegacyMigrationJob extends MigrationJob {
     }
 
     if (lastSeenVersion < SIGNED_PREKEY_VERSION) {
-      CreateSignedPreKeyJob.enqueueIfNeeded();
+      ApplicationDependencies.getJobManager().add(new CreateSignedPreKeyJob(context));
     }
 
     if (lastSeenVersion < NO_DECRYPT_QUEUE_VERSION) {
@@ -145,6 +149,7 @@ public class LegacyMigrationJob extends MigrationJob {
 //        new TextSecureSessionStore(context, masterSecret).migrateSessions();
 //        new TextSecurePreKeyStore(context, masterSecret).migrateRecords();
 
+      IdentityKeyUtil.migrateIdentityKeys(context, masterSecret);
       scheduleMessagesInPushDatabase(context);;
     }
 

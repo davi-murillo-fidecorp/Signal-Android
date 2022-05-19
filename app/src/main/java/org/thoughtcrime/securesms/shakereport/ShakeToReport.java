@@ -7,8 +7,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Lifecycle;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -38,7 +36,7 @@ public final class ShakeToReport implements ShakeDetector.Listener {
   private final Application   application;
   private final ShakeDetector detector;
 
-  private WeakReference<AppCompatActivity> weakActivity;
+  private WeakReference<Activity> weakActivity;
 
   public ShakeToReport(@NonNull Application application) {
     this.application  = application;
@@ -58,7 +56,7 @@ public final class ShakeToReport implements ShakeDetector.Listener {
     detector.stop();
   }
 
-  public void registerActivity(@NonNull AppCompatActivity activity) {
+  public void registerActivity(@NonNull Activity activity) {
     if (!SignalStore.internalValues().shakeToReport()) return;
 
     this.weakActivity = new WeakReference<>(activity);
@@ -68,28 +66,26 @@ public final class ShakeToReport implements ShakeDetector.Listener {
   public void onShakeDetected() {
     if (!SignalStore.internalValues().shakeToReport()) return;
 
-    AppCompatActivity activity = weakActivity.get();
+    Activity activity = weakActivity.get();
     if (activity == null) {
       Log.w(TAG, "No registered activity!");
       return;
     }
 
-    if (activity.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-      disable();
+    disable();
 
-      new MaterialAlertDialogBuilder(activity)
-          .setTitle(R.string.ShakeToReport_shake_detected)
-          .setMessage(R.string.ShakeToReport_submit_debug_log)
-          .setNegativeButton(android.R.string.cancel, (d, i) -> {
-            d.dismiss();
-            enableIfVisible();
-          })
-          .setPositiveButton(R.string.ShakeToReport_submit, (d, i) -> {
-            d.dismiss();
-            submitLog(activity);
-          })
-          .show();
-    }
+    new MaterialAlertDialogBuilder(activity)
+        .setTitle(R.string.ShakeToReport_shake_detected)
+        .setMessage(R.string.ShakeToReport_submit_debug_log)
+        .setNegativeButton(android.R.string.cancel, (d, i) -> {
+          d.dismiss();
+          enableIfVisible();
+        })
+        .setPositiveButton(R.string.ShakeToReport_submit, (d, i) -> {
+          d.dismiss();
+          submitLog(activity);
+        })
+        .show();
   }
 
   private void submitLog(@NonNull Activity activity) {

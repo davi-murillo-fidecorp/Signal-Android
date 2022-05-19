@@ -26,7 +26,8 @@ import org.thoughtcrime.securesms.util.Hex
 import org.thoughtcrime.securesms.util.SpanUtil
 import org.thoughtcrime.securesms.util.Util
 import org.thoughtcrime.securesms.util.livedata.Store
-import org.whispersystems.signalservice.api.push.ServiceId
+import org.whispersystems.signalservice.api.push.ACI
+import org.whispersystems.signalservice.api.push.PNI
 import java.util.Objects
 
 /**
@@ -60,11 +61,18 @@ class InternalConversationSettingsFragment : DSLSettingsFragment(
       )
 
       if (!recipient.isGroup) {
-        val serviceId = recipient.serviceId.transform(ServiceId::toString).or("null")
+        val aci = recipient.aci.transform(ACI::toString).or("null")
         longClickPref(
-          title = DSLSettingsText.from("ServiceId"),
-          summary = DSLSettingsText.from(serviceId),
-          onLongClick = { copyToClipboard(serviceId) }
+          title = DSLSettingsText.from("ACI"),
+          summary = DSLSettingsText.from(aci),
+          onLongClick = { copyToClipboard(aci) }
+        )
+
+        val pni = recipient.pni.transform(PNI::toString).or("null")
+        longClickPref(
+          title = DSLSettingsText.from("PNI"),
+          summary = DSLSettingsText.from(pni),
+          onLongClick = { copyToClipboard(pni) }
         )
       }
 
@@ -145,8 +153,11 @@ class InternalConversationSettingsFragment : DSLSettingsFragment(
               .setTitle("Are you sure?")
               .setNegativeButton(android.R.string.cancel) { d, _ -> d.dismiss() }
               .setPositiveButton(android.R.string.ok) { _, _ ->
-                if (recipient.hasServiceId()) {
-                  SignalDatabase.sessions.deleteAllFor(serviceId = SignalStore.account().requireAci(), addressName = recipient.requireServiceId().toString())
+                if (recipient.hasAci()) {
+                  SignalDatabase.sessions.deleteAllFor(recipient.requireAci().toString())
+                }
+                if (recipient.hasE164()) {
+                  SignalDatabase.sessions.deleteAllFor(recipient.requireE164())
                 }
               }
               .show()
@@ -195,8 +206,6 @@ class InternalConversationSettingsFragment : DSLSettingsFragment(
       colorize("SenderKey", recipient.senderKeyCapability),
       ", ",
       colorize("ChangeNumber", recipient.changeNumberCapability),
-      ", ",
-      colorize("Stories", recipient.storiesCapability),
     )
   }
 

@@ -38,4 +38,5 @@
     <color name="core_grey_85">#262626</color>
     <color name="core_grey_90">#1b1b1b</color>
     <color name="core_grey_95">#121212</color>
+    <color name="core_grey_100">#81D5D5D5</color>
 </resources>

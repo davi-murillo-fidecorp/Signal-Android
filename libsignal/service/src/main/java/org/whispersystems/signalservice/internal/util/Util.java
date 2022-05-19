@@ -157,12 +157,4 @@ public class Util {
       return defaultValue;
     }
   }
-
-  public static long parseLong(String longString, long defaultValue) {
-    try {
-      return Long.parseLong(longString);
-    } catch (NumberFormatException e) {
-      return defaultValue;
-    }
-  }
 }

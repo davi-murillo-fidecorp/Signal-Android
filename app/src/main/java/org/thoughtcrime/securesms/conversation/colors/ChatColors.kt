@@ -10,11 +10,8 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.annotation.ColorInt
 import com.google.common.base.Objects
-import kotlinx.parcelize.Parcelize
 import org.signal.core.util.ColorUtil
 import org.thoughtcrime.securesms.components.RotatableGradientDrawable
 import org.thoughtcrime.securesms.database.model.databaseprotos.ChatColor
@@ -28,12 +25,11 @@ import kotlin.math.min
  * @param linearGradient The LinearGradient to render. Null if this is for a single color.
  * @param singleColor    The single color to render. Null if this is for a linear gradient.
  */
-@Parcelize
 class ChatColors private constructor(
   val id: Id,
   private val linearGradient: LinearGradient?,
   private val singleColor: Int?
-) : Parcelable {
+) {
 
   fun isGradient(): Boolean = Build.VERSION.SDK_INT >= 21 && linearGradient != null
 
@@ -186,7 +182,7 @@ class ChatColors private constructor(
       ChatColors(id, null, color)
   }
 
-  sealed class Id(val longValue: Long) : Parcelable {
+  sealed class Id(val longValue: Long) {
     /**
      * Represents user selection of 'auto'.
      */
@@ -215,12 +211,6 @@ class ChatColors private constructor(
       return Objects.hashCode(longValue)
     }
 
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-      dest.writeLong(longValue)
-    }
-
-    override fun describeContents(): Int = 0
-
     companion object {
       @JvmStatic
       fun forLongValue(longValue: Long): Id {
@@ -231,26 +221,14 @@ class ChatColors private constructor(
           else -> Custom(longValue)
         }
       }
-
-      @JvmField
-      val CREATOR = object : Parcelable.Creator<Id> {
-        override fun createFromParcel(parcel: Parcel): Id {
-          return forLongValue(parcel.readLong())
-        }
-
-        override fun newArray(size: Int): Array<Id?> {
-          return arrayOfNulls(size)
-        }
-      }
     }
   }
 
-  @Parcelize
   data class LinearGradient(
     val degrees: Float,
     val colors: IntArray,
     val positions: FloatArray
-  ) : Parcelable {
+  ) {
 
     override fun equals(other: Any?): Boolean {
       if (this === other) return true

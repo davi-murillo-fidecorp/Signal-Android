@@ -79,8 +79,7 @@ public class InputPanel extends LinearLayout
   private ComposeText     composeText;
   private View            quickCameraToggle;
   private View            quickAudioToggle;
-  private AnimatingToggle buttonToggle;
-  private SendButton      sendButton;
+  private View            buttonToggle;
   private View            recordingContainer;
   private View            recordLockCancel;
   private ViewGroup       composeContainer;
@@ -128,7 +127,6 @@ public class InputPanel extends LinearLayout
     this.quickCameraToggle      = findViewById(R.id.quick_camera_toggle);
     this.quickAudioToggle       = findViewById(R.id.quick_audio_toggle);
     this.buttonToggle           = findViewById(R.id.button_toggle);
-    this.sendButton             = findViewById(R.id.send_button);
     this.recordingContainer     = findViewById(R.id.recording_container);
     this.recordLockCancel       = findViewById(R.id.record_cancel);
     this.voiceNoteDraftView     = findViewById(R.id.voice_note_draft_view);
@@ -356,13 +354,13 @@ public class InputPanel extends LinearLayout
     slideToCancel.display();
 
     if (emojiVisible) {
-      fadeOut(mediaKeyboard);
+      ViewUtil.fadeOut(mediaKeyboard, FADE_TIME, View.INVISIBLE);
     }
 
-    fadeOut(composeText);
-    fadeOut(quickCameraToggle);
-    fadeOut(quickAudioToggle);
-    fadeOut(buttonToggle);
+    ViewUtil.fadeOut(composeText, FADE_TIME, View.INVISIBLE);
+    ViewUtil.fadeOut(quickCameraToggle, FADE_TIME, View.INVISIBLE);
+    ViewUtil.fadeOut(quickAudioToggle, FADE_TIME, View.INVISIBLE);
+    buttonToggle.animate().alpha(0).setDuration(FADE_TIME).start();
   }
 
   @Override
@@ -403,7 +401,7 @@ public class InputPanel extends LinearLayout
   public void onRecordLocked() {
     slideToCancel.hide();
     recordLockCancel.setVisibility(View.VISIBLE);
-    fadeIn(buttonToggle);
+    buttonToggle.animate().alpha(1).setDuration(FADE_TIME).start();
     if (listener != null) listener.onRecorderLocked();
   }
 
@@ -477,7 +475,6 @@ public class InputPanel extends LinearLayout
       voiceNoteDraftView.setDraft(voiceNoteDraft);
       voiceNoteDraftView.setVisibility(VISIBLE);
       hideNormalComposeViews();
-      buttonToggle.displayQuick(sendButton);
     } else {
       voiceNoteDraftView.clearDraft();
       ViewUtil.fadeOut(voiceNoteDraftView, FADE_TIME);
@@ -491,33 +488,36 @@ public class InputPanel extends LinearLayout
 
   private void hideNormalComposeViews() {
     if (emojiVisible) {
-      mediaKeyboard.animate().cancel();
-      mediaKeyboard.setAlpha(0f);
+      Animation animation = mediaKeyboard.getAnimation();
+      if (animation != null) {
+        animation.cancel();
+      }
+
+      mediaKeyboard.setVisibility(View.INVISIBLE);
     }
 
-    for (View view : Arrays.asList(composeText, quickCameraToggle, quickAudioToggle)) {
-      view.animate().cancel();
-      view.setAlpha(0f);
+    for (Animation animation : Arrays.asList(composeText.getAnimation(), quickCameraToggle.getAnimation(), quickAudioToggle.getAnimation())) {
+      if (animation != null) {
+        animation.cancel();
+      }
     }
+
+    buttonToggle.animate().cancel();
+
+    composeText.setVisibility(View.INVISIBLE);
+    quickCameraToggle.setVisibility(View.INVISIBLE);
+    quickAudioToggle.setVisibility(View.INVISIBLE);
   }
 
   private void fadeInNormalComposeViews() {
     if (emojiVisible) {
-      fadeIn(mediaKeyboard);
+      ViewUtil.fadeIn(mediaKeyboard, FADE_TIME);
     }
 
-    fadeIn(composeText);
-    fadeIn(quickCameraToggle);
-    fadeIn(quickAudioToggle);
-    fadeIn(buttonToggle);
-  }
-
-  private void fadeIn(@NonNull View v) {
-    v.animate().alpha(1).setDuration(FADE_TIME).start();
-  }
-
-  private void fadeOut(@NonNull View v) {
-    v.animate().alpha(0).setDuration(FADE_TIME).start();
+    ViewUtil.fadeIn(composeText, FADE_TIME);
+    ViewUtil.fadeIn(quickCameraToggle, FADE_TIME);
+    ViewUtil.fadeIn(quickAudioToggle, FADE_TIME);
+    buttonToggle.animate().alpha(1).setDuration(FADE_TIME).start();
   }
 
   private void updateVisibility() {

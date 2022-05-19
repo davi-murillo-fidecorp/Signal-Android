@@ -122,9 +122,6 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
       ThreadUtil.runOnMainDelayed(() -> handleRegister(requireContext()), 250);
     }
 
-    Toolbar toolbar = view.findViewById(R.id.toolbar);
-    ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
-    ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(null);
   }
 
   @Override

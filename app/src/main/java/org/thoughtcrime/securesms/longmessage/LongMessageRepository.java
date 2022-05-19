@@ -31,7 +31,7 @@ class LongMessageRepository {
   private final MessageDatabase mmsDatabase;
   private final MessageDatabase smsDatabase;
 
-  LongMessageRepository() {
+  LongMessageRepository(@NonNull Context context) {
     this.mmsDatabase = SignalDatabase.mms();
     this.smsDatabase = SignalDatabase.sms();
   }

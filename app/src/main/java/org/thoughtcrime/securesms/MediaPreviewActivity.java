@@ -21,11 +21,13 @@ import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -553,27 +555,19 @@ public final class MediaPreviewActivity extends PassphraseRequiredActivity
       }
       cursor = Objects.requireNonNull(data.first);
 
-      viewModel.setCursor(this, cursor, leftIsRecent);
-
       int mediaPosition = Objects.requireNonNull(data.second);
 
-      CursorPagerAdapter oldAdapter = (CursorPagerAdapter) mediaPager.getAdapter();
-      if (oldAdapter == null) {
-        CursorPagerAdapter adapter = new CursorPagerAdapter(getSupportFragmentManager(), this, cursor, mediaPosition, leftIsRecent);
-        mediaPager.setAdapter(adapter);
-        adapter.setActive(true);
-      } else {
-        oldAdapter.setCursor(cursor, mediaPosition);
-        oldAdapter.setActive(true);
-      }
+      CursorPagerAdapter adapter = new CursorPagerAdapter(getSupportFragmentManager(),this, cursor, mediaPosition, leftIsRecent);
+      mediaPager.setAdapter(adapter);
+      adapter.setActive(true);
 
-      if (oldAdapter == null || restartItem >= 0) {
-        int item = restartItem >= 0 ? restartItem : mediaPosition;
-        mediaPager.setCurrentItem(item);
+      viewModel.setCursor(this, cursor, leftIsRecent);
 
-        if (item == 0) {
-          viewPagerListener.onPageSelected(0);
-        }
+      int item = restartItem >= 0 ? restartItem : mediaPosition;
+      mediaPager.setCurrentItem(item);
+
+      if (item == 0) {
+        viewPagerListener.onPageSelected(0);
       }
     } else {
       mediaNotAvailable();
@@ -721,10 +715,10 @@ public final class MediaPreviewActivity extends PassphraseRequiredActivity
     private final Map<Integer, MediaPreviewFragment> mediaFragments = new HashMap<>();
 
     private final Context context;
+    private final Cursor  cursor;
     private final boolean leftIsRecent;
 
     private boolean active;
-    private Cursor  cursor;
     private int     autoPlayPosition;
 
     CursorPagerAdapter(@NonNull FragmentManager fragmentManager,
@@ -743,11 +737,6 @@ public final class MediaPreviewActivity extends PassphraseRequiredActivity
     public void setActive(boolean active) {
       this.active = active;
       notifyDataSetChanged();
-    }
-
-    public void setCursor(@NonNull Cursor cursor, int autoPlayPosition) {
-      this.cursor           = cursor;
-      this.autoPlayPosition = autoPlayPosition;
     }
 
     @Override

@@ -7,7 +7,6 @@ apply from: 'translations.gradle'
 apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'app.cash.exhaustive'
 apply plugin: 'kotlin-parcelize'
-apply from: 'static-ips.gradle'
 
 repositories {
     maven {
@@ -63,8 +62,8 @@ ktlint {
     version = "0.43.2"
 }
 
-def canonicalVersionCode = 1021
-def canonicalVersionName = "5.33.2"
+def canonicalVersionCode = 999
+def canonicalVersionName = "5.31.2"
 
 def postFixSize = 100
 def abiPostFix = ['universal'   : 0,
@@ -76,18 +75,18 @@ def abiPostFix = ['universal'   : 0,
 def keystores = [ 'debug'  : loadKeystoreProperties('keystore.debug.properties') ]
 
 def selectableVariants = [
-        'nightlyProdSpinner',
+        'nightlyProdFlipper',
         'nightlyProdPerf',
         'nightlyProdRelease',
         'playProdDebug',
-        'playProdSpinner',
+        'playProdFlipper',
         'playProdPerf',
         'playProdRelease',
         'playStagingDebug',
-        'playStagingSpinner',
+        'playStagingFlipper',
         'playStagingPerf',
         'playStagingRelease',
-        'websiteProdSpinner',
+        'websiteProdFlipper',
         'websiteProdRelease',
 ]
 
@@ -118,48 +117,6 @@ android {
         }
     }
 
-    testOptions {
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
-
-        unitTests {
-            includeAndroidResources = true
-        }
-    }
-
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError true
-        baseline file("lint-baseline.xml")
-        disable "LintError"
-    }
-
-    sourceSets {
-        test {
-            java.srcDirs += "$projectDir/src/testShared"
-        }
-
-        androidTest {
-            java.srcDirs += "$projectDir/src/testShared"
-        }
-    }
-
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility JAVA_VERSION
-        targetCompatibility JAVA_VERSION
-    }
-
-    packagingOptions {
-        exclude 'LICENSE.txt'
-        exclude 'LICENSE'
-        exclude 'NOTICE'
-        exclude 'asm-license.txt'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/proguard/androidx-annotations.pro'
-    }
-
-
     defaultConfig {
         versionCode canonicalVersionCode * postFixSize
         versionName canonicalVersionName
@@ -187,17 +144,9 @@ android {
         buildConfigField "String[]", "SIGNAL_SFU_INTERNAL_URLS", "new String[]{\"https://sfu.test.voip.signal.org\", \"https://sfu.staging.voip.signal.org\"}"
         buildConfigField "String", "CONTENT_PROXY_HOST", "\"contentproxy.signal.org\""
         buildConfigField "int", "CONTENT_PROXY_PORT", "443"
-        buildConfigField "String[]", "SIGNAL_SERVICE_IPS", service_ips
-        buildConfigField "String[]", "SIGNAL_STORAGE_IPS", storage_ips
-        buildConfigField "String[]", "SIGNAL_CDN_IPS", cdn_ips
-        buildConfigField "String[]", "SIGNAL_CDN2_IPS", cdn2_ips
-        buildConfigField "String[]", "SIGNAL_CDS_IPS", cds_ips
-        buildConfigField "String[]", "SIGNAL_KBS_IPS", kbs_ips
-        buildConfigField "String[]", "SIGNAL_SFU_IPS", sfu_ips
-        buildConfigField "String[]", "SIGNAL_CONTENT_PROXY_IPS", content_proxy_ips
         buildConfigField "String", "SIGNAL_AGENT", "\"OWA\""
         buildConfigField "String", "CDSH_PUBLIC_KEY", "\"2fe57da347cd62431528daac5fbb290730fff684afc4cfc2ed90995f58cb3b74\""
-        buildConfigField "String", "CDSH_CODE_HASH", "\"2f79dc6c1599b71c70fc2d14f3ea2e3bc65134436eb87011c88845b137af673a\""
+        buildConfigField "String", "CDSH_CODE_HASH", "\"ec58c0d7561de8d5657f3a4b22a635eaa305204e9359dcc80a99dfd0c5f1cbf2\""
         buildConfigField "String", "CDS_MRENCLAVE", "\"c98e00a4e3ff977a56afefe7362a27e4961e4f19e211febfbb19b897e6b80b15\""
         buildConfigField "org.thoughtcrime.securesms.KbsEnclave", "KBS_ENCLAVE", "new org.thoughtcrime.securesms.KbsEnclave(\"0cedba03535b41b67729ce9924185f831d7767928a1d1689acb689bc079c375f\", " +
                                                                                                                            "\"187d2739d22be65e74b65f0055e74d31310e4267e5fac2b1246cc8beba81af39\", " +
@@ -212,8 +161,8 @@ android {
         buildConfigField "String[]", "LANGUAGES", "new String[]{\"" + autoResConfig().collect { s -> s.replace('-r', '_') }.join('", "') + '"}'
         buildConfigField "int", "CANONICAL_VERSION_CODE", "$canonicalVersionCode"
         buildConfigField "String", "DEFAULT_CURRENCIES", "\"EUR,AUD,GBP,CAD,CNY\""
+        buildConfigField "int[]", "MOBILE_COIN_BLACKLIST", "new int[]{98,963,53,850,7}"
         buildConfigField "String", "GIPHY_API_KEY", "\"3o6ZsYH6U6Eri53TXy\""
-        buildConfigField "String", "SIGNAL_CAPTCHA_URL", "\"https://signalcaptchas.org/registration/generate.html\""
         buildConfigField "String", "RECAPTCHA_PROOF_URL", "\"https://signalcaptchas.org/challenge/generate.html\""
 
         buildConfigField "String", "BUILD_DISTRIBUTION_TYPE", "\"unset\""
@@ -239,6 +188,36 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
+    }
+
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    }
+
+    sourceSets {
+        test {
+            java.srcDirs += "$projectDir/src/testShared"
+        }
+
+        androidTest {
+            java.srcDirs += "$projectDir/src/testShared"
+        }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JAVA_VERSION
+        targetCompatibility JAVA_VERSION
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'LICENSE'
+        exclude 'NOTICE'
+        exclude 'asm-license.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/proguard/androidx-annotations.pro'
     }
 
     buildTypes {
@@ -271,12 +250,12 @@ android {
 
             buildConfigField "String", "BUILD_VARIANT_TYPE", "\"Debug\""
         }
-        spinner {
+        flipper {
             initWith debug
             isDefault false
             minifyEnabled false
             matchingFallbacks = ['debug']
-            buildConfigField "String", "BUILD_VARIANT_TYPE", "\"Spinner\""
+            buildConfigField "String", "BUILD_VARIANT_TYPE", "\"Flipper\""
         }
         release {
             minifyEnabled true
@@ -352,7 +331,6 @@ android {
             buildConfigField "String", "UNIDENTIFIED_SENDER_TRUST_ROOT", "\"BbqY1DzohE4NUZoVF+L18oUPrK3kILllLEJh2UnPSsEx\""
             buildConfigField "String", "ZKGROUP_SERVER_PUBLIC_PARAMS", "\"ABSY21VckQcbSXVNCGRYJcfWHiAMZmpTtTELcDmxgdFbtp/bWsSxZdMKzfCp8rvIs8ocCU3B37fT3r4Mi5qAemeGeR2X+/YmOGR5ofui7tD5mDQfstAI9i+4WpMtIe8KC3wU5w3Inq3uNWVmoGtpKndsNfwJrCg0Hd9zmObhypUnSkfYn2ooMOOnBpfdanRtrvetZUayDMSC5iSRcXKpdlukrpzzsCIvEwjwQlJYVPOQPj4V0F4UXXBdHSLK05uoPBCQG8G9rYIGedYsClJXnbrgGYG3eMTG5hnx4X4ntARBgELuMWWUEEfSK0mjXg+/2lPmWcTZWR9nkqgQQP0tbzuiPm74H2wMO4u1Wafe+UwyIlIT9L7KLS19Aw8r4sPrXQ==\""
             buildConfigField "String", "MOBILE_COIN_ENVIRONMENT", "\"testnet\""
-            buildConfigField "String", "SIGNAL_CAPTCHA_URL", "\"https://signalcaptchas.org/staging/registration/generate.html\""
             buildConfigField "String", "RECAPTCHA_PROOF_URL", "\"https://signalcaptchas.org/staging/challenge/generate.html\""
 
             buildConfigField "String", "BUILD_ENVIRONMENT_TYPE", "\"Staging\""
@@ -366,9 +344,6 @@ android {
                 output.versionCodeOverride = canonicalVersionCode * postFixSize + 5
                 def tag = getCurrentGitTag()
                 if (tag != null && tag.length() > 0) {
-                    if (tag.startsWith("v")) {
-                        tag = tag.substring(1)
-                    }
                     output.versionNameOverride = tag
                 }
             } else {
@@ -391,6 +366,19 @@ android {
 
         if (!selectableVariants.contains(fullName)) {
             variant.setIgnore(true)
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError true
+        baseline file("lint-baseline.xml")
+        disable "LintError"
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
         }
     }
 }
@@ -518,8 +506,9 @@ dependencies {
     }
     implementation libs.dnsjava
 
-    spinnerImplementation project(":spinner")
-    spinnerImplementation libs.square.leakcanary
+    flipperImplementation libs.facebook.flipper
+    flipperImplementation libs.facebook.soloader
+    flipperImplementation libs.square.leakcanary
 
     testImplementation testLibs.junit.junit
     testImplementation testLibs.assertj.core

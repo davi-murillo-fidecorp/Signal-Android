@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 
 import org.signal.core.util.concurrent.TracingExecutor;
 import org.signal.core.util.concurrent.TracingExecutorService;
@@ -19,9 +18,6 @@ import java.util.concurrent.ExecutorService;
 public final class ThreadUtil {
 
   private static volatile Handler handler;
-
-  @VisibleForTesting
-  public static volatile  boolean enforceAssertions = true;
 
   private ThreadUtil() {}
 
@@ -41,13 +37,13 @@ public final class ThreadUtil {
   }
 
   public static void assertMainThread() {
-    if (!isMainThread() && enforceAssertions) {
+    if (!isMainThread()) {
       throw new AssertionError("Must run on main thread.");
     }
   }
 
   public static void assertNotMainThread() {
-    if (isMainThread() && enforceAssertions) {
+    if (isMainThread()) {
       throw new AssertionError("Cannot run on main thread.");
     }
   }

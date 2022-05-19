@@ -91,7 +91,7 @@ public final class GroupsV2CapabilityChecker {
         }
       }
 
-      if (!member.hasServiceId()) {
+      if (!member.hasAci()) {
         noUuidCount++;
       }
     }

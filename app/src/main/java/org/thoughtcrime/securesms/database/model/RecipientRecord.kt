@@ -20,21 +20,20 @@ import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper
 import org.whispersystems.libsignal.util.guava.Optional
+import org.whispersystems.signalservice.api.push.ACI
 import org.whispersystems.signalservice.api.push.PNI
-import org.whispersystems.signalservice.api.push.ServiceId
 
 /**
  * Database model for [RecipientDatabase].
  */
 data class RecipientRecord(
   val id: RecipientId,
-  val serviceId: ServiceId?,
+  val aci: ACI?,
   val pni: PNI?,
   val username: String?,
   val e164: String?,
   val email: String?,
   val groupId: GroupId?,
-  val distributionListId: DistributionListId?,
   val groupType: RecipientDatabase.GroupType,
   val isBlocked: Boolean,
   val muteUntil: Long,
@@ -71,7 +70,6 @@ data class RecipientRecord(
   val senderKeyCapability: Recipient.Capability,
   val announcementGroupCapability: Recipient.Capability,
   val changeNumberCapability: Recipient.Capability,
-  val storiesCapability: Recipient.Capability,
   val insightsBannerTier: InsightsBannerTier,
   val storageId: ByteArray?,
   val mentionSetting: MentionSetting,

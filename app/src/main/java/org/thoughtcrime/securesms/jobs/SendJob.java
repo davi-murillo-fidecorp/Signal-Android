@@ -45,7 +45,7 @@ public abstract class SendJob extends BaseJob {
 
   protected abstract void onSend() throws Exception;
 
-  protected static void markAttachmentsUploaded(long messageId, @NonNull OutgoingMediaMessage message) {
+  protected void markAttachmentsUploaded(long messageId, @NonNull OutgoingMediaMessage message) {
     List<Attachment> attachments = new LinkedList<>();
 
     attachments.addAll(message.getAttachments());

@@ -23,12 +23,10 @@ public abstract class AudioManagerCompat {
   private static final int AUDIOFOCUS_GAIN = AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE;
 
   protected final AudioManager audioManager;
-  protected       boolean      hasFocus;
 
   @SuppressWarnings("CodeBlock2Expr")
   protected final AudioManager.OnAudioFocusChangeListener onAudioFocusChangeListener = focusChange -> {
     Log.i(TAG, "onAudioFocusChangeListener: " + focusChange);
-    hasFocus = focusChange == AudioManager.AUDIOFOCUS_GAIN;
   };
 
   private AudioManagerCompat(@NonNull Context context) {
@@ -118,7 +116,7 @@ public abstract class AudioManagerCompat {
   }
 
   abstract public SoundPool createSoundPool();
-  abstract public boolean requestCallAudioFocus();
+  abstract public void requestCallAudioFocus();
   abstract public void abandonCallAudioFocus();
 
   public static AudioManagerCompat create(@NonNull Context context) {
@@ -154,29 +152,22 @@ public abstract class AudioManagerCompat {
     }
 
     @Override
-    public boolean requestCallAudioFocus() {
-      if (audioFocusRequest != null && hasFocus) {
+    public void requestCallAudioFocus() {
+      if (audioFocusRequest != null) {
         Log.w(TAG, "Already requested audio focus. Ignoring...");
-        return true;
+        return;
       }
 
-      if (audioFocusRequest == null) {
-        audioFocusRequest = new AudioFocusRequest.Builder(AUDIOFOCUS_GAIN)
-                                                 .setAudioAttributes(AUDIO_ATTRIBUTES)
-                                                 .setOnAudioFocusChangeListener(onAudioFocusChangeListener)
-                                                 .build();
-      } else {
-        Log.w(TAG, "Trying again to request audio focus");
-      }
+      audioFocusRequest = new AudioFocusRequest.Builder(AUDIOFOCUS_GAIN)
+                                               .setAudioAttributes(AUDIO_ATTRIBUTES)
+                                               .setOnAudioFocusChangeListener(onAudioFocusChangeListener)
+                                               .build();
 
       int result = audioManager.requestAudioFocus(audioFocusRequest);
 
       if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
         Log.w(TAG, "Audio focus not granted. Result code: " + result);
-        return false;
       }
-
-      return true;
     }
 
     @Override
@@ -192,7 +183,6 @@ public abstract class AudioManagerCompat {
         Log.w(TAG, "Audio focus abandon failed. Result code: " + result);
       }
 
-      hasFocus          = false;
       audioFocusRequest = null;
     }
   }
@@ -227,19 +217,16 @@ public abstract class AudioManagerCompat {
 
     @Override
     public SoundPool createSoundPool() {
-      return new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 0);
+      return new SoundPool(1, AudioManager.STREAM_VOICE_CALL, 0);
     }
 
     @Override
-    public boolean requestCallAudioFocus() {
+    public void requestCallAudioFocus() {
       int result = audioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_VOICE_CALL, AUDIOFOCUS_GAIN);
 
       if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
         Log.w(TAG, "Audio focus not granted. Result code: " + result);
-        return false;
       }
-
-      return true;
     }
 
     @Override

@@ -122,15 +122,6 @@
   <string name="CameraContacts_cant_find_who_youre_looking_for">Axtardığınızı tapa bilmirsiniz?</string>
   <string name="CameraContacts_invite_a_contact_to_join_signal">Əlaqəni Signal-a qoşulmağa dəvət edin</string>
   <string name="CameraContacts__menu_search">Axtar</string>
-  <!--Censorship Circumvention Megaphone-->
-  <!--Title for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off_censorship_circumvention">Senzuradan yayınma söndürülsün?</string>
-  <!--Body for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_you_can_now_connect_to_the_signal_service">Artıq daha yaxşı bir xidmət üçün birbaşa Signal xidməti ilə bağlantı qura bilərsiniz.</string>
-  <!--Action to prompt the user to disable circumvention since it is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off">Söndür</string>
-  <!--Action to prompt the user to dismiss the alert at the bottom of the chat list-->
-  <string name="CensorshipCircumventionMegaphone_no_thanks">Xeyr, təşəkkürlər</string>
   <!--ClearProfileActivity-->
   <string name="ClearProfileActivity_remove">Çıxart</string>
   <string name="ClearProfileActivity_remove_profile_photo">Profil fotosu çıxarılsın? </string>
@@ -1256,11 +1247,6 @@
   <string name="RedPhone_number_not_registered">Nömrə qeydiyyatdan keçirilməyib!</string>
   <string name="RedPhone_the_number_you_dialed_does_not_support_secure_voice">Daxil etdiyiniz nömrə güvənli səs sistemini dəstəkləmir!</string>
   <string name="RedPhone_got_it">Anladım</string>
-  <!--Valentine\'s Day Megaphone-->
-  <!--Title text for the Valentine\'s Day donation megaphone. The placeholder will always be a heart emoji. Needs to be a placeholder for Android reasons.-->
-  <string name="ValentinesDayMegaphone_happy_heart_day">Sevgililər 💜 Gününüz Mübarək!</string>
-  <!--Body text for the Valentine\'s Day donation megaphone.-->
-  <string name="ValentinesDayMegaphone_show_your_affection">Bir Signal dəstəkçisi olaraq sevginizi göstərin.</string>
   <!--WebRtcCallActivity-->
   <string name="WebRtcCallActivity__tap_here_to_turn_on_your_video">Videonuzu açmaq üçün bura toxunun</string>
   <string name="WebRtcCallActivity__to_call_s_signal_needs_access_to_your_camera">Signal-ın, %1$s əlaqəsinə zəng etmək üçün kameranıza müraciətinə ehtiyacı var</string>
@@ -1316,7 +1302,6 @@
   <string name="WebRtcCallView__flip">Çevir</string>
   <string name="WebRtcCallView__speaker">Dinamik</string>
   <string name="WebRtcCallView__camera">Kamera</string>
-  <string name="WebRtcCallView__unmute">Səsi aç</string>
   <string name="WebRtcCallView__mute">Səssizə al</string>
   <string name="WebRtcCallView__ring">Zəng</string>
   <string name="WebRtcCallView__end_call">Zəngi bitir</string>
@@ -1619,10 +1604,6 @@
   <string name="NotificationChannel_voice_notes">Səsli qeydlər</string>
   <string name="NotificationChannel_contact_joined_signal">Əlaqə Signal-a qoşuldu</string>
   <string name="NotificationChannels__no_activity_available_to_open_notification_channel_settings">Bildiriş kanalı tənzimləmələrini açmaq üçün mövcud bir fəaliyyət yoxdur</string>
-  <!--Notification channel name for showing persistent background connection on devices without push notifications-->
-  <string name="NotificationChannel_background_connection">Arxaplan bağlantısı</string>
-  <!--Notification channel name for showing call status information (like connection, ongoing, etc.) Not ringing.-->
-  <string name="NotificationChannel_call_status">Zəngin vəziyyəti</string>
   <!--ProfileEditNameFragment-->
   <!--QuickResponseService-->
   <string name="QuickResponseService_quick_response_unavailable_when_Signal_is_locked">Signal kilidli ikən cəld cavab əlçatmazdır!</string>
@@ -2188,19 +2169,6 @@
   <string name="preferences_chats__message_text_size">Mesaj şrift ölçüsü</string>
   <string name="preferences_events__contact_joined_signal">Əlaqə Signal-a qoşuldu</string>
   <string name="preferences_notifications__priority">Üstünlük</string>
-  <!--Heading for the \'censorship circumvention\' section of privacy preferences-->
-  <string name="preferences_communication__category_censorship_circumvention">Senzuradan yayınma</string>
-  <!--Title of the \'censorship circumvention\' toggle switch-->
-  <string name="preferences_communication__censorship_circumvention">Senzuradan yayınma</string>
-  <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Fəal olsa, Singal, senzuradan yayınmağa cəhd edəcək. Singal senzurasının olduğu bir yerdə deyilsəniz, bu özəlliyi fəallaşdırmayın.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Senzuradan yayınma, hesabınızın telefon nömrəsinə görə aktivləşdirildi.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Senzuradan yayınmanı əllə sıradan çıxartdınız.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service-->
-  <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Senzuradan yayınmağa ehtiyac yoxdur; artıq Signal xidmətinə bağlanmısınız.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet-->
-  <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Senzuradan yayınma, yalnız internetə bağlananda aktivləşdirilə bilər.</string>
   <string name="preferences_communication__category_sealed_sender">Gizli Göndərən</string>
   <string name="preferences_communication__sealed_sender_display_indicators">Göstəriciləri görüntülə</string>
   <string name="preferences_communication__sealed_sender_display_indicators_description">Gizli göndərən seçimini istifadə edərək çatdırılan mesajlarda \"Mesaj təfsilatları\"nı seçərkən bir status nişanı göstər.</string>
@@ -2248,7 +2216,7 @@
   <string name="PaymentsHomeFragment__currency_conversion">Pul vahidi çevirmə</string>
   <string name="PaymentsHomeFragment__deactivate_payments">Ödənişləri deaktiv et</string>
   <string name="PaymentsHomeFragment__recovery_phrase">Bərpa parolu</string>
-  <string name="PaymentsHomeFragment__help">Kömək</string>
+  <string name="PaymentsHomeFragment__help">Kömək et</string>
   <string name="PaymentsHomeFragment__coin_cleanup_fee">Xırda pul təmizləmə haqqı</string>
   <string name="PaymentsHomeFragment__sent_payment">Ödəniş göndərildi</string>
   <string name="PaymentsHomeFragment__received_payment">Ödəniş alındı</string>
@@ -2259,7 +2227,7 @@
   <string name="PaymentsHomeFragment__payments_is_not_available_in_your_region">Ödənişlər bölgənizdə əlçatmazdır.</string>
   <string name="PaymentsHomeFragment__could_not_enable_payments">Ödənişlər fəallaşdırıla bilmir. Daha sonra yenidən sınayın.</string>
   <string name="PaymentsHomeFragment__deactivate_payments_question">Ödənişlər deaktiv edilsin?</string>
-  <string name="PaymentsHomeFragment__you_will_not_be_able_to_send">Ödənişləri deaktiv etsəniz, Signal-da MobileCoin göndərə və ya ala bilməyəcəksiniz.</string>
+  <string name="PaymentsHomeFragment__you_will_not_be_able_to_send">Ödənişləri deaktiv etsəniz, Signal-da MobileCoin göndərə və ya ala bilməzsiniz.</string>
   <string name="PaymentsHomeFragment__deactivate">Deaktiv et</string>
   <string name="PaymentsHomeFragment__continue">Davam et</string>
   <string name="PaymentsHomeFragment__balance_is_not_currently_available">Balans hal-hazırda əlçatmazdır.</string>
@@ -3001,7 +2969,7 @@
   <string name="PaymentsRecoveryStartFragment__recovery_phrase">Bərpa parolu</string>
   <string name="PaymentsRecoveryStartFragment__view_recovery_phrase">Bərpa paroluna bax</string>
   <string name="PaymentsRecoveryStartFragment__enter_recovery_phrase">Bərpa parolunu daxil edin</string>
-  <string name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">Signal PIN-inizi təsdiqləmisinizsə, Signal-ı yenidən quraşdıranda balansınız avtomatik geri yüklənəcək. Həmçinin sizə xas olan %1$d sözdən ibarət bir bərpa parolunu istifadə edərək balansınızı geri yükləyə bilərsiniz. Bunu bir yerə yazın və etibarlı bir yerdə saxlayın.</string>
+  <string name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">Signal PIN-inizi təsdiqlədinizsə, Signal-ı yenidən quraşdıranda balansınız avtomatik geri yüklənəcək. Həmçinin sizə xas olan %1$d sözdən ibarət bir bərpa parolunu istifadə edərək balansınızı geri yükləyə bilərsiniz. Bunu bir yerə yazın və etibarlı bir yerdə saxlayın.</string>
   <string name="PaymentsRecoveryStartFragment__your_recovery_phrase_is_a">Bərpa parolunuz, sizə xas %1$d sözdən ibarət bir paroldur. Balansınızı geri yükləmək üçün bu parolu istifadə edin.</string>
   <string name="PaymentsRecoveryStartFragment__start">Başla</string>
   <string name="PaymentsRecoveryStartFragment__enter_manually">Əllə daxil edin</string>
@@ -3468,15 +3436,9 @@
   <string name="ExpiredBadgeBottomSheetDialogFragment__become_a_sustainer">Bir dəstəkçi olun</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__add_a_boost">Bir Gücləndirmə əlavə et</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__not_now">İndi yox</string>
-  <!--Copy displayed when badge expires after user inactivity-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_automatically">Uzun müddət aktiv olmadığınız üçün Dəstəkçi abunəliyiniz avtomatik olaraq ləğv edildi. %1$s nişanınız artıq profilinizdə görünmür.</string>
-  <!--Copy displayed when badge expires after payment failure-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_canceled">Ödənişinizi emal edə bilmədiyimizə görə Dəstəkçi abunəliyiniz ləğv edildi. Artıq nişanınız profilinizdə görünmür.</string>
+  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer">Uzun müddət aktiv olmadığınız üçün Dəstəkçi abunəliyiniz avtomatik olaraq ləğv edildi. %1$s nişanınız artıq profilinizdə görünmür.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Signal-ı istifadə etməyə davam edə bilərsiniz, ancaq tətbiqi dəstəkləmək və nişanınızı təkrar aktiv etmək üçün abunəliyi indi yeniləyin.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__renew_subscription">Abunəliyi yenilə</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__cant_process_subscription_payment">Abunəlik ödənişi emal edilə bilmir</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__were_having_trouble">Signal Dəstəkçi ödənişinizi almaqda çətinlik çəkirik. Ödəniş metodunuzun güncəl olduğuna əmin olun. Əgər deyilsə, Google Play-də yeniləyin. Signal, bir neçə gün sonra ödənişi yenidən emal etməyə çalışacaq.</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__dont_show_this_again">Bunu təkrar göstərmə</string>
   <string name="Subscription__please_contact_support_for_more_information">Daha çox məlumat üçün zəhmət olmasa dəstəklə əlaqə saxlayın.</string>
   <string name="Subscription__contact_support">Dəstək ilə əlaqə</string>
   <string name="Subscription__earn_a_s_badge">%1$s nişanını qazanın.</string>
@@ -3498,34 +3460,6 @@
   <string name="ViewBadgeBottomSheetDialogFragment__your_device_doesn_t_support_google_pay_so_you_can_t_subscribe_to_earn_a_badge_you_can_still_support_signal_by_making_a_donation_on_our_website">Cihazınız, \"Google Pay\"i dəstəkləmir, ona görə də, nişan qazanmaq üçün abunə ola bilməzsiniz. Veb saytımızdan ianə edərək Signal-a dəstək ola bilərsiniz.</string>
   <string name="NetworkFailure__network_error_check_your_connection_and_try_again">Şəbəkə xətası. Bağlantınızı yoxlayıb yenidən sınayın.</string>
   <string name="NetworkFailure__retry">Yenidən sına</string>
-  <!--Stripe decline code generic_failure-->
-  <string name="DeclineCode__try_another_payment_method_or_contact_your_bank">Başqa ödəniş metodunu sınayın və ya daha ətraflı məlumat üçün bankınızla əlaqə saxlayın.</string>
-  <!--Stripe decline code verify on Google Pay and try again-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again">Ödəniş metodunuzun Google Play-də güncəl olduğunu təsdiqləyin və yenidən sınayın.</string>
-  <!--Stripe decline code learn more action label-->
-  <string name="DeclineCode__learn_more">Daha ətraflı</string>
-  <!--Stripe decline code contact issuer-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again_if_the_problem">Ödəniş metodunuzun Google Play-də güncəl olduğunu təsdiqləyin və yenidən sınayın. Əgər problem davam edərsə, bankınızla əlaqə saxlayın.</string>
-  <!--Stripe decline code purchase not supported-->
-  <string name="DeclineCode__your_card_does_not_support_this_type_of_purchase">Kartınız bu növ satın almaları dəstəkləmir. Başqa bir ödəniş metodunu sınayın.</string>
-  <!--Stripe decline code your card has expired-->
-  <string name="DeclineCode__your_card_has_expired">Kartınızın istifadə müddəti bitib. Google Play-də ödəniş metodunuzu yeniləyib yenidən sınayın.</string>
-  <!--Stripe decline code go to google pay action label-->
-  <string name="DeclineCode__go_to_google_pay">Google Play-ə get</string>
-  <!--Stripe decline code incorrect card number-->
-  <string name="DeclineCode__your_card_number_is_incorrect">Kart nömrəniz yanlışdır. Google Play-də yeniləyib yenidən sınayın.</string>
-  <!--Stripe decline code incorrect cvc-->
-  <string name="DeclineCode__your_cards_cvc_number_is_incorrect">Kartınızın CVC nömrəsi yanlışdır. Google Play-də yeniləyib yenidən sınayın.</string>
-  <!--Stripe decline code insufficient funds-->
-  <string name="DeclineCode__your_card_does_not_have_sufficient_funds">Kartınızda bu satın almanı tamamlamaq üçün yetərli məbləğ yoxdur. Başqa bir ödəniş metodunu sınayın.</string>
-  <!--Stripe decline code incorrect expiration month-->
-  <string name="DeclineCode__the_expiration_month">Ödəniş metodunuzdakı son istifadə ayı yanlışdır. Google Play-də yeniləyib yenidən sınayın.</string>
-  <!--Stripe decline code incorrect expiration year-->
-  <string name="DeclineCode__the_expiration_year">Ödəniş metodunuzdakı son istifadə ili yanlışdır. Google Play-də yeniləyib yenidən sınayın.</string>
-  <!--Stripe decline code issuer not available-->
-  <string name="DeclineCode__try_completing_the_payment_again">Ödənişi yenidən tamamlamağa çalışın və ya daha ətraflı məlumat üçün bankınızla əlaqə saxlayın.</string>
-  <!--Stripe decline code processing error-->
-  <string name="DeclineCode__try_again">Yenidən sınayın və ya daha ətraflı məlumat üçün bankınızla əlaqə saxlayın.</string>
   <!--Title of create notification profile screen-->
   <string name="EditNotificationProfileFragment__name_your_profile">Profil adı</string>
   <!--Hint text for create/edit notification profile name-->

@@ -144,13 +144,10 @@ public class AccountAttributes {
     @JsonProperty
     private boolean changeNumber;
 
-    @JsonProperty
-    private boolean stories;
-
     @JsonCreator
     public Capabilities() {}
 
-    public Capabilities(boolean uuid, boolean gv2, boolean storage, boolean gv1Migration, boolean senderKey, boolean announcementGroup, boolean changeNumber, boolean stories) {
+    public Capabilities(boolean uuid, boolean gv2, boolean storage, boolean gv1Migration, boolean senderKey, boolean announcementGroup, boolean changeNumber) {
       this.uuid              = uuid;
       this.gv2               = gv2;
       this.storage           = storage;
@@ -158,7 +155,6 @@ public class AccountAttributes {
       this.senderKey         = senderKey;
       this.announcementGroup = announcementGroup;
       this.changeNumber      = changeNumber;
-      this.stories           = stories;
     }
 
     public boolean isUuid() {
@@ -187,10 +183,6 @@ public class AccountAttributes {
 
     public boolean isChangeNumber() {
       return changeNumber;
-    }
-
-    public boolean isStories() {
-      return stories;
     }
   }
 }

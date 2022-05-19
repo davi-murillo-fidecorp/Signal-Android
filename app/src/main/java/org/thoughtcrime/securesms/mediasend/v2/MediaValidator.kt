@@ -15,14 +15,14 @@ object MediaValidator {
     var error: FilterError? = null
     if (!isAllMediaValid) {
       error = if (media.all { MediaUtil.isImageOrVideoType(it.mimeType) }) {
-        FilterError.ItemTooLarge
+        FilterError.ITEM_TOO_LARGE
       } else {
-        FilterError.ItemInvalidType
+        FilterError.ITEM_INVALID_TYPE
       }
     }
 
     if (filteredMedia.size > maxSelection) {
-      error = FilterError.TooManyItems
+      error = FilterError.TOO_MANY_ITEMS
     }
 
     val truncatedMedia = filteredMedia.take(maxSelection)
@@ -39,7 +39,7 @@ object MediaValidator {
     }
 
     if (truncatedMedia.isEmpty()) {
-      error = FilterError.NoItems(error)
+      error = FilterError.NO_ITEMS
     }
 
     return FilterResult(truncatedMedia, error, bucketId)
@@ -67,14 +67,10 @@ object MediaValidator {
 
   data class FilterResult(val filteredMedia: List<Media>, val filterError: FilterError?, val bucketId: String?)
 
-  sealed class FilterError {
-    object ItemTooLarge : FilterError()
-    object ItemInvalidType : FilterError()
-    object TooManyItems : FilterError()
-    class NoItems(val cause: FilterError? = null) : FilterError() {
-      init {
-        require(cause !is NoItems)
-      }
-    }
+  enum class FilterError {
+    ITEM_TOO_LARGE,
+    ITEM_INVALID_TYPE,
+    TOO_MANY_ITEMS,
+    NO_ITEMS
   }
 }

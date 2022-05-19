@@ -33,7 +33,6 @@ import org.thoughtcrime.securesms.database.RecipientDatabase.RegisteredState;
 import org.thoughtcrime.securesms.database.RecipientDatabase.UnidentifiedAccessMode;
 import org.thoughtcrime.securesms.database.RecipientDatabase.VibrateState;
 import org.thoughtcrime.securesms.database.SignalDatabase;
-import org.thoughtcrime.securesms.database.model.DistributionListId;
 import org.thoughtcrime.securesms.database.model.databaseprotos.RecipientExtras;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.groups.GroupId;
@@ -49,8 +48,8 @@ import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper;
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.libsignal.util.guava.Preconditions;
+import org.whispersystems.signalservice.api.push.ACI;
 import org.whispersystems.signalservice.api.push.PNI;
-import org.whispersystems.signalservice.api.push.ServiceId;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
 import org.whispersystems.signalservice.api.util.UuidUtil;
 
@@ -71,7 +70,7 @@ public class Recipient {
 
   private static final String TAG = Log.tag(Recipient.class);
 
-  public static final Recipient UNKNOWN = new Recipient(RecipientId.UNKNOWN, RecipientDetails.forUnknown(), true);
+  public static final Recipient UNKNOWN = new Recipient(RecipientId.UNKNOWN, new RecipientDetails(), true);
 
   public static final FallbackPhotoProvider DEFAULT_FALLBACK_PHOTO_PROVIDER = new FallbackPhotoProvider();
 
@@ -79,13 +78,12 @@ public class Recipient {
 
   private final RecipientId            id;
   private final boolean                resolving;
-  private final ServiceId              serviceId;
+  private final ACI                    aci;
   private final PNI                    pni;
   private final String                 username;
   private final String                 e164;
   private final String                 email;
   private final GroupId                groupId;
-  private final DistributionListId     distributionListId;
   private final List<Recipient>        participants;
   private final Optional<Long>         groupAvatarId;
   private final boolean                isSelf;
@@ -117,7 +115,6 @@ public class Recipient {
   private final Capability             senderKeyCapability;
   private final Capability             announcementGroupCapability;
   private final Capability             changeNumberCapability;
-  private final Capability             storiesCapability;
   private final InsightsBannerTier     insightsBannerTier;
   private final byte[]                 storageId;
   private final MentionSetting         mentionSetting;
@@ -165,18 +162,12 @@ public class Recipient {
     return recipients;
   }
 
-  @WorkerThread
-  public static @NonNull Recipient distributionList(@NonNull DistributionListId distributionListId) {
-    RecipientId id = SignalDatabase.recipients().getOrInsertFromDistributionListId(distributionListId);
-    return resolved(id);
-  }
-
   /**
    * Returns a fully-populated {@link Recipient} and associates it with the provided username.
    */
   @WorkerThread
-  public static @NonNull Recipient externalUsername(@NonNull ServiceId serviceId, @NonNull String username) {
-    Recipient recipient = externalPush(serviceId, null, false);
+  public static @NonNull Recipient externalUsername(@NonNull Context context, @NonNull ACI aci, @NonNull String username) {
+    Recipient recipient = externalPush(context, aci, null, false);
     SignalDatabase.recipients().setUsername(recipient.getId(), username);
     return recipient;
   }
@@ -184,11 +175,11 @@ public class Recipient {
   /**
    * Returns a fully-populated {@link Recipient} based off of a {@link SignalServiceAddress},
    * creating one in the database if necessary. Convenience overload of
-   * {@link #externalPush(ServiceId, String, boolean)}
+   * {@link #externalPush(Context, ACI, String, boolean)}
    */
   @WorkerThread
-  public static @NonNull Recipient externalPush(@NonNull SignalServiceAddress signalServiceAddress) {
-    return externalPush(signalServiceAddress.getServiceId(), signalServiceAddress.getNumber().orNull(), false);
+  public static @NonNull Recipient externalPush(@NonNull Context context, @NonNull SignalServiceAddress signalServiceAddress) {
+    return externalPush(context, signalServiceAddress.getAci(), signalServiceAddress.getNumber().orNull(), false);
   }
 
   /**
@@ -197,11 +188,11 @@ public class Recipient {
    * prioritize E164 addresses and not use the UUIDs if possible.
    */
   @WorkerThread
-  public static @NonNull Recipient externalGV1Member(@NonNull SignalServiceAddress address) {
+  public static @NonNull Recipient externalGV1Member(@NonNull Context context, @NonNull SignalServiceAddress address) {
     if (address.getNumber().isPresent()) {
-      return externalPush(null, address.getNumber().get(), false);
+      return externalPush(context, null, address.getNumber().get(), false);
     } else {
-      return externalPush(address.getServiceId(), null, false);
+      return externalPush(context, address.getAci(), null, false);
     }
   }
 
@@ -216,41 +207,37 @@ public class Recipient {
    */
   @WorkerThread
   public static @NonNull Recipient externalHighTrustPush(@NonNull Context context, @NonNull SignalServiceAddress signalServiceAddress) {
-    return externalPush(signalServiceAddress.getServiceId(), signalServiceAddress.getNumber().orNull(), true);
+    return externalPush(context, signalServiceAddress.getAci(), signalServiceAddress.getNumber().orNull(), true);
   }
 
   /**
-   * Returns a fully-populated {@link Recipient} based off of an ACI and phone number, creating one
+   * Returns a fully-populated {@link Recipient} based off of a UUID and phone number, creating one
    * in the database if necessary. We want both piece of information so we're able to associate them
    * both together, depending on which are available.
    *
-   * In particular, while we'll eventually get the ACI of a user created via a phone number
+   * In particular, while we'll eventually get the UUID of a user created via a phone number
    * (through a directory sync), the only way we can store the phone number is by retrieving it from
    * sent messages and whatnot. So we should store it when available.
    *
-   * @param highTrust This should only be set to true if the source of the E164-ACI pairing is one
+   * @param highTrust This should only be set to true if the source of the E164-UUID pairing is one
    *                  that can be trusted as accurate (like an envelope).
    */
   @WorkerThread
-  public static @NonNull Recipient externalPush(@Nullable ServiceId serviceId, @Nullable String e164, boolean highTrust) {
-    if (ServiceId.UNKNOWN.equals(serviceId)) {
+  public static @NonNull Recipient externalPush(@NonNull Context context, @Nullable ACI aci, @Nullable String e164, boolean highTrust) {
+    if (UuidUtil.UNKNOWN_UUID.equals(aci)) {
       throw new AssertionError();
     }
 
     RecipientDatabase db          = SignalDatabase.recipients();
-    RecipientId       recipientId = db.getAndPossiblyMerge(serviceId, e164, highTrust);
+    RecipientId       recipientId = db.getAndPossiblyMerge(aci, e164, highTrust);
 
     Recipient resolved = resolved(recipientId);
 
-    if (!resolved.getId().equals(recipientId)) {
-      Log.w(TAG, "Resolved " + recipientId + ", but got back a recipient with " + resolved.getId());
-    }
-
-    if (highTrust && !resolved.isRegistered() && serviceId != null) {
+    if (highTrust && !resolved.isRegistered() && aci != null) {
       Log.w(TAG, "External high-trust push was locally marked unregistered. Marking as registered.");
-      db.markRegistered(recipientId, serviceId);
+      db.markRegistered(recipientId, aci);
     } else if (highTrust && !resolved.isRegistered()) {
-      Log.w(TAG, "External high-trust push was locally marked unregistered, but we don't have an ACI, so we can't do anything.", new Throwable());
+      Log.w(TAG, "External high-trust push was locally marked unregistered, but we don't have a UUID, so we can't do anything.", new Throwable());
     }
 
     return resolved;
@@ -314,7 +301,7 @@ public class Recipient {
    * or serialized groupId.
    *
    * If the identifier is a UUID of a Signal user, prefer using
-   * {@link #externalPush(ServiceId, String, boolean)} or its overload, as this will let us associate
+   * {@link #externalPush(Context, ACI, String, boolean)} or its overload, as this will let us associate
    * the phone number with the recipient.
    */
   @WorkerThread
@@ -325,8 +312,8 @@ public class Recipient {
     RecipientId       id = null;
 
     if (UuidUtil.isUuid(identifier)) {
-      ServiceId serviceId = ServiceId.parseOrThrow(identifier);
-      id = db.getOrInsertFromServiceId(serviceId);
+      ACI uuid = ACI.parseOrThrow(identifier);
+      id = db.getOrInsertFromAci(uuid);
     } else if (GroupId.isEncodedGroup(identifier)) {
       id = db.getOrInsertFromGroupId(GroupId.parseOrThrow(identifier));
     } else if (NumberUtil.isValidEmail(identifier)) {
@@ -346,13 +333,12 @@ public class Recipient {
   Recipient(@NonNull RecipientId id) {
     this.id                          = id;
     this.resolving                   = true;
-    this.serviceId                   = null;
+    this.aci                         = null;
     this.pni                         = null;
     this.username                    = null;
     this.e164                        = null;
     this.email                       = null;
     this.groupId                     = null;
-    this.distributionListId          = null;
     this.participants                = Collections.emptyList();
     this.groupAvatarId               = Optional.absent();
     this.isSelf                      = false;
@@ -385,7 +371,6 @@ public class Recipient {
     this.senderKeyCapability         = Capability.UNKNOWN;
     this.announcementGroupCapability = Capability.UNKNOWN;
     this.changeNumberCapability      = Capability.UNKNOWN;
-    this.storiesCapability           = Capability.UNKNOWN;
     this.storageId                   = null;
     this.mentionSetting              = MentionSetting.ALWAYS_NOTIFY;
     this.wallpaper                   = null;
@@ -403,14 +388,13 @@ public class Recipient {
 
   public Recipient(@NonNull RecipientId id, @NonNull RecipientDetails details, boolean resolved) {
     this.id                          = id;
-    this.resolving = !resolved;
-    this.serviceId = details.serviceId;
-    this.pni       = details.pni;
+    this.resolving                   = !resolved;
+    this.aci                         = details.aci;
+    this.pni                         = details.pni;
     this.username                    = details.username;
     this.e164                        = details.e164;
     this.email                       = details.email;
     this.groupId                     = details.groupId;
-    this.distributionListId          = details.distributionListId;
     this.participants                = details.participants;
     this.groupAvatarId               = details.groupAvatarId;
     this.isSelf                      = details.isSelf;
@@ -443,7 +427,6 @@ public class Recipient {
     this.senderKeyCapability         = details.senderKeyCapability;
     this.announcementGroupCapability = details.announcementGroupCapability;
     this.changeNumberCapability      = details.changeNumberCapability;
-    this.storiesCapability           = details.storiesCapability;
     this.storageId                   = details.storageId;
     this.mentionSetting              = details.mentionSetting;
     this.wallpaper                   = details.wallpaper;
@@ -505,8 +488,6 @@ public class Recipient {
       }
 
       return Util.join(names, ", ");
-    } else if (isMyStory()) {
-      return context.getString(R.string.Recipient_my_story);
     } else {
       return this.groupName;
     }
@@ -629,8 +610,8 @@ public class Recipient {
     return StringUtil.isolateBidi(name);
   }
 
-  public @NonNull Optional<ServiceId> getServiceId() {
-    return Optional.fromNullable(serviceId);
+  public @NonNull Optional<ACI> getAci() {
+    return Optional.fromNullable(aci);
   }
 
   public @NonNull Optional<PNI> getPni() {
@@ -657,16 +638,12 @@ public class Recipient {
     return Optional.fromNullable(groupId);
   }
 
-  public @NonNull Optional<DistributionListId> getDistributionListId() {
-    return Optional.fromNullable(distributionListId);
-  }
-
   public @NonNull Optional<String> getSmsAddress() {
     return Optional.fromNullable(e164).or(Optional.fromNullable(email));
   }
 
-  public @NonNull PNI requirePni() {
-    PNI resolved = resolving ? resolve().pni : pni;
+  public @NonNull ACI requireAci() {
+    ACI resolved = resolving ? resolve().aci : aci;
 
     if (resolved == null) {
       throw new MissingAddressError(id);
@@ -674,6 +651,7 @@ public class Recipient {
 
     return resolved;
   }
+
 
   public @NonNull String requireE164() {
     String resolved = resolving ? resolve().e164 : e164;
@@ -715,16 +693,12 @@ public class Recipient {
     return getE164().isPresent();
   }
 
-  public boolean hasServiceId() {
-    return getServiceId().isPresent();
+  public boolean hasAci() {
+    return getAci().isPresent();
   }
 
-  public boolean isServiceIdOnly() {
-    return hasServiceId() && !hasSmsAddress();
-  }
-
-  public boolean shouldHideStory() {
-    return extras.transform(Extras::hideStory).or(false);
+  public boolean isAciOnly() {
+    return hasAci() && !hasSmsAddress();
   }
 
   public @NonNull GroupId requireGroupId() {
@@ -737,41 +711,36 @@ public class Recipient {
     return resolved;
   }
 
-  public @NonNull DistributionListId requireDistributionListId() {
-    DistributionListId resolved = resolving ? resolve().distributionListId : distributionListId;
-
-    if (resolved == null) {
-      throw new MissingAddressError(id);
-    }
-
-    return resolved;
+  public boolean hasServiceIdentifier() {
+    return aci != null || e164 != null;
   }
 
   /**
-   * The {@link ServiceId} of the user if available, otherwise throw.
+   * @return A string identifier able to be used with the Signal service. Prefers ACI, and if not
+   * available, will return an E164 number.
    */
-  public @NonNull ServiceId requireServiceId() {
-    ServiceId resolved = resolving ? resolve().serviceId : serviceId;
+  public @NonNull String requireServiceId() {
+    Recipient resolved = resolving ? resolve() : this;
 
-    if (resolved == null) {
-      throw new MissingAddressError(id);
+    if (resolved.getAci().isPresent()) {
+      return resolved.requireAci().toString();
+    } else {
+      return getE164().get();
     }
-
-    return resolved;
   }
 
   /**
    * @return A single string to represent the recipient, in order of precedence:
    *
-   * Group ID > ServiceId > Phone > Email
+   * Group ID > ACI > Phone > Email
    */
   public @NonNull String requireStringId() {
     Recipient resolved = resolving ? resolve() : this;
 
     if (resolved.isGroup()) {
       return resolved.requireGroupId().toString();
-    } else if (resolved.getServiceId().isPresent()) {
-      return resolved.requireServiceId().toString();
+    } else if (resolved.getAci().isPresent()) {
+      return resolved.requireAci().toString();
     }
 
     return requireSmsAddress();
@@ -829,14 +798,6 @@ public class Recipient {
     return groupId != null && groupId.isV2();
   }
 
-  public boolean isDistributionList() {
-    return resolve().distributionListId != null;
-  }
-
-  public boolean isMyStory() {
-    return Objects.equals(resolve().distributionListId, DistributionListId.from(DistributionListId.MY_STORY_ID));
-  }
-
   public boolean isActiveGroup() {
     return Stream.of(getParticipants()).anyMatch(Recipient::isSelf);
   }
@@ -876,7 +837,6 @@ public class Recipient {
   public @NonNull FallbackContactPhoto getFallbackContactPhoto(@NonNull FallbackPhotoProvider fallbackPhotoProvider, int targetSize) {
     if      (isSelf)                                return fallbackPhotoProvider.getPhotoForLocalNumber();
     else if (isResolving())                         return fallbackPhotoProvider.getPhotoForResolvingRecipient();
-    else if (isDistributionList())                  return fallbackPhotoProvider.getPhotoForDistributionList();
     else if (isGroupInternal())                     return fallbackPhotoProvider.getPhotoForGroup();
     else if (isGroup())                             return fallbackPhotoProvider.getPhotoForGroup();
     else if (!TextUtils.isEmpty(groupName))         return fallbackPhotoProvider.getPhotoForRecipientWithName(groupName, targetSize);
@@ -987,10 +947,6 @@ public class Recipient {
 
   public @NonNull Capability getChangeNumberCapability() {
     return changeNumberCapability;
-  }
-
-  public @NonNull Capability getStoriesCapability() {
-    return storiesCapability;
   }
 
   /**
@@ -1216,21 +1172,17 @@ public class Recipient {
       return recipientExtras.getManuallyShownAvatar();
     }
 
-    public boolean hideStory() {
-      return recipientExtras.getHideStory();
-    }
-
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       final Extras that = (Extras) o;
-      return manuallyShownAvatar() == that.manuallyShownAvatar() && hideStory() == that.hideStory();
+      return manuallyShownAvatar() == that.manuallyShownAvatar();
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(manuallyShownAvatar(), hideStory());
+      return Objects.hash(manuallyShownAvatar());
     }
   }
 
@@ -1245,7 +1197,8 @@ public class Recipient {
            profileSharing == other.profileSharing &&
            lastProfileFetch == other.lastProfileFetch &&
            forceSmsSelection == other.forceSmsSelection &&
-           Objects.equals(serviceId, other.serviceId) &&
+           Objects.equals(id, other.id) &&
+           Objects.equals(aci, other.aci) &&
            Objects.equals(username, other.username) &&
            Objects.equals(e164, other.e164) &&
            Objects.equals(email, other.email) &&
@@ -1318,10 +1271,6 @@ public class Recipient {
 
     public @NonNull FallbackContactPhoto getPhotoForRecipientWithoutName() {
       return new ResourceContactPhoto(R.drawable.ic_profile_outline_40, R.drawable.ic_profile_outline_20, R.drawable.ic_profile_outline_48);
-    }
-
-    public @NonNull FallbackContactPhoto getPhotoForDistributionList() {
-      return new ResourceContactPhoto(R.drawable.ic_group_outline_34, R.drawable.ic_group_outline_20, R.drawable.ic_group_outline_48);
     }
   }
 

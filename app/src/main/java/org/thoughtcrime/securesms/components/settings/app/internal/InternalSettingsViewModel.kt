@@ -66,8 +66,8 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
     refresh()
   }
 
-  fun setAllowCensorshipSetting(enabled: Boolean) {
-    preferenceDataStore.putBoolean(InternalValues.ALLOW_CENSORSHIP_SETTING, enabled)
+  fun setForceCensorship(enabled: Boolean) {
+    preferenceDataStore.putBoolean(InternalValues.FORCE_CENSORSHIP, enabled)
     refresh()
   }
 
@@ -96,16 +96,6 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
     refresh()
   }
 
-  fun toggleStories() {
-    val newState = !SignalStore.storyValues().isFeatureDisabled
-    SignalStore.storyValues().isFeatureDisabled = newState
-    store.update { getState().copy(disableStories = newState) }
-  }
-
-  fun addSampleReleaseNote() {
-    repository.addSampleReleaseNote()
-  }
-
   private fun refresh() {
     store.update { getState().copy(emojiVersion = it.emojiVersion) }
   }
@@ -119,15 +109,14 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
     gv2ignoreP2PChanges = SignalStore.internalValues().gv2IgnoreP2PChanges(),
     disableAutoMigrationInitiation = SignalStore.internalValues().disableGv1AutoMigrateInitiation(),
     disableAutoMigrationNotification = SignalStore.internalValues().disableGv1AutoMigrateNotification(),
-    allowCensorshipSetting = SignalStore.internalValues().allowChangingCensorshipSetting(),
+    forceCensorship = SignalStore.internalValues().forcedCensorship(),
     callingServer = SignalStore.internalValues().groupCallingServer(),
     audioProcessingMethod = SignalStore.internalValues().audioProcessingMethod(),
     useBuiltInEmojiSet = SignalStore.internalValues().forceBuiltInEmoji(),
     emojiVersion = null,
     removeSenderKeyMinimium = SignalStore.internalValues().removeSenderKeyMinimum(),
     delayResends = SignalStore.internalValues().delayResends(),
-    disableStorageService = SignalStore.internalValues().storageServiceDisabled(),
-    disableStories = SignalStore.storyValues().isFeatureDisabled
+    disableStorageService = SignalStore.internalValues().storageServiceDisabled()
   )
 
   class Factory(private val repository: InternalSettingsRepository) : ViewModelProvider.Factory {

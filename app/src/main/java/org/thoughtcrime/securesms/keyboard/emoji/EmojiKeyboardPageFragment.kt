@@ -2,9 +2,7 @@ package org.thoughtcrime.securesms.keyboard.emoji
 
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,16 +14,14 @@ import org.thoughtcrime.securesms.components.emoji.EmojiEventListener
 import org.thoughtcrime.securesms.components.emoji.EmojiPageView
 import org.thoughtcrime.securesms.components.emoji.EmojiPageViewGridAdapter
 import org.thoughtcrime.securesms.components.emoji.EmojiPageViewGridAdapter.EmojiHeader
-import org.thoughtcrime.securesms.keyboard.KeyboardPageSelected
+import org.thoughtcrime.securesms.keyboard.findListener
 import org.thoughtcrime.securesms.keyvalue.SignalStore
-import org.thoughtcrime.securesms.util.ThemedFragment.themedInflate
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingModel
-import org.thoughtcrime.securesms.util.fragments.requireListener
 import java.util.Optional
 
 private val DELETE_KEY_EVENT: KeyEvent = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL)
 
-class EmojiKeyboardPageFragment : Fragment(), EmojiEventListener, EmojiPageViewGridAdapter.VariationSelectorListener, KeyboardPageSelected {
+class EmojiKeyboardPageFragment : Fragment(R.layout.keyboard_pager_emoji_page_fragment), EmojiEventListener, EmojiPageViewGridAdapter.VariationSelectorListener {
 
   private lateinit var viewModel: EmojiKeyboardPageViewModel
   private lateinit var emojiPageView: EmojiPageView
@@ -40,12 +36,8 @@ class EmojiKeyboardPageFragment : Fragment(), EmojiEventListener, EmojiPageViewG
 
   private val categoryUpdateOnScroll = UpdateCategorySelectionOnScroll()
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    return themedInflate(R.layout.keyboard_pager_emoji_page_fragment, inflater, container)
-  }
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    callback = requireNotNull(requireListener())
+    callback = requireNotNull(findListener())
 
     emojiPageView = view.findViewById(R.id.emoji_page_view)
     emojiPageView.initialize(this, this, true)
@@ -93,16 +85,7 @@ class EmojiKeyboardPageFragment : Fragment(), EmojiEventListener, EmojiPageViewG
 
     viewModel.selectedKey.observe(viewLifecycleOwner) { updateCategoryTab(it) }
 
-    eventListener = requireListener()
-  }
-
-  override fun onResume() {
-    super.onResume()
-    viewModel.refreshRecentEmoji()
-  }
-
-  override fun onPageSelected() {
-    viewModel.refreshRecentEmoji()
+    eventListener = findListener() ?: throw AssertionError("No emoji listener found")
   }
 
   private fun updateCategoryTab(key: String) {
@@ -129,6 +112,7 @@ class EmojiKeyboardPageFragment : Fragment(), EmojiEventListener, EmojiPageViewG
   override fun onEmojiSelected(emoji: String) {
     SignalStore.emojiValues().setPreferredVariation(emoji)
     eventListener.onEmojiSelected(emoji)
+    viewModel.addToRecents(emoji)
   }
 
   override fun onKeyEvent(keyEvent: KeyEvent?) {

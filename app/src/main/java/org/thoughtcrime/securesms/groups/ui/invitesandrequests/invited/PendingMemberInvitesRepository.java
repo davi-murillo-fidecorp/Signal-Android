@@ -21,7 +21,6 @@ import org.thoughtcrime.securesms.groups.GroupChangeException;
 import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.groups.GroupManager;
 import org.thoughtcrime.securesms.groups.GroupProtoUtil;
-import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.recipients.Recipient;
 
 import java.io.IOException;
@@ -55,7 +54,7 @@ final class PendingMemberInvitesRepository {
       List<DecryptedPendingMember>                 pendingMembersList = decryptedGroup.getPendingMembersList();
       List<SinglePendingMemberInvitedByYou>        byMe               = new ArrayList<>(pendingMembersList.size());
       List<MultiplePendingMembersInvitedByAnother> byOthers           = new ArrayList<>(pendingMembersList.size());
-      ByteString                                   self               = SignalStore.account().requireAci().toByteString();
+      ByteString                                   self               = Recipient.self().requireAci().toByteString();
       boolean                                      selfIsAdmin        = v2GroupProperties.isAdmin(Recipient.self());
 
       Stream.of(pendingMembersList)

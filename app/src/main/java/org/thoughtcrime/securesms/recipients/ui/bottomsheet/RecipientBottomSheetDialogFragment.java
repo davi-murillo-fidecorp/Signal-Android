@@ -3,9 +3,8 @@ package org.thoughtcrime.securesms.recipients.ui.bottomsheet;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,17 +17,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.avatar.view.AvatarView;
 import org.thoughtcrime.securesms.badges.BadgeImageView;
 import org.thoughtcrime.securesms.badges.view.ViewBadgeBottomSheetDialogFragment;
+import org.thoughtcrime.securesms.components.AvatarImageView;
 import org.thoughtcrime.securesms.components.settings.DSLSettingsIcon;
 import org.thoughtcrime.securesms.components.settings.conversation.preferences.ButtonStripPreference;
 import org.thoughtcrime.securesms.contacts.avatars.FallbackContactPhoto;
@@ -41,11 +41,10 @@ import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.recipients.RecipientUtil;
 import org.thoughtcrime.securesms.util.BottomSheetUtil;
 import org.thoughtcrime.securesms.util.ContextUtil;
-import org.thoughtcrime.securesms.util.DrawableUtil;
 import org.thoughtcrime.securesms.util.ServiceUtil;
-import org.thoughtcrime.securesms.util.SpanUtil;
 import org.thoughtcrime.securesms.util.ThemeUtil;
 import org.thoughtcrime.securesms.util.Util;
+import org.thoughtcrime.securesms.util.ViewUtil;
 
 import java.util.Objects;
 
@@ -65,7 +64,7 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
   private static final String ARGS_GROUP_ID     = "GROUP_ID";
 
   private RecipientDialogViewModel viewModel;
-  private AvatarView               avatar;
+  private AvatarImageView          avatar;
   private TextView                 fullName;
   private TextView                 about;
   private TextView                 usernameNumber;
@@ -145,11 +144,7 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
 
     RecipientDialogViewModel.Factory factory = new RecipientDialogViewModel.Factory(requireContext().getApplicationContext(), recipientId, groupId);
 
-    viewModel = new ViewModelProvider(this, factory).get(RecipientDialogViewModel.class);
-
-    viewModel.getStoryViewState().observe(getViewLifecycleOwner(), state -> {
-      avatar.setStoryRingFromState(state);
-    });
+    viewModel = ViewModelProviders.of(this, factory).get(RecipientDialogViewModel.class);
 
     viewModel.getRecipient().observe(getViewLifecycleOwner(), recipient -> {
       interactionsContainer.setVisibility(recipient.isSelf() ? View.GONE : View.VISIBLE);
@@ -160,7 +155,7 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
           return new FallbackPhoto80dp(R.drawable.ic_note_80, recipient.getAvatarColor());
         }
       });
-      avatar.displayChatAvatar(recipient);
+      avatar.setAvatar(recipient);
 
       if (!recipient.isSelf()) {
         badgeImageView.setBadgeFromRecipient(recipient);
@@ -175,16 +170,16 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
 
       String name = recipient.isSelf() ? requireContext().getString(R.string.note_to_self)
                                        : recipient.getDisplayName(requireContext());
+      fullName.setText(name);
       fullName.setVisibility(TextUtils.isEmpty(name) ? View.GONE : View.VISIBLE);
-      SpannableStringBuilder nameBuilder = new SpannableStringBuilder(name);
       if (recipient.isSystemContact() && !recipient.isSelf()) {
-        Drawable systemContact = DrawableUtil.tint(ContextUtil.requireDrawable(requireContext(), R.drawable.ic_profile_circle_outline_16),
-                                                   ContextCompat.getColor(requireContext(), R.color.signal_text_primary));
-        SpanUtil.appendCenteredImageSpan(nameBuilder, systemContact, 16, 16);
+        fullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_profile_circle_outline_16, 0);
+        fullName.setCompoundDrawablePadding(ViewUtil.dpToPx(4));
+        TextViewCompat.setCompoundDrawableTintList(fullName, ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.signal_text_primary)));
       } else if (recipient.isReleaseNotes()) {
-        SpanUtil.appendCenteredImageSpan(nameBuilder, ContextUtil.requireDrawable(requireContext(), R.drawable.ic_official_28), 28, 28);
+        fullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_official_28, 0);
+        fullName.setCompoundDrawablePadding(ViewUtil.dpToPx(4));
       }
-      fullName.setText(nameBuilder);
 
       String aboutText = recipient.getCombinedAboutAndEmoji();
       if (recipient.isReleaseNotes()) {

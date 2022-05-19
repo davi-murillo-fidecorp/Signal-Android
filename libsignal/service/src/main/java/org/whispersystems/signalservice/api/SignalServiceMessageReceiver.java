@@ -20,10 +20,11 @@ import org.whispersystems.signalservice.api.messages.SignalServiceEnvelope;
 import org.whispersystems.signalservice.api.messages.SignalServiceStickerManifest;
 import org.whispersystems.signalservice.api.profiles.ProfileAndCredential;
 import org.whispersystems.signalservice.api.profiles.SignalServiceProfile;
-import org.whispersystems.signalservice.api.push.ServiceId;
+import org.whispersystems.signalservice.api.push.ACI;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
 import org.whispersystems.signalservice.api.push.exceptions.MissingConfigurationException;
 import org.whispersystems.signalservice.api.util.CredentialsProvider;
+import org.whispersystems.signalservice.api.util.UuidUtil;
 import org.whispersystems.signalservice.internal.configuration.SignalServiceConfiguration;
 import org.whispersystems.signalservice.internal.push.PushServiceSocket;
 import org.whispersystems.signalservice.internal.push.SignalServiceEnvelopeEntity;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * The primary interface for receiving Signal Service messages.
@@ -89,13 +91,13 @@ public class SignalServiceMessageReceiver {
                                                                 SignalServiceProfile.RequestType requestType,
                                                                 Locale locale)
   {
-    ServiceId serviceId = address.getServiceId();
+    ACI aci = address.getAci();
 
     if (profileKey.isPresent()) {
       if (requestType == SignalServiceProfile.RequestType.PROFILE_AND_CREDENTIAL) {
-        return socket.retrieveVersionedProfileAndCredential(serviceId.uuid(), profileKey.get(), unidentifiedAccess, locale);
+        return socket.retrieveVersionedProfileAndCredential(aci.uuid(), profileKey.get(), unidentifiedAccess, locale);
       } else {
-        return FutureTransformers.map(socket.retrieveVersionedProfile(serviceId.uuid(), profileKey.get(), unidentifiedAccess, locale), profile -> {
+        return FutureTransformers.map(socket.retrieveVersionedProfile(aci.uuid(), profileKey.get(), unidentifiedAccess, locale), profile -> {
           return new ProfileAndCredential(profile,
                                           SignalServiceProfile.RequestType.PROFILE,
                                           Optional.absent());
@@ -203,7 +205,7 @@ public class SignalServiceMessageReceiver {
       SignalServiceEnvelope envelope;
 
       if (entity.hasSource() && entity.getSourceDevice() > 0) {
-        SignalServiceAddress address = new SignalServiceAddress(ServiceId.parseOrThrow(entity.getSourceUuid()), entity.getSourceE164());
+        SignalServiceAddress address = new SignalServiceAddress(ACI.parseOrThrow(entity.getSourceUuid()), entity.getSourceE164());
         envelope = new SignalServiceEnvelope(entity.getType(),
                                              Optional.of(address),
                                              entity.getSourceDevice(),

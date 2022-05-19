@@ -13,10 +13,7 @@ import org.signal.donations.GooglePayApi
 import org.signal.donations.GooglePayPaymentSource
 import org.signal.donations.StripeApi
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.components.settings.app.subscription.errors.DonationError
-import org.thoughtcrime.securesms.components.settings.app.subscription.errors.DonationErrorSource
 import org.thoughtcrime.securesms.database.SignalDatabase
-import org.thoughtcrime.securesms.database.model.DonationReceiptRecord
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.jobmanager.JobTracker
 import org.thoughtcrime.securesms.jobs.BoostReceiptRequestResponseJob
@@ -59,6 +56,8 @@ class DonationPaymentRepository(activity: Activity) : StripeApi.PaymentIntentFet
   private val googlePayApi = GooglePayApi(activity, StripeApi.Gateway(Environment.Donations.STRIPE_CONFIGURATION), Environment.Donations.GOOGLE_PAY_CONFIGURATION)
   private val stripeApi = StripeApi(Environment.Donations.STRIPE_CONFIGURATION, this, this, ApplicationDependencies.getOkHttpClient())
 
+  fun isGooglePayAvailable(): Completable = googlePayApi.queryIsReadyToPay()
+
   fun scheduleSyncForAccountRecordChange() {
     SignalExecutors.BOUNDED.execute {
       scheduleSyncForAccountRecordChangeSync()
@@ -89,14 +88,14 @@ class DonationPaymentRepository(activity: Activity) : StripeApi.PaymentIntentFet
   fun continuePayment(price: FiatMoney, paymentData: PaymentData): Completable {
     Log.d(TAG, "Creating payment intent for $price...", true)
     return stripeApi.createPaymentIntent(price, application.getString(R.string.Boost__thank_you_for_your_donation))
-      .onErrorResumeNext { Single.error(DonationError.getPaymentSetupError(DonationErrorSource.BOOST, it)) }
+      .onErrorResumeNext { Single.error(DonationExceptions.SetupFailed(it)) }
       .flatMapCompletable { result ->
         Log.d(TAG, "Created payment intent for $price.", true)
         when (result) {
-          is StripeApi.CreatePaymentIntentResult.AmountIsTooSmall -> Completable.error(DonationError.boostAmountTooSmall())
-          is StripeApi.CreatePaymentIntentResult.AmountIsTooLarge -> Completable.error(DonationError.boostAmountTooLarge())
-          is StripeApi.CreatePaymentIntentResult.CurrencyIsNotSupported -> Completable.error(DonationError.invalidCurrencyForBoost())
-          is StripeApi.CreatePaymentIntentResult.Success -> confirmPayment(price, paymentData, result.paymentIntent)
+          is StripeApi.CreatePaymentIntentResult.AmountIsTooSmall -> Completable.error(DonationExceptions.SetupFailed(Exception("Boost amount is too small")))
+          is StripeApi.CreatePaymentIntentResult.AmountIsTooLarge -> Completable.error(DonationExceptions.SetupFailed(Exception("Boost amount is too large")))
+          is StripeApi.CreatePaymentIntentResult.CurrencyIsNotSupported -> Completable.error(DonationExceptions.SetupFailed(Exception("Boost currency is not supported")))
+          is StripeApi.CreatePaymentIntentResult.Success -> confirmPayment(paymentData, result.paymentIntent)
         }
       }
   }
@@ -140,15 +139,11 @@ class DonationPaymentRepository(activity: Activity) : StripeApi.PaymentIntentFet
       }
   }
 
-  private fun confirmPayment(price: FiatMoney, paymentData: PaymentData, paymentIntent: StripeApi.PaymentIntent): Completable {
+  private fun confirmPayment(paymentData: PaymentData, paymentIntent: StripeApi.PaymentIntent): Completable {
     Log.d(TAG, "Confirming payment intent...", true)
-    val confirmPayment = stripeApi.confirmPaymentIntent(GooglePayPaymentSource(paymentData), paymentIntent).onErrorResumeNext {
-      Completable.error(DonationError.getPaymentSetupError(DonationErrorSource.BOOST, it))
-    }
-
+    val confirmPayment = stripeApi.confirmPaymentIntent(GooglePayPaymentSource(paymentData), paymentIntent)
     val waitOnRedemption = Completable.create {
-      Log.d(TAG, "Confirmed payment intent. Recording boost receipt and submitting badge reimbursement job chain.", true)
-      SignalDatabase.donationReceipts.addReceipt(DonationReceiptRecord.createForBoost(price))
+      Log.d(TAG, "Confirmed payment intent.", true)
 
       val countDownLatch = CountDownLatch(1)
       var finalJobState: JobTracker.JobState? = null
@@ -169,20 +164,20 @@ class DonationPaymentRepository(activity: Activity) : StripeApi.PaymentIntentFet
             }
             JobTracker.JobState.FAILURE -> {
               Log.d(TAG, "Boost request response job chain failed permanently.", true)
-              it.onError(DonationError.genericBadgeRedemptionFailure(DonationErrorSource.BOOST))
+              it.onError(DonationExceptions.RedemptionFailed)
             }
             else -> {
               Log.d(TAG, "Boost request response job chain ignored due to in-progress jobs.", true)
-              it.onError(DonationError.timeoutWaitingForToken(DonationErrorSource.BOOST))
+              it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
             }
           }
         } else {
           Log.d(TAG, "Boost redemption timed out waiting for job completion.", true)
-          it.onError(DonationError.timeoutWaitingForToken(DonationErrorSource.BOOST))
+          it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
         }
       } catch (e: InterruptedException) {
         Log.d(TAG, "Boost redemption job interrupted", e, true)
-        it.onError(DonationError.timeoutWaitingForToken(DonationErrorSource.BOOST))
+        it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
       }
     }
 
@@ -241,20 +236,20 @@ class DonationPaymentRepository(activity: Activity) : StripeApi.PaymentIntentFet
                 }
                 JobTracker.JobState.FAILURE -> {
                   Log.d(TAG, "Subscription request response job chain failed permanently.", true)
-                  it.onError(DonationError.genericBadgeRedemptionFailure(DonationErrorSource.SUBSCRIPTION))
+                  it.onError(DonationExceptions.RedemptionFailed)
                 }
                 else -> {
                   Log.d(TAG, "Subscription request response job chain ignored due to in-progress jobs.", true)
-                  it.onError(DonationError.timeoutWaitingForToken(DonationErrorSource.SUBSCRIPTION))
+                  it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
                 }
               }
             } else {
               Log.d(TAG, "Subscription request response job timed out.", true)
-              it.onError(DonationError.timeoutWaitingForToken(DonationErrorSource.SUBSCRIPTION))
+              it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
             }
           } catch (e: InterruptedException) {
             Log.w(TAG, "Subscription request response interrupted.", e, true)
-            it.onError(DonationError.timeoutWaitingForToken(DonationErrorSource.SUBSCRIPTION))
+            it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
           }
         }
       }.doOnError {

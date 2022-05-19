@@ -119,7 +119,8 @@ public class AccountRecordProcessor extends DefaultStorageRecordProcessor<Signal
     } else if (matchesLocal) {
       return local;
     } else {
-      return new SignalAccountRecord.Builder(keyGenerator.generate(), unknownFields)
+      return new SignalAccountRecord.Builder(keyGenerator.generate())
+                                    .setUnknownFields(unknownFields)
                                     .setGivenName(givenName)
                                     .setFamilyName(familyName)
                                     .setAvatarUrlPath(avatarUrlPath)

@@ -126,10 +126,6 @@ public final class MultiShareArgs implements Parcelable {
     return expiresAt;
   }
 
-  public boolean isValidForStories() {
-    return !media.isEmpty() && media.stream().allMatch(m -> MediaUtil.isImageOrVideoType(m.getMimeType()) && !MediaUtil.isGif(m.getMimeType()));
-  }
-
   public @NonNull InterstitialContentType getInterstitialContentType() {
     if (!requiresInterstitial()) {
       return InterstitialContentType.NONE;

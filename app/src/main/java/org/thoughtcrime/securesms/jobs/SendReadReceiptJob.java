@@ -166,11 +166,6 @@ public class SendReadReceiptJob extends BaseJob {
       return;
     }
 
-    if (recipient.isDistributionList()) {
-      Log.w(TAG, "Refusing to send receipts to distribution list");
-      return;
-    }
-
     if (recipient.isUnregistered()) {
       Log.w(TAG, recipient.getId() + " not registered!");
       return;

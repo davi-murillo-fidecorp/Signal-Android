@@ -111,7 +111,8 @@ public final class StorageSyncHelper {
                                                     .map(recipientDatabase::getRecordForSync)
                                                     .toList();
 
-    SignalAccountRecord account = new SignalAccountRecord.Builder(self.getStorageServiceId(), record != null ? record.getSyncExtras().getStorageProto() : null)
+    SignalAccountRecord account = new SignalAccountRecord.Builder(self.getStorageServiceId())
+                                                         .setUnknownFields(record != null ? record.getSyncExtras().getStorageProto() : null)
                                                          .setProfileKey(self.getProfileKey())
                                                          .setGivenName(self.getProfileName().getGivenName())
                                                          .setFamilyName(self.getProfileName().getFamilyName())
@@ -161,7 +162,6 @@ public final class StorageSyncHelper {
 
     if (update.getNew().isSubscriptionManuallyCancelled()) {
       SignalStore.donationsValues().markUserManuallyCancelled();
-      SignalStore.donationsValues().setUnexpectedSubscriptionCancelationReason(null);
     } else {
       SignalStore.donationsValues().clearUserManuallyCancelled();
     }

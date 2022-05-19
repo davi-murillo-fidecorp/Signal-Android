@@ -123,15 +123,6 @@
   <string name="CameraContacts_cant_find_who_youre_looking_for">Neatradāt, ko jūs meklējāt?</string>
   <string name="CameraContacts_invite_a_contact_to_join_signal">Uzaicināt kontaktpersonu pievienoties Signal</string>
   <string name="CameraContacts__menu_search">Meklēt</string>
-  <!--Censorship Circumvention Megaphone-->
-  <!--Title for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off_censorship_circumvention">Atslēgt cenzūras apiešanu?</string>
-  <!--Body for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_you_can_now_connect_to_the_signal_service">Labākai pieredzei jūs tagad varat tieši pieslēgties Signal servisam.</string>
-  <!--Action to prompt the user to disable circumvention since it is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off">Izslēgt</string>
-  <!--Action to prompt the user to dismiss the alert at the bottom of the chat list-->
-  <string name="CensorshipCircumventionMegaphone_no_thanks">Nē, paldies</string>
   <!--ClearProfileActivity-->
   <string name="ClearProfileActivity_remove">Noņemt</string>
   <string name="ClearProfileActivity_remove_profile_photo">Vai noņemt profila attēlu?</string>
@@ -365,7 +356,7 @@
   <plurals name="ConversationListFragment_mute_plural">
     <item quantity="zero">Apklusināt</item>
     <item quantity="one">Apklusināt</item>
-    <item quantity="other">Izslēgt</item>
+    <item quantity="other">Apklusināt</item>
   </plurals>
   <plurals name="ConversationListFragment_unmute_plural">
     <item quantity="zero">Ieslēgt</item>
@@ -709,7 +700,7 @@
   <string name="ManageGroupActivity_block_group">Bloķēt grupu</string>
   <string name="ManageGroupActivity_unblock_group">Atbloķēt grupu</string>
   <string name="ManageGroupActivity_leave_group">Pamest grupu</string>
-  <string name="ManageGroupActivity_mute_notifications">Izslēgt paziņojumus</string>
+  <string name="ManageGroupActivity_mute_notifications">Noklusināt paziņojumus</string>
   <string name="ManageGroupActivity_custom_notifications">Pielāgoti paziņojumi</string>
   <string name="ManageGroupActivity_mentions">Pieminējumi</string>
   <string name="ManageGroupActivity_chat_color_and_wallpaper">Tērzēšanas krāsa un fona tapete</string>
@@ -746,7 +737,7 @@
   <string name="ManageGroupActivity_add_group_description">Pievienot grupas aprakstu…</string>
   <!--GroupMentionSettingDialog-->
   <string name="GroupMentionSettingDialog_notify_me_for_mentions">Paziņot man par Pieminējumiem</string>
-  <string name="GroupMentionSettingDialog_receive_notifications_when_youre_mentioned_in_muted_chats">Vai saņemt paziņojumus, kad esat pieminēts sarunās, kurām izslēgti paziņojumi?</string>
+  <string name="GroupMentionSettingDialog_receive_notifications_when_youre_mentioned_in_muted_chats">Vai saņemt paziņojumus, kad esat pieminēts noklusinātajās tērzēšanas sarunās?</string>
   <string name="GroupMentionSettingDialog_always_notify_me">Vienmēr man paziņot</string>
   <string name="GroupMentionSettingDialog_dont_notify_me">Nevajag paziņot</string>
   <!--ManageProfileFragment-->
@@ -794,7 +785,7 @@
   <string name="ShareableGroupLinkDialogFragment__require_an_admin_to_approve_new_members_joining_via_the_group_link">Pieprasiet, lai administrators apstiprina jaunu dalībnieku pievienošanos, izmantojot grupas saiti.</string>
   <string name="ShareableGroupLinkDialogFragment__are_you_sure_you_want_to_reset_the_group_link">Vai tiešām vēlaties atiestatīt grupas saiti? Cilvēki vairs nevarēs pievienoties šai grupai, izmantojot pašreizējo saiti.</string>
   <!--GroupLinkShareQrDialogFragment-->
-  <string name="GroupLinkShareQrDialogFragment__qr_code">Kvadrātkods</string>
+  <string name="GroupLinkShareQrDialogFragment__qr_code">QR kods</string>
   <string name="GroupLinkShareQrDialogFragment__people_who_scan_this_code_will">Cilvēki, kuri skenē šo kodu, varēs pievienoties jūsu grupai. Ja šis iestatījums ir ieslēgts, administratoriem joprojām būs jāapstiprina jauni dalībnieki.</string>
   <string name="GroupLinkShareQrDialogFragment__share_code">Kopīgot kodu</string>
   <!--GV2 Invite Revoke confirmation dialog-->
@@ -875,10 +866,10 @@
   <!--MmsDownloader-->
   <string name="MmsDownloader_error_reading_mms_settings">Neizdevās nolasīt mobilo pakalpojumu sniedzēja MMS uzstādījumus</string>
   <!--MediaOverviewActivity-->
-  <string name="MediaOverviewActivity_Media">Multivide</string>
+  <string name="MediaOverviewActivity_Media">Mediju fails</string>
   <string name="MediaOverviewActivity_Files">Faili</string>
   <string name="MediaOverviewActivity_Audio">Audio</string>
-  <string name="MediaOverviewActivity_All">Visi</string>
+  <string name="MediaOverviewActivity_All">Visus</string>
   <plurals name="MediaOverviewActivity_Media_delete_confirm_title">
     <item quantity="zero">Vai izdzēst atlasīto?</item>
     <item quantity="one">Vai izdzēst atlasīto?</item>
@@ -954,7 +945,7 @@
   <string name="NotificationsMegaphone_turn_on">Ieslēgt</string>
   <string name="NotificationsMegaphone_not_now">Ne tagad</string>
   <!--NotificationMmsMessageRecord-->
-  <string name="NotificationMmsMessageRecord_multimedia_message">Multivides ziņa</string>
+  <string name="NotificationMmsMessageRecord_multimedia_message">Multimēdiju ziņa</string>
   <string name="NotificationMmsMessageRecord_downloading_mms_message">Lejuplādē MMS ziņu</string>
   <string name="NotificationMmsMessageRecord_error_downloading_mms_message">Kļūme lejuplādējot MMS ziņu, pieskarieties, lai mēģinātu vēlreiz</string>
   <!--MediaPickerActivity-->
@@ -979,7 +970,7 @@
   <string name="MediaSendActivity_select_recipients_description">Izvēlēties adresātus</string>
   <string name="MediaSendActivity_tap_here_to_make_this_message_disappear_after_it_is_viewed">Pieskarieties šeit, lai šis ziņojums pēc tā izlasīšanas izgaistu.</string>
   <!--MediaRepository-->
-  <string name="MediaRepository_all_media">Visa multivide</string>
+  <string name="MediaRepository_all_media">Visi multimediju faili</string>
   <string name="MediaRepository__camera">Kamera</string>
   <!--MessageDecryptionUtil-->
   <string name="MessageDecryptionUtil_failed_to_decrypt_message">Neizdevās atšifrēt ziņu</string>
@@ -1237,13 +1228,13 @@
   <string name="DeviceProvisioningActivity_content_progress_success">Ierīce apstiprināta!</string>
   <string name="DeviceProvisioningActivity_content_progress_no_device">Neviena ierīce netika atrasta.</string>
   <string name="DeviceProvisioningActivity_content_progress_network_error">Tīkla kļūda.</string>
-  <string name="DeviceProvisioningActivity_content_progress_key_error">Nederīgs kvadrātkods.</string>
+  <string name="DeviceProvisioningActivity_content_progress_key_error">Nederīgs QR kods.</string>
   <string name="DeviceProvisioningActivity_sorry_you_have_too_many_devices_linked_already">Piedodiet, bet Jums piesaistītas pārāk daudz ierīces , lūdzu kādu atsaistiet</string>
-  <string name="DeviceActivity_sorry_this_is_not_a_valid_device_link_qr_code">Piedodiet, bet šis nav derīgs ierīces kvadrātkods.</string>
+  <string name="DeviceActivity_sorry_this_is_not_a_valid_device_link_qr_code">Piedodiet, bet šis nav derīgs ierīces QR kods.</string>
   <string name="DeviceProvisioningActivity_link_a_signal_device">Piesaistīt Signal ierīci?</string>
   <string name="DeviceProvisioningActivity_it_looks_like_youre_trying_to_link_a_signal_device_using_a_3rd_party_scanner">Izskatās, ka jūs mēģināt piesaistīt Signal ierīci, izmantojot svešas aplikācijas skeneri. Jūsu drošībai, lūdzu, skenējiet kodu vēlreiz, izmantojot Signal.</string>
-  <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">Signal ir nepieciešama piekļuve kamerai, lai skenētu kvadrātkodu, bet tai nav dotas šādas atļaujas. Dodieties uz lietotnes iestatījumiem, izvēlieties \"Atļaujas\" un iespējojiet \"Kamera\". </string>
-  <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">Nav iespējams skenēt kvadrātkodu bez kameras lietošanas atļaujas</string>
+  <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">Signal ir nepieciešama piekļuve kamerai, lai skenētu QR kodu, bet tai nav dotas šādas atļaujas. Dodieties uz lietotnes iestatījumiem, izvēlieties \"Atļaujas\" un iespējojiet \"Kamera\". </string>
+  <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">Nav iespējams skenēt QR kodu bez kameras lietošanas atļaujas</string>
   <!--OutdatedBuildReminder-->
   <string name="OutdatedBuildReminder_update_now">Aktualizēt tagad</string>
   <string name="OutdatedBuildReminder_your_version_of_signal_will_expire_today">Šīs Signal versijas lietošanas termiņš beigsies šodien. Aktualizējiet uz nesenāku versiju.</string>
@@ -1324,11 +1315,6 @@
   <string name="RedPhone_number_not_registered">Numurs nav reģistrēts!</string>
   <string name="RedPhone_the_number_you_dialed_does_not_support_secure_voice">Numurs, uz kuru zvanījāt, neatbalsta drošu zvanu!</string>
   <string name="RedPhone_got_it">Skaidrīte</string>
-  <!--Valentine\'s Day Megaphone-->
-  <!--Title text for the Valentine\'s Day donation megaphone. The placeholder will always be a heart emoji. Needs to be a placeholder for Android reasons.-->
-  <string name="ValentinesDayMegaphone_happy_heart_day">Laimīgu 💜 dienu!</string>
-  <!--Body text for the Valentine\'s Day donation megaphone.-->
-  <string name="ValentinesDayMegaphone_show_your_affection">Parādi savu pieķeršanos kļūstot par Signal uzturētāju.</string>
   <!--WebRtcCallActivity-->
   <string name="WebRtcCallActivity__tap_here_to_turn_on_your_video">Pieskarieties, lai ieslēgtu video</string>
   <string name="WebRtcCallActivity__to_call_s_signal_needs_access_to_your_camera">Lai zvanītu %1$s, Signal ir nepieciešama piekļuve jūsu kamerai</string>
@@ -1389,8 +1375,7 @@
   <string name="WebRtcCallView__flip">Pārslēgt</string>
   <string name="WebRtcCallView__speaker">Skaļrunis</string>
   <string name="WebRtcCallView__camera">Kamera</string>
-  <string name="WebRtcCallView__unmute">Ieslēgt</string>
-  <string name="WebRtcCallView__mute">Izslēgt</string>
+  <string name="WebRtcCallView__mute">Atspējot ziņas</string>
   <string name="WebRtcCallView__ring">Zvanīt</string>
   <string name="WebRtcCallView__end_call">Beigt zvanu</string>
   <!--CallParticipantsListDialog-->
@@ -1607,14 +1592,14 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   </plurals>
   <!--VerifyIdentityActivity-->
   <string name="VerifyIdentityActivity_your_contact_is_running_an_old_version_of_signal">Jūsu kontaktpersona izmanto novecojušu Signal versiju. Pirms apstipriniet drošības kodu,  palūdziet, lai to aktualizē.</string>
-  <string name="VerifyIdentityActivity_your_contact_is_running_a_newer_version_of_Signal">Jūsu kontaktpersona izmanto jaunāku Signal versiju, ar nesaderīgu kvadrātkoda formātu. Lūdzu atjaunojiet Signal lietotni savā ierīcē, lai turpinātu.</string>
-  <string name="VerifyIdentityActivity_the_scanned_qr_code_is_not_a_correctly_formatted_safety_number">Noskanētais kvadrātkods nav pareizi formatēts drošības numura apstiprināšanas kods. Lūdzu, mēģiniet vēlreiz.</string>
+  <string name="VerifyIdentityActivity_your_contact_is_running_a_newer_version_of_Signal">Jūsu kontaktpersona izmanto jaunāku Signal versiju, ar nesaderīgu QR koda formātu. Lūdzu atjaunojiet Signal lietotni savā ierīcē, lai turpinātu.</string>
+  <string name="VerifyIdentityActivity_the_scanned_qr_code_is_not_a_correctly_formatted_safety_number">Noskanētais QR kods nav pareizi formatēts drošības numura apstiprināšanas kods. Lūdzu, mēģiniet vēlreiz.</string>
   <string name="VerifyIdentityActivity_share_safety_number_via">Dalīties ar drošības numuru izmantojot…</string>
   <string name="VerifyIdentityActivity_our_signal_safety_number">Mūsu Signal drošības numurs:</string>
   <string name="VerifyIdentityActivity_no_app_to_share_to">Izskatās, ka Tev nav nevienas aplikācijas, caur kurām dalīties.</string>
   <string name="VerifyIdentityActivity_no_safety_number_to_compare_was_found_in_the_clipboard">Starpenē netika atrasts drošības kods</string>
-  <string name="VerifyIdentityActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code_but_it_has_been_permanently_denied">Signal ir nepieciešama piekļuve kamerai, lai skenētu kvadrātkodu, bet tā nav dota. Dodieties uz lietotnes iestatījumiem, izvēlieties \"Atļaujas\" un iespējojiet \"Kamera\". </string>
-  <string name="VerifyIdentityActivity_unable_to_scan_qr_code_without_camera_permission">Nebija iespējams noskenēt kvadrātkodu bez kameras lietošanas atļaujas</string>
+  <string name="VerifyIdentityActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code_but_it_has_been_permanently_denied">Signal ir nepieciešama piekļuve kamerai, lai skenētu QR kodu, bet tā nav dota. Dodieties uz lietotnes iestatījumiem, izvēlieties \"Atļaujas\" un iespējojiet \"Kamera\". </string>
+  <string name="VerifyIdentityActivity_unable_to_scan_qr_code_without_camera_permission">Nebija iespējams noskenēt QR kodu bez kameras lietošanas atļaujas</string>
   <string name="VerifyIdentityActivity_you_must_first_exchange_messages_in_order_to_view">Lai skatītu %1$s drošības numuru, vispirms jums savstarpēji ir jāapmainās ar ziņām.</string>
   <!--ViewOnceMessageActivity-->
   <!--AudioView-->
@@ -1624,7 +1609,7 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="MmsMessageRecord_bad_encrypted_mms_message">Slikti šifrēta MMS ziņa</string>
   <string name="MmsMessageRecord_mms_message_encrypted_for_non_existing_session">MMS ziņa šifrēta neeksistējošai sesijai</string>
   <!--MuteDialog-->
-  <string name="MuteDialog_mute_notifications">Izslēgt paziņojumus</string>
+  <string name="MuteDialog_mute_notifications">Noklusināt paziņojumus</string>
   <!--ApplicationMigrationService-->
   <string name="ApplicationMigrationService_import_in_progress">Notiek importēšana</string>
   <string name="ApplicationMigrationService_importing_text_messages">Teksta ziņu importēšana</string>
@@ -1689,10 +1674,6 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="NotificationChannel_voice_notes">Balss piezīmes</string>
   <string name="NotificationChannel_contact_joined_signal">Kontakts pievienojās Signal</string>
   <string name="NotificationChannels__no_activity_available_to_open_notification_channel_settings">Paziņojumu kanāla iestatījumu atvēršanai nav pieejama neviena darbība.</string>
-  <!--Notification channel name for showing persistent background connection on devices without push notifications-->
-  <string name="NotificationChannel_background_connection">Fona savienojums</string>
-  <!--Notification channel name for showing call status information (like connection, ongoing, etc.) Not ringing.-->
-  <string name="NotificationChannel_call_status">Zvana statuss</string>
   <!--ProfileEditNameFragment-->
   <!--QuickResponseService-->
   <string name="QuickResponseService_quick_response_unavailable_when_Signal_is_locked">Ātrās atbildes nav pieejamas, kad Signal ir bloķēts!</string>
@@ -1878,7 +1859,7 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="country_selection_fragment__search">Meklēt</string>
   <string name="country_selection_fragment__no_matching_countries">Nav atbilstošu valstu</string>
   <!--device_add_fragment-->
-  <string name="device_add_fragment__scan_the_qr_code_displayed_on_the_device_to_link">Lai piesaistītu citu ierīci, noskenējiet kvadrātkodu, ko tā rāda. </string>
+  <string name="device_add_fragment__scan_the_qr_code_displayed_on_the_device_to_link">Lai piesaistītu citu ierīci, noskenējiet QR kodu, ko tā rāda. </string>
   <!--device_link_fragment-->
   <string name="device_link_fragment__link_device">Piesaistīt ierīci</string>
   <!--device_list_fragment-->
@@ -2011,7 +1992,7 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <!--verify_identity-->
   <string name="verify_identity__share_safety_number">Dalīties ar drošības numuru</string>
   <!--verity_scan_fragment-->
-  <string name="verify_scan_fragment__scan_the_qr_code_on_your_contact">Skenējiet kvadrātkodu savas kontaktpersonas ierīcē.</string>
+  <string name="verify_scan_fragment__scan_the_qr_code_on_your_contact">Skenējiet QR kodu savas kontaktpersonas ierīcē.</string>
   <!--webrtc_answer_decline_button-->
   <string name="webrtc_answer_decline_button__swipe_up_to_answer">Vilkt uz augšu, lai atbildētu</string>
   <string name="webrtc_answer_decline_button__swipe_down_to_reject">Vilkt uz leju, lai noraidītu</string>
@@ -2088,10 +2069,10 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <!--arrays.xml-->
   <string name="arrays__use_default">Izmantot noklusējumu</string>
   <string name="arrays__use_custom">Izmantot pielāgotu</string>
-  <string name="arrays__mute_for_one_hour">Izslēgt uz 1 stundu</string>
-  <string name="arrays__mute_for_eight_hours">Izslēgt uz 8 stundām</string>
-  <string name="arrays__mute_for_one_day">Izslēgt uz 1 dienu</string>
-  <string name="arrays__mute_for_seven_days">Izslēgt uz 7 dienām</string>
+  <string name="arrays__mute_for_one_hour">Apklusināt 1 stundu</string>
+  <string name="arrays__mute_for_eight_hours">Izslēgt skaņu uz 8 stundām</string>
+  <string name="arrays__mute_for_one_day">Apklusināt 1 dienu</string>
+  <string name="arrays__mute_for_seven_days">Apklusināt 7 dienas</string>
   <string name="arrays__always">Vienmēr</string>
   <string name="arrays__settings_default">Sistēmas noklusējums</string>
   <string name="arrays__enabled">Iespējots</string>
@@ -2269,19 +2250,6 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="preferences_chats__message_text_size">Ziņu fonta lielums</string>
   <string name="preferences_events__contact_joined_signal">Kontaktpersona pievienojās Signal</string>
   <string name="preferences_notifications__priority">Prioritāte</string>
-  <!--Heading for the \'censorship circumvention\' section of privacy preferences-->
-  <string name="preferences_communication__category_censorship_circumvention">Cenzūras apiešana</string>
-  <!--Title of the \'censorship circumvention\' toggle switch-->
-  <string name="preferences_communication__censorship_circumvention">Cenzūras apiešana</string>
-  <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Ja šī funkcija ir iespējota, Signal mēģinās apiet cenzūru. Neieslēdziet šo funkciju, ja atrodaties vietā, kur Signal tiek cenzēta.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Cenzūras apiešana ir aktivizēta, pamatojoties uz jūsu konta tālruņa numuru.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Jūs manuāli atspējojāt cenzūras apiešanu.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service-->
-  <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Cenzūras apiešana nav nepieciešama; jūs jau izveidojāt savienojumu ar Signal pakalpojumu.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet-->
-  <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Cenzūras apiešanu var aktivizēt tikai tad, kad ir izveidots savienojums ar internetu.</string>
   <string name="preferences_communication__category_sealed_sender">Aizzīmogots sūtītājs</string>
   <string name="preferences_communication__sealed_sender_display_indicators">Parādīt indikatorus</string>
   <string name="preferences_communication__sealed_sender_display_indicators_description">Kad izvēlaties “Ziņas info”  ziņām, kuras tika piegādātas, izmantojot aizzīmogotu sūtītāju, parādīt statusa ikonu.</string>
@@ -2356,7 +2324,7 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="PaymentsAddMoneyFragment__your_wallet_address">Jūsu maciņa adrese</string>
   <string name="PaymentsAddMoneyFragment__copy">Kopēt</string>
   <string name="PaymentsAddMoneyFragment__copied_to_clipboard">Iekopēts starpenē</string>
-  <string name="PaymentsAddMoneyFragment__to_add_funds">Lai pievienotu naudas kapitālu, nosūtiet MobileCoin uz sava naudas maka adresi. Sāciet transakciju no sava konta biržā, kas atbalsta MobileCoin, pēc tam skenējiet kvadrātkodu vai kopējiet naudas maka adresi.</string>
+  <string name="PaymentsAddMoneyFragment__to_add_funds">Lai pievienotu naudas kapitālu, nosūtiet MobileCoin uz sava naudas maka adresi. Sāciet transakciju no sava konta biržā, kas atbalsta MobileCoin, pēc tam skenējiet QR kodu vai kopējiet naudas maka adresi.</string>
   <!--PaymentsDetailsFragment-->
   <string name="PaymentsDetailsFragment__details">Sīkāki dati / Rekvizīti</string>
   <string name="PaymentsDetailsFragment__status">Statuss</string>
@@ -2381,20 +2349,20 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="PaymentsDetailsFragment__block_number">Bloka numurs</string>
   <!--PaymentsTransferFragment-->
   <string name="PaymentsTransferFragment__transfer">Pārsūtīt</string>
-  <string name="PaymentsTransferFragment__scan_qr_code">Skenēt kvadrātkodu</string>
+  <string name="PaymentsTransferFragment__scan_qr_code">Skenēt QR kodu</string>
   <string name="PaymentsTransferFragment__to_scan_or_enter_wallet_address">Kam: Ieskenēt vai ievadīt maka adresi</string>
-  <string name="PaymentsTransferFragment__you_can_transfer">MobileCoin var pārskaitīt, veicot pārskaitījumu uz biržas norādīto naudas maka adresi. Naudas maka adrese ir ciparu un burtu virkne, kas parasti atrodas zem kvadrātkoda.</string>
+  <string name="PaymentsTransferFragment__you_can_transfer">MobileCoin var pārskaitīt, veicot pārskaitījumu uz biržas norādīto naudas maka adresi. Naudas maka adrese ir ciparu un burtu virkne, kas parasti atrodas zem QR koda.</string>
   <string name="PaymentsTransferFragment__next">Nākošais/Tālāk</string>
   <string name="PaymentsTransferFragment__invalid_address">Nederīga adrese</string>
   <string name="PaymentsTransferFragment__check_the_wallet_address">Pārbaudiet naudas maka adresi, uz kuru mēģināt pārsūtīt, un mēģiniet vēlreiz.</string>
   <string name="PaymentsTransferFragment__you_cant_transfer_to_your_own_signal_wallet_address">Jūs nevarat veikt pārskaitījumu uz savu Signal naudas maka adresi. Ievadiet naudas maka adresi no sava konta atbalstītā biržā.</string>
-  <string name="PaymentsTransferFragment__to_scan_a_qr_code_signal_needs">Lai skenētu kvadrātkodu, lietotnei Signal ir nepieciešama piekļuve kamerai.</string>
+  <string name="PaymentsTransferFragment__to_scan_a_qr_code_signal_needs">Lai skenētu QR kodu, lietotnei Signal ir nepieciešama piekļuve kamerai.</string>
   <string name="PaymentsTransferFragment__signal_needs_the_camera_permission_to_capture_qr_code_go_to_settings">Lai uzņemtu fotoattēlus vai video, lietotnei Signal ir nepieciešama atļauja piekļūt kamerai. Atveriet iestatījumus, atlasiet Atļaujas un iespējojiet Kamera.</string>
-  <string name="PaymentsTransferFragment__to_scan_a_qr_code_signal_needs_access_to_the_camera">Lai skenētu kvadrātkodu, lietotnei Signal ir nepieciešama piekļuve kamerai.</string>
+  <string name="PaymentsTransferFragment__to_scan_a_qr_code_signal_needs_access_to_the_camera">Lai skenētu QR kodu, lietotnei Signal ir nepieciešama piekļuve kamerai.</string>
   <string name="PaymentsTransferFragment__settings">Iestatījumi</string>
   <!--PaymentsTransferQrScanFragment-->
-  <string name="PaymentsTransferQrScanFragment__scan_address_qr_code">Skenēt adreses kvadrātkodu</string>
-  <string name="PaymentsTransferQrScanFragment__scan_the_address_qr_code_of_the_payee">Skenēt maksājuma saņēmēja adreses kvadrātkodu</string>
+  <string name="PaymentsTransferQrScanFragment__scan_address_qr_code">Skenēt adreses QR kodu</string>
+  <string name="PaymentsTransferQrScanFragment__scan_the_address_qr_code_of_the_payee">Skenēt maksājuma saņēmēja adreses QR kodu</string>
   <!--CreatePaymentFragment-->
   <string name="CreatePaymentFragment__request">Pieprasīt</string>
   <string name="CreatePaymentFragment__pay">Maksāt</string>
@@ -2470,7 +2438,7 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <!--Button to delete a message-->
   <string name="conversation_selection__menu_delete">Dzēst</string>
   <!--Button to forward a message to another person or group chat-->
-  <string name="conversation_selection__menu_forward">Pārsūtīt</string>
+  <string name="conversation_selection__menu_forward">Uz priekšu</string>
   <!--Button to reply to a message-->
   <string name="conversation_selection__menu_reply">Atbildēt</string>
   <!--Button to save a message attachment (image, file etc.)-->
@@ -2507,13 +2475,13 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <!--conversation_secure_verified-->
   <string name="conversation_secure_verified__menu_reset_secure_session">Atstatīt šifrēto saraksti (sesiju)</string>
   <!--conversation_muted-->
-  <string name="conversation_muted__unmute">Ieslēgt</string>
+  <string name="conversation_muted__unmute">Apskaņot paziņojumus </string>
   <!--conversation_unmuted-->
-  <string name="conversation_unmuted__mute_notifications">Izslēgt paziņojumus</string>
+  <string name="conversation_unmuted__mute_notifications">Noklusināt paziņojumus</string>
   <!--conversation-->
   <string name="conversation__menu_group_settings">Grupu iestatījumi</string>
   <string name="conversation__menu_leave_group">Pamest grupu</string>
-  <string name="conversation__menu_view_all_media">Visa multivide</string>
+  <string name="conversation__menu_view_all_media">Visi faili</string>
   <string name="conversation__menu_conversation_settings">Sarunas iestatījumi</string>
   <string name="conversation__menu_add_shortcut">Pievienot sākuma ekrānam</string>
   <string name="conversation__menu_create_bubble">Izveidot burbuli</string>
@@ -2544,9 +2512,9 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="reminder_header_progress">%1$d %%</string>
   <!--media_preview-->
   <string name="media_preview__save_title">Saglabāt</string>
-  <string name="media_preview__forward_title">Pārsūtīt</string>
+  <string name="media_preview__forward_title">Uz priekšu</string>
   <string name="media_preview__share_title">Kopīgot</string>
-  <string name="media_preview__all_media_title">Visa multivide</string>
+  <string name="media_preview__all_media_title">Visus multimedijus</string>
   <!--media_preview_activity-->
   <string name="media_preview_activity__media_content_description">Multimediju priekšskats</string>
   <!--new_conversation_activity-->
@@ -2923,7 +2891,7 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="GroupLinkBottomSheet_share_hint_not_requiring_approval">Ikviens ar šo saiti var skatīt grupas nosaukumu un fotoattēlu un pievienoties šai grupai. Nosūtiet šo saiti tikai cilvēkiem, kuriem uzticaties.</string>
   <string name="GroupLinkBottomSheet_share_via_signal">Koplietot, izmantojot Signal</string>
   <string name="GroupLinkBottomSheet_copy">Kopēt</string>
-  <string name="GroupLinkBottomSheet_qr_code">Kvadrātkods</string>
+  <string name="GroupLinkBottomSheet_qr_code">QR kods</string>
   <string name="GroupLinkBottomSheet_share">Kopīgot</string>
   <string name="GroupLinkBottomSheet_copied_to_clipboard">Iekopēts starpenē</string>
   <string name="GroupLinkBottomSheet_the_link_is_not_currently_active">Saite pašlaik nav aktīva</string>
@@ -3222,8 +3190,8 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <!--NotificationsSettingsFragment-->
   <string name="NotificationsSettingsFragment__messages">Ziņas</string>
   <string name="NotificationsSettingsFragment__calls">Zvani</string>
-  <string name="NotificationsSettingsFragment__notify_when">Paziņot, kad…</string>
-  <string name="NotificationsSettingsFragment__contact_joins_signal">Kontaktpersona pievienojas Signal</string>
+  <string name="NotificationsSettingsFragment__notify_when">Paziņot, ja…</string>
+  <string name="NotificationsSettingsFragment__contact_joins_signal">Kontaktpersona pievienojas lietotnei Signal</string>
   <!--Notification preference header-->
   <string name="NotificationsSettingsFragment__notification_profiles">Paziņojumu profili</string>
   <!--Notification preference option header-->
@@ -3359,8 +3327,8 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="ConversationSettingsFragment__video">Video</string>
   <string name="ConversationSettingsFragment__audio">Audio</string>
   <string name="ConversationSettingsFragment__call">Zvanīt</string>
-  <string name="ConversationSettingsFragment__mute">Izslēgt</string>
-  <string name="ConversationSettingsFragment__muted">Izslēgta</string>
+  <string name="ConversationSettingsFragment__mute">Atspējot ziņas</string>
+  <string name="ConversationSettingsFragment__muted">Izslēgta skaņa</string>
   <string name="ConversationSettingsFragment__search">Meklēt</string>
   <string name="ConversationSettingsFragment__disappearing_messages">Gaistošās ziņas</string>
   <string name="ConversationSettingsFragment__sounds_and_notifications">Skaņas un paziņojumi</string>
@@ -3377,9 +3345,9 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="ConversationSettingsFragment__requests_and_invites">Pieprasījumi un uzaicinājumi</string>
   <string name="ConversationSettingsFragment__group_link">Grupas saite</string>
   <string name="ConversationSettingsFragment__add_as_a_contact">Pievienot kā kontaktpersonu</string>
-  <string name="ConversationSettingsFragment__unmute">Ieslēgt</string>
-  <string name="ConversationSettingsFragment__conversation_muted_until_s">Saruna izslēgta līdz %1$s</string>
-  <string name="ConversationSettingsFragment__conversation_muted_forever">Saruna izslēgta uz visiem laikiem.</string>
+  <string name="ConversationSettingsFragment__unmute">Ieslēgt ziņas</string>
+  <string name="ConversationSettingsFragment__conversation_muted_until_s">Saruna apklusināta līdz %1$s</string>
+  <string name="ConversationSettingsFragment__conversation_muted_forever">Saruna apklusināta uz visiem laikiem.</string>
   <string name="ConversationSettingsFragment__copied_phone_number_to_clipboard">Tālruņa numurs ir nokopēts starpliktuvē.</string>
   <string name="ConversationSettingsFragment__phone_number">Tālruņa numurs</string>
   <string name="ConversationSettingsFragment__get_badges">Iegūstiet nozīmītes savam profilam, atbalstot Signal. Piesitiet nozīmītei, lai uzzinātu vairāk.</string>
@@ -3393,8 +3361,8 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="PermissionsSettingsFragment__who_can_edit_this_groups_info">Kas var rediģēt šīs grupas informāciju?</string>
   <string name="PermissionsSettingsFragment__who_can_send_messages">Kurš var sūtīt ziņas?</string>
   <!--SoundsAndNotificationsSettingsFragment-->
-  <string name="SoundsAndNotificationsSettingsFragment__mute_notifications">Izslēgt paziņojumus</string>
-  <string name="SoundsAndNotificationsSettingsFragment__not_muted">Nav izslēgtas</string>
+  <string name="SoundsAndNotificationsSettingsFragment__mute_notifications">Noklusināt paziņojumus</string>
+  <string name="SoundsAndNotificationsSettingsFragment__not_muted">Nav atspējotas</string>
   <string name="SoundsAndNotificationsSettingsFragment__muted_until_s">Skaņa izslēgta līdz %1$s</string>
   <string name="SoundsAndNotificationsSettingsFragment__mentions">Pieminējumi</string>
   <string name="SoundsAndNotificationsSettingsFragment__always_notify">Vienmēr paziņot</string>
@@ -3566,15 +3534,9 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="ExpiredBadgeBottomSheetDialogFragment__become_a_sustainer">Kļūstiet par Uzturētāju</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__add_a_boost">Pievienot Atbalstu</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__not_now">Ne tagad</string>
-  <!--Copy displayed when badge expires after user inactivity-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_automatically">Jūsu Uzturētāja abonements tika automātiski atcelts, jo jūs pārāk ilgi bijāt neaktīvs. Jūsu %1$s nozīmīte vairs nav redzama uz jūsu profila.</string>
-  <!--Copy displayed when badge expires after payment failure-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_canceled">Jūsu Uzturētāja abonements tika atcelts, jo mēs nevarējām apstrādāt jūsu maksājumu. Jūsu nozīmīte vairs nav redzama uz jūsu profila.</string>
+  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer">Jūsu Uzturētāja abonements tika automātiski atcelts, jo jūs pārāk ilgi bijāt neaktīvs. Jūsu %1$s nozīmīte vairs nav redzama uz jūsu profila.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Jūs varat turpināt izmantot Signal, bet lai atbalstītu aplikāciju un atkārtoti aktivizētu jūsu nozīmīti, atjaunojiet tagad.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__renew_subscription">Atjaunot abonementu</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__cant_process_subscription_payment">Nevar apstrādāt abonementa maksājumu</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__were_having_trouble">Mums ir grūtības iekasēt jūsu Signal Uzturētāja maksājumu. Pārliecinieties, ka maksājuma veids ir atjaunināts. Ja ne, atjauniniet to Google Pay. Signal mēģinās dažu dienu laikā to apstrādāt vēlreiz.</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__dont_show_this_again">Nerādīt šo atkārtoti</string>
   <string name="Subscription__please_contact_support_for_more_information">Lūdzu, sazinieties ar tehnisko atbalstu, lai saņemtu vairāk informācijas.</string>
   <string name="Subscription__contact_support">Sazināties ar atbalstu</string>
   <string name="Subscription__earn_a_s_badge">Iegūsti %1$s nozīmīti</string>
@@ -3596,34 +3558,6 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <string name="ViewBadgeBottomSheetDialogFragment__your_device_doesn_t_support_google_pay_so_you_can_t_subscribe_to_earn_a_badge_you_can_still_support_signal_by_making_a_donation_on_our_website">Jūsu ierīce neatbalsta Google Pay, tāpēc jūs nevarat pieteikties abonementam, lai iegūtu nozīmīti. Jūs vēl arvien varat atbalstīt Signal, ziedojot mūsu mājaslapā.</string>
   <string name="NetworkFailure__network_error_check_your_connection_and_try_again">Tīkla kļūda. Pārbaudiet savienojumu un mēģiniet vēlreiz.</string>
   <string name="NetworkFailure__retry">Mēģināt vēlreiz</string>
-  <!--Stripe decline code generic_failure-->
-  <string name="DeclineCode__try_another_payment_method_or_contact_your_bank">Mēģiniet citu maksājuma veidu vai sazinieties ar savu banku, lai iegūtu vairāk informācijas.</string>
-  <!--Stripe decline code verify on Google Pay and try again-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again">Pārliecinieties, ka jūsu maksājuma veids ir atjaunināts Google Pay un mēģiniet vēlreiz.</string>
-  <!--Stripe decline code learn more action label-->
-  <string name="DeclineCode__learn_more">Lasīt vairāk</string>
-  <!--Stripe decline code contact issuer-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again_if_the_problem">Pārliecinieties, ka jūsu maksājuma veids ir atjaunināts Google Pay un mēģiniet vēlreiz. Ja problēma turpinās, sazinieties ar savu banku.</string>
-  <!--Stripe decline code purchase not supported-->
-  <string name="DeclineCode__your_card_does_not_support_this_type_of_purchase">Jūsu karte neatbalsta šo pirkuma veidu. Mēģiniet citu maksājuma veidu.</string>
-  <!--Stripe decline code your card has expired-->
-  <string name="DeclineCode__your_card_has_expired">Jūsu kartes derīguma termiņš ir beidzies. Atjauniniet savu maksājuma veidu Google Pay un mēģiniet vēlreiz.</string>
-  <!--Stripe decline code go to google pay action label-->
-  <string name="DeclineCode__go_to_google_pay">Doties uz Google Pay</string>
-  <!--Stripe decline code incorrect card number-->
-  <string name="DeclineCode__your_card_number_is_incorrect">Jūsu kartes numurs ir nepareizs. Atjauniniet to Google Pay un mēģniet vēlreiz.</string>
-  <!--Stripe decline code incorrect cvc-->
-  <string name="DeclineCode__your_cards_cvc_number_is_incorrect">Jūsu kartes CVC kods ir nepareizs. Atjauniniet to Google Pay un mēģniet vēlreiz.</string>
-  <!--Stripe decline code insufficient funds-->
-  <string name="DeclineCode__your_card_does_not_have_sufficient_funds">Jūsu kartē nav pietiekami daudz līdzekļu šim pirkumam. Mēģiniet citu maksājuma veidu.</string>
-  <!--Stripe decline code incorrect expiration month-->
-  <string name="DeclineCode__the_expiration_month">Jūsu maksājuma veida derīguma termiņa mēneša skaitlis ir nepareizs. Atjauniniet to Google Pay un mēģiniet vēlreiz.</string>
-  <!--Stripe decline code incorrect expiration year-->
-  <string name="DeclineCode__the_expiration_year">Jūsu maksājuma veida derīguma termiņa gada skaitlis ir nepareizs. Atjauniniet to Google Pay un mēģiniet vēlreiz.</string>
-  <!--Stripe decline code issuer not available-->
-  <string name="DeclineCode__try_completing_the_payment_again">Mēģiniet pabeigt maksājumu vēlreiz vai sazinieties ar savu banku, lai iegūtu vairāk informācijas.</string>
-  <!--Stripe decline code processing error-->
-  <string name="DeclineCode__try_again">Mēģiniet vēlreiz vai sazinieties ar savu banku, lai iegūtu vairāk informācijas.</string>
   <!--Title of create notification profile screen-->
   <string name="EditNotificationProfileFragment__name_your_profile">Dodiet profilam nosaukumu</string>
   <!--Hint text for create/edit notification profile name-->
@@ -3641,7 +3575,7 @@ Saņemts nederīgas protokola versijas atslēgas apmaiņas ziņojums.
   <!--Error message shown when attempting to create or edit a profile name to an existing profile name-->
   <string name="EditNotificationProfileFragment__a_profile_with_this_name_already_exists">Profils ar šādu nosaukumu jau eksistē</string>
   <!--Preset selectable name for a profile name, shown as list in edit/create screen-->
-  <string name="EditNotificationProfileFragment__work">Darbs</string>
+  <string name="EditNotificationProfileFragment__work">Darba</string>
   <!--Preset selectable name for a profile name, shown as list in edit/create screen-->
   <string name="EditNotificationProfileFragment__sleep">Miegs</string>
   <!--Preset selectable name for a profile name, shown as list in edit/create screen-->

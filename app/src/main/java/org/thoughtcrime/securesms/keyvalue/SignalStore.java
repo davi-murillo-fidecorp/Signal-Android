@@ -42,7 +42,6 @@ public final class SignalStore {
   private final ImageEditorValues         imageEditorValues;
   private final NotificationProfileValues notificationProfileValues;
   private final ReleaseChannelValues      releaseChannelValues;
-  private final StoryValues               storyValues;
 
   private static volatile SignalStore instance;
 
@@ -84,7 +83,6 @@ public final class SignalStore {
     this.imageEditorValues         = new ImageEditorValues(store);
     this.notificationProfileValues = new NotificationProfileValues(store);
     this.releaseChannelValues      = new ReleaseChannelValues(store);
-    this.storyValues               = new StoryValues(store);
   }
 
   public static void onFirstEverAppLaunch() {
@@ -112,7 +110,6 @@ public final class SignalStore {
     imageEditorValues().onFirstEverAppLaunch();
     notificationProfileValues().onFirstEverAppLaunch();
     releaseChannelValues().onFirstEverAppLaunch();
-    storyValues().onFirstEverAppLaunch();
   }
 
   public static List<String> getKeysToIncludeInBackup() {
@@ -141,7 +138,6 @@ public final class SignalStore {
     keys.addAll(imageEditorValues().getKeysToIncludeInBackup());
     keys.addAll(notificationProfileValues().getKeysToIncludeInBackup());
     keys.addAll(releaseChannelValues().getKeysToIncludeInBackup());
-    keys.addAll(storyValues().getKeysToIncludeInBackup());
     return keys;
   }
 
@@ -151,13 +147,6 @@ public final class SignalStore {
    */
   @VisibleForTesting
   public static void resetCache() {
-    getInstance().store.resetCache();
-  }
-
-  /**
-   * Restoring a backup changes the underlying disk values, so the cache needs to be reset.
-   */
-  public static void onPostBackupRestore() {
     getInstance().store.resetCache();
   }
 
@@ -255,10 +244,6 @@ public final class SignalStore {
 
   public static @NonNull ReleaseChannelValues releaseChannelValues() {
     return getInstance().releaseChannelValues;
-  }
-
-  public static @NonNull StoryValues storyValues() {
-    return getInstance().storyValues;
   }
 
   public static @NonNull GroupsV2AuthorizationSignalStoreCache groupsV2AuthorizationCache() {

@@ -29,7 +29,6 @@ import org.thoughtcrime.securesms.payments.Payments;
 import org.thoughtcrime.securesms.push.SignalServiceNetworkAccess;
 import org.thoughtcrime.securesms.recipients.LiveRecipientCache;
 import org.thoughtcrime.securesms.revealable.ViewOnceMessageManager;
-import org.thoughtcrime.securesms.service.ExpiringStoriesManager;
 import org.thoughtcrime.securesms.service.ExpiringMessageManager;
 import org.thoughtcrime.securesms.service.PendingRetryReceiptManager;
 import org.thoughtcrime.securesms.service.TrimThreadsByDateManager;
@@ -45,7 +44,6 @@ import org.thoughtcrime.securesms.video.exo.GiphyMp4Cache;
 import org.thoughtcrime.securesms.webrtc.audio.AudioManagerCompat;
 import org.whispersystems.signalservice.api.KeyBackupService;
 import org.whispersystems.signalservice.api.SignalServiceAccountManager;
-import org.whispersystems.signalservice.api.SignalServiceDataStore;
 import org.whispersystems.signalservice.api.SignalServiceMessageReceiver;
 import org.whispersystems.signalservice.api.SignalServiceMessageSender;
 import org.whispersystems.signalservice.api.SignalWebSocket;
@@ -91,7 +89,6 @@ public class ApplicationDependencies {
   private static volatile DatabaseObserver             databaseObserver;
   private static volatile TrimThreadsByDateManager     trimThreadsByDateManager;
   private static volatile ViewOnceMessageManager       viewOnceMessageManager;
-  private static volatile ExpiringStoriesManager       expiringStoriesManager;
   private static volatile ExpiringMessageManager       expiringMessageManager;
   private static volatile Payments                     payments;
   private static volatile SignalCallManager            signalCallManager;
@@ -202,7 +199,7 @@ public class ApplicationDependencies {
 
     synchronized (LOCK) {
       if (messageSender == null) {
-        messageSender = provider.provideSignalServiceMessageSender(getSignalWebSocket(), getProtocolStore());
+        messageSender = provider.provideSignalServiceMessageSender(getSignalWebSocket());
       }
       return messageSender;
     }
@@ -382,18 +379,6 @@ public class ApplicationDependencies {
     }
 
     return viewOnceMessageManager;
-  }
-
-  public static @NonNull ExpiringStoriesManager getExpireStoriesManager() {
-    if (expiringStoriesManager == null) {
-      synchronized (LOCK) {
-        if (expiringStoriesManager == null) {
-          expiringStoriesManager = provider.provideExpiringStoriesManager();
-        }
-      }
-    }
-
-    return expiringStoriesManager;
   }
 
   public static @NonNull PendingRetryReceiptManager getPendingRetryReceiptManager() {
@@ -615,7 +600,7 @@ public class ApplicationDependencies {
   public interface Provider {
     @NonNull GroupsV2Operations provideGroupsV2Operations();
     @NonNull SignalServiceAccountManager provideSignalServiceAccountManager();
-    @NonNull SignalServiceMessageSender provideSignalServiceMessageSender(@NonNull SignalWebSocket signalWebSocket, @NonNull SignalServiceDataStore protocolStore);
+    @NonNull SignalServiceMessageSender provideSignalServiceMessageSender(@NonNull SignalWebSocket signalWebSocket);
     @NonNull SignalServiceMessageReceiver provideSignalServiceMessageReceiver();
     @NonNull SignalServiceNetworkAccess provideSignalServiceNetworkAccess();
     @NonNull IncomingMessageProcessor provideIncomingMessageProcessor();
@@ -629,7 +614,6 @@ public class ApplicationDependencies {
     @NonNull IncomingMessageObserver provideIncomingMessageObserver();
     @NonNull TrimThreadsByDateManager provideTrimThreadsByDateManager();
     @NonNull ViewOnceMessageManager provideViewOnceMessageManager();
-    @NonNull ExpiringStoriesManager provideExpiringStoriesManager();
     @NonNull ExpiringMessageManager provideExpiringMessageManager();
     @NonNull TypingStatusRepository provideTypingStatusRepository();
     @NonNull TypingStatusSender provideTypingStatusSender();

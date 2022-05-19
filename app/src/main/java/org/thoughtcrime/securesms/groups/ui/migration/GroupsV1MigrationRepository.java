@@ -95,7 +95,7 @@ final class GroupsV1MigrationRepository {
     group = group.fresh();
 
     List<Recipient> ineligible = Stream.of(group.getParticipants())
-                                       .filter(r -> !r.hasServiceId() ||
+                                       .filter(r -> !r.hasAci() ||
                                                     r.getGroupsV2Capability() != Recipient.Capability.SUPPORTED ||
                                                     r.getGroupsV1MigrationCapability() != Recipient.Capability.SUPPORTED ||
                                                     r.getRegistered() != RecipientDatabase.RegisteredState.REGISTERED)

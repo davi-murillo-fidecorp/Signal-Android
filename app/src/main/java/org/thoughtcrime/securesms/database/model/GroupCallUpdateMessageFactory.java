@@ -6,12 +6,11 @@ import androidx.annotation.NonNull;
 
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.database.model.databaseprotos.GroupCallUpdateDetails;
-import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.util.DateUtils;
+import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.whispersystems.signalservice.api.push.ACI;
-import org.whispersystems.signalservice.api.push.ServiceId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +22,13 @@ import java.util.Objects;
  */
 public class GroupCallUpdateMessageFactory implements UpdateDescription.StringFactory {
   private final Context                context;
-  private final List<ServiceId>        joinedMembers;
+  private final List<ACI>              joinedMembers;
   private final boolean                withTime;
   private final GroupCallUpdateDetails groupCallUpdateDetails;
   private final ACI                    selfAci;
 
   public GroupCallUpdateMessageFactory(@NonNull Context context,
-                                       @NonNull List<ServiceId> joinedMembers,
+                                       @NonNull List<ACI> joinedMembers,
                                        boolean withTime,
                                        @NonNull GroupCallUpdateDetails groupCallUpdateDetails)
   {
@@ -37,7 +36,7 @@ public class GroupCallUpdateMessageFactory implements UpdateDescription.StringFa
     this.joinedMembers          = new ArrayList<>(joinedMembers);
     this.withTime               = withTime;
     this.groupCallUpdateDetails = groupCallUpdateDetails;
-    this.selfAci                = SignalStore.account().requireAci();
+    this.selfAci                = Recipient.self().requireAci();
 
     boolean removed = this.joinedMembers.remove(selfAci);
     if (removed) {
@@ -88,12 +87,12 @@ public class GroupCallUpdateMessageFactory implements UpdateDescription.StringFa
     }
   }
 
-  private @NonNull String describe(@NonNull ServiceId serviceId) {
-    if (serviceId.isUnknown()) {
+  private @NonNull String describe(@NonNull ACI aci) {
+    if (aci.isUnknown()) {
       return context.getString(R.string.MessageRecord_unknown);
     }
 
-    Recipient recipient = Recipient.resolved(RecipientId.from(serviceId, null));
+    Recipient recipient = Recipient.resolved(RecipientId.from(aci, null));
 
     if (recipient.isSelf()) {
       return context.getString(R.string.MessageRecord_you);

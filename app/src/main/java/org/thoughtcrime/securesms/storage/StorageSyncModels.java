@@ -12,7 +12,7 @@ import org.thoughtcrime.securesms.database.model.RecipientRecord;
 import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.keyvalue.PhoneNumberPrivacyValues;
 import org.thoughtcrime.securesms.subscription.Subscriber;
-import org.whispersystems.signalservice.api.push.ServiceId;
+import org.whispersystems.signalservice.api.push.ACI;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
 import org.whispersystems.signalservice.api.storage.SignalAccountRecord;
 import org.whispersystems.signalservice.api.storage.SignalContactRecord;
@@ -83,7 +83,7 @@ public final class StorageSyncModels {
 
   private static @NonNull SignalAccountRecord.PinnedConversation localToRemotePinnedConversation(@NonNull RecipientRecord settings) {
     switch (settings.getGroupType()) {
-      case NONE     : return SignalAccountRecord.PinnedConversation.forContact(new SignalServiceAddress(settings.getServiceId(), settings.getE164()));
+      case NONE     : return SignalAccountRecord.PinnedConversation.forContact(new SignalServiceAddress(settings.getAci(), settings.getE164()));
       case SIGNAL_V1: return SignalAccountRecord.PinnedConversation.forGroupV1(settings.getGroupId().requireV1().getDecodedId());
       case SIGNAL_V2: return SignalAccountRecord.PinnedConversation.forGroupV2(settings.getSyncExtras().getGroupMasterKey().serialize());
       default       : throw new AssertionError("Unexpected group type!");
@@ -91,14 +91,14 @@ public final class StorageSyncModels {
   }
 
   private static @NonNull SignalContactRecord localToRemoteContact(@NonNull RecipientRecord recipient, byte[] rawStorageId) {
-    if (recipient.getServiceId() == null && recipient.getE164() == null) {
+    if (recipient.getAci() == null && recipient.getE164() == null) {
       throw new AssertionError("Must have either a UUID or a phone number!");
     }
 
-    ServiceId serviceId = recipient.getServiceId() != null ? recipient.getServiceId() : ServiceId.UNKNOWN;
-    boolean   hideStory = recipient.getExtras() != null && recipient.getExtras().hideStory();
+    ACI aci = recipient.getAci() != null ? recipient.getAci() : ACI.UNKNOWN;
 
-    return new SignalContactRecord.Builder(rawStorageId, new SignalServiceAddress(serviceId, recipient.getE164()), recipient.getSyncExtras().getStorageProto())
+    return new SignalContactRecord.Builder(rawStorageId, new SignalServiceAddress(aci, recipient.getE164()))
+                                  .setUnknownFields(recipient.getSyncExtras().getStorageProto())
                                   .setProfileKey(recipient.getProfileKey())
                                   .setGivenName(recipient.getProfileName().getGivenName())
                                   .setFamilyName(recipient.getProfileName().getFamilyName())
@@ -109,7 +109,6 @@ public final class StorageSyncModels {
                                   .setArchived(recipient.getSyncExtras().isArchived())
                                   .setForcedUnread(recipient.getSyncExtras().isForcedUnread())
                                   .setMuteUntil(recipient.getMuteUntil())
-                                  .setHideStory(hideStory)
                                   .build();
   }
 
@@ -124,7 +123,8 @@ public final class StorageSyncModels {
       throw new AssertionError("Group is not V1");
     }
 
-    return new SignalGroupV1Record.Builder(rawStorageId, groupId.getDecodedId(), recipient.getSyncExtras().getStorageProto())
+    return new SignalGroupV1Record.Builder(rawStorageId, groupId.getDecodedId())
+                                  .setUnknownFields(recipient.getSyncExtras().getStorageProto())
                                   .setBlocked(recipient.isBlocked())
                                   .setProfileSharingEnabled(recipient.isProfileSharing())
                                   .setArchived(recipient.getSyncExtras().isArchived())
@@ -148,16 +148,13 @@ public final class StorageSyncModels {
       throw new AssertionError("Group master key not on recipient record");
     }
 
-    boolean hideStory = recipient.getExtras() != null && recipient.getExtras().hideStory();
-
-    return new SignalGroupV2Record.Builder(rawStorageId, groupMasterKey, recipient.getSyncExtras().getStorageProto())
+    return new SignalGroupV2Record.Builder(rawStorageId, groupMasterKey)
+                                  .setUnknownFields(recipient.getSyncExtras().getStorageProto())
                                   .setBlocked(recipient.isBlocked())
                                   .setProfileSharingEnabled(recipient.isProfileSharing())
                                   .setArchived(recipient.getSyncExtras().isArchived())
                                   .setForcedUnread(recipient.getSyncExtras().isForcedUnread())
                                   .setMuteUntil(recipient.getMuteUntil())
-                                  .setNotifyForMentionsWhenMuted(recipient.getMentionSetting() == RecipientDatabase.MentionSetting.ALWAYS_NOTIFY)
-                                  .setHideStory(hideStory)
                                   .build();
   }
 

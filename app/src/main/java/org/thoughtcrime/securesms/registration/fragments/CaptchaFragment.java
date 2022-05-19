@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 
-import org.thoughtcrime.securesms.BuildConfig;
 import org.thoughtcrime.securesms.LoggingFragment;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.registration.viewmodel.BaseRegistrationViewModel;
@@ -56,7 +55,7 @@ public final class CaptchaFragment extends LoggingFragment {
       }
     });
 
-    webView.loadUrl(BuildConfig.SIGNAL_CAPTCHA_URL);
+    webView.loadUrl(RegistrationConstants.SIGNAL_CAPTCHA_URL);
 
     CaptchaViewModelProvider provider = null;
     if (getArguments() != null) {

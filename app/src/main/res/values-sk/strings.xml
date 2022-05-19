@@ -124,15 +124,6 @@
   <string name="CameraContacts_cant_find_who_youre_looking_for">Nenašli ste hľadaný kontakt?</string>
   <string name="CameraContacts_invite_a_contact_to_join_signal">Pozvite kontakt, aby použival Signal</string>
   <string name="CameraContacts__menu_search">Hľadať</string>
-  <!--Censorship Circumvention Megaphone-->
-  <!--Title for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off_censorship_circumvention">Vypnúť obchádzanie cenzúry?</string>
-  <!--Body for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_you_can_now_connect_to_the_signal_service">Teraz sa môžete priamo pripojiť k službe Signal pre lepší zážitok.</string>
-  <!--Action to prompt the user to disable circumvention since it is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off">Vypnúť</string>
-  <!--Action to prompt the user to dismiss the alert at the bottom of the chat list-->
-  <string name="CensorshipCircumventionMegaphone_no_thanks">Nie, ďakujem</string>
   <!--ClearProfileActivity-->
   <string name="ClearProfileActivity_remove">Odstrániť</string>
   <string name="ClearProfileActivity_remove_profile_photo">Odstrániť profilovú fotku?</string>
@@ -1391,11 +1382,6 @@
   <string name="RedPhone_number_not_registered">Neregistrované číslo!</string>
   <string name="RedPhone_the_number_you_dialed_does_not_support_secure_voice">Číslo ktoré ste vytočili nepodporuje zabezpečené hovory!</string>
   <string name="RedPhone_got_it">Chápem</string>
-  <!--Valentine\'s Day Megaphone-->
-  <!--Title text for the Valentine\'s Day donation megaphone. The placeholder will always be a heart emoji. Needs to be a placeholder for Android reasons.-->
-  <string name="ValentinesDayMegaphone_happy_heart_day">Šťastný 💜 Deň!</string>
-  <!--Body text for the Valentine\'s Day donation megaphone.-->
-  <string name="ValentinesDayMegaphone_show_your_affection">Ukážte svoju náklonnosť tým, že sa stanete podporovateľom Signal.</string>
   <!--WebRtcCallActivity-->
   <string name="WebRtcCallActivity__tap_here_to_turn_on_your_video">Ťuknite sem pre spustenie videa</string>
   <string name="WebRtcCallActivity__to_call_s_signal_needs_access_to_your_camera">Pre volanie %1$s potrebuje Signal prístup k vašej kamere</string>
@@ -1461,7 +1447,6 @@
   <string name="WebRtcCallView__flip">Preklopiť</string>
   <string name="WebRtcCallView__speaker">Reproduktor</string>
   <string name="WebRtcCallView__camera">Fotoaparát</string>
-  <string name="WebRtcCallView__unmute">Zapnúť zvuky</string>
   <string name="WebRtcCallView__mute">Stlmiť</string>
   <string name="WebRtcCallView__ring">Zvoniť</string>
   <string name="WebRtcCallView__end_call">Ukončiť hovor</string>
@@ -1770,10 +1755,6 @@ Bola prijatá správa výmeny kľúčov s neplatnou verziou protokolu.
   <string name="NotificationChannel_voice_notes">Hlasové poznámky</string>
   <string name="NotificationChannel_contact_joined_signal">Váš kontakt začal používať Signal</string>
   <string name="NotificationChannels__no_activity_available_to_open_notification_channel_settings">Na otvorenie nastavení kanála upozornení nie je k dispozícii žiadna aktivita.</string>
-  <!--Notification channel name for showing persistent background connection on devices without push notifications-->
-  <string name="NotificationChannel_background_connection">Pripojenie na pozadí</string>
-  <!--Notification channel name for showing call status information (like connection, ongoing, etc.) Not ringing.-->
-  <string name="NotificationChannel_call_status">Stav hovoru</string>
   <!--ProfileEditNameFragment-->
   <!--QuickResponseService-->
   <string name="QuickResponseService_quick_response_unavailable_when_Signal_is_locked">Rýchla odpoveď nie je dostupná, keď je Signal zamknutý!</string>
@@ -2361,19 +2342,6 @@ Bola prijatá správa výmeny kľúčov s neplatnou verziou protokolu.
   <string name="preferences_chats__message_text_size">Veľkosť písma správy</string>
   <string name="preferences_events__contact_joined_signal">Váš kontakt začal používať Signal</string>
   <string name="preferences_notifications__priority">Priorita</string>
-  <!--Heading for the \'censorship circumvention\' section of privacy preferences-->
-  <string name="preferences_communication__category_censorship_circumvention">Obchádzanie cenzúry</string>
-  <!--Title of the \'censorship circumvention\' toggle switch-->
-  <string name="preferences_communication__censorship_circumvention">Obchádzanie cenzúry</string>
-  <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Keď je povolené, Signal sa pokúsi obísť cenzúru. Nepovoľujte v umiestneniach, kde Signal nie je cenzurovaný.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Obchádzanie cenzúry bolo zapnuté na základe telefónneho čísla vašeho účtu.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Obchádzanie cenzúry ste manuálne vypli.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service-->
-  <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Obchádzanie cenzúry nie je nutné; už ste pripojený k službe Signal.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet-->
-  <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Obchádzanie cenzúry je možné zapnúť len s prístupom na internet.</string>
   <string name="preferences_communication__category_sealed_sender">Zapečatený odosielateľ</string>
   <string name="preferences_communication__sealed_sender_display_indicators">Zobraziť indikátory</string>
   <string name="preferences_communication__sealed_sender_display_indicators_description">Zobraziť stavovú ikonu v detailoch správ, ktoré boli doručené s použitím zapečateného odosielateľa.</string>
@@ -3675,15 +3643,9 @@ Bola prijatá správa výmeny kľúčov s neplatnou verziou protokolu.
   <string name="ExpiredBadgeBottomSheetDialogFragment__become_a_sustainer">Staňte sa Sustainerom</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__add_a_boost">Pridajte podporu</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__not_now">Teraz nie</string>
-  <!--Copy displayed when badge expires after user inactivity-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_automatically">Vaše prispievanie podporovateľa bolo automaticky zrušené, pretože ste boli príliš dlho neaktívni. Váš odznak %1$s sa už vo vašom profile nezobrazuje.</string>
-  <!--Copy displayed when badge expires after payment failure-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_canceled">Vaše predplatné Podporovateľa bolo zrušené, pretože sa nám nepodarilo spracovať vašu platbu. Váš odznak sa už vo vašom profile nezobrazuje.</string>
+  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer">Vaše prispievanie podporovateľa bolo automaticky zrušené, pretože ste boli príliš dlho neaktívni. Váš odznak %1$s sa už vo vašom profile nezobrazuje.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Signal môžete naďalej používať, ale ak chcete podporiť aplikáciu a znova aktivovať svoj odznak, obnovte ho teraz.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__renew_subscription">Obnoviť prispievanie</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__cant_process_subscription_payment">Nedá sa spracovať platba za podporu</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__were_having_trouble">Máme problém s evidovaním vašej platby za Signal Podporovateľ. Uistite sa, že je váš spôsob platby aktuálny. Ak nie, aktualizujte ho v službe Google Pay. Signal sa pokúsi spracovať platbu znova o niekoľko dní.</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__dont_show_this_again">Toto už nezobrazovať</string>
   <string name="Subscription__please_contact_support_for_more_information">Pre viac informácií kontaktujte podporu.</string>
   <string name="Subscription__contact_support">Kontaktovať zákaznícku podporu</string>
   <string name="Subscription__earn_a_s_badge">Získajte odznak %1$s</string>
@@ -3705,34 +3667,6 @@ Bola prijatá správa výmeny kľúčov s neplatnou verziou protokolu.
   <string name="ViewBadgeBottomSheetDialogFragment__your_device_doesn_t_support_google_pay_so_you_can_t_subscribe_to_earn_a_badge_you_can_still_support_signal_by_making_a_donation_on_our_website">Vaše zariadenie nepodporuje Google Pay, takže sa nemôžete prihlásiť na odber a získať odznak. Signal môžete stále podporiť príspevkom na našej webovej stránke.</string>
   <string name="NetworkFailure__network_error_check_your_connection_and_try_again">Chyba siete. Skontrolujte pripojenie a skúste to znova.</string>
   <string name="NetworkFailure__retry">Skúsiť znovu</string>
-  <!--Stripe decline code generic_failure-->
-  <string name="DeclineCode__try_another_payment_method_or_contact_your_bank">Skúste iný spôsob platby, alebo kontaktujte svoju banku a požiadajte o viac informácií.</string>
-  <!--Stripe decline code verify on Google Pay and try again-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again">Overte, či je váš spôsob platby aktuálny v službe Google Pay, a skúste to znova.</string>
-  <!--Stripe decline code learn more action label-->
-  <string name="DeclineCode__learn_more">Dozvedieť sa viac</string>
-  <!--Stripe decline code contact issuer-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again_if_the_problem">Overte, či je váš spôsob platby aktuálny v službe Google Pay, a skúste to znova. Ak problém pretrváva, kontaktujte svoju banku.</string>
-  <!--Stripe decline code purchase not supported-->
-  <string name="DeclineCode__your_card_does_not_support_this_type_of_purchase">Vaša karta nepodporuje tento typ nákupu. Skúste iný spôsob platby.</string>
-  <!--Stripe decline code your card has expired-->
-  <string name="DeclineCode__your_card_has_expired">Platnosť vašej karty vypršala. Aktualizujte svoj spôsob platby v službe Google Pay a skúste to znova.</string>
-  <!--Stripe decline code go to google pay action label-->
-  <string name="DeclineCode__go_to_google_pay">Prejdite do služby Google Pay</string>
-  <!--Stripe decline code incorrect card number-->
-  <string name="DeclineCode__your_card_number_is_incorrect">Číslo vašej karty je nesprávne. Aktualizujte ho v službe Google Pay a skúste to znova.</string>
-  <!--Stripe decline code incorrect cvc-->
-  <string name="DeclineCode__your_cards_cvc_number_is_incorrect">Číslo CVC vašej karty je nesprávne. Aktualizujte ho v službe Google Pay a skúste to znova.</string>
-  <!--Stripe decline code insufficient funds-->
-  <string name="DeclineCode__your_card_does_not_have_sufficient_funds">Na vašej karte nie sú dostatočné prostriedky na dokončenie tohto nákupu. Skúste iný spôsob platby.</string>
-  <!--Stripe decline code incorrect expiration month-->
-  <string name="DeclineCode__the_expiration_month">Mesiac vypršania platnosti vášho spôsobu platby je nesprávny. Aktualizujte ho v službe Google Pay a skúste to znova.</string>
-  <!--Stripe decline code incorrect expiration year-->
-  <string name="DeclineCode__the_expiration_year">Rok vypršania platnosti vášho spôsobu platby je nesprávny. Aktualizujte ho v službe Google Pay a skúste to znova.</string>
-  <!--Stripe decline code issuer not available-->
-  <string name="DeclineCode__try_completing_the_payment_again">Skúste znova dokončiť platbu, alebo kontaktujte svoju banku a požiadajte o ďalšie informácie.</string>
-  <!--Stripe decline code processing error-->
-  <string name="DeclineCode__try_again">Skúste to znova, alebo kontaktujte svoju banku a požiadajte o ďalšie informácie.</string>
   <!--Title of create notification profile screen-->
   <string name="EditNotificationProfileFragment__name_your_profile">Pomenujte svoj profil</string>
   <!--Hint text for create/edit notification profile name-->

@@ -91,9 +91,7 @@
   <string name="BlockUnblockDialog_you_will_be_able_to_call_and_message_each_other">Vous pourrez échanger des messages et des appels, et vos nom et photo seront partagés avec eux.</string>
   <string name="BlockUnblockDialog_blocked_people_wont_be_able_to_call_you_or_send_you_messages">Les personnes bloquées ne pourront ni vous appeler ni vous envoyer de messages.</string>
   <!--Message shown on block dialog when blocking the Signal release notes recipient-->
-  <string name="BlockUnblockDialog_block_getting_signal_updates_and_news">Bloquer la réception des mises à jour et des actualités de Signal.</string>
   <!--Message shown on unblock dialog when unblocking the Signal release notes recipient-->
-  <string name="BlockUnblockDialog_resume_getting_signal_updates_and_news">Reprendre la réception des mises à jour et des actualités de Signal.</string>
   <string name="BlockUnblockDialog_unblock_s">Débloquer %1$s ?</string>
   <string name="BlockUnblockDialog_block">Bloquer</string>
   <string name="BlockUnblockDialog_block_and_leave">Bloquer et quitter</string>
@@ -122,15 +120,6 @@
   <string name="CameraContacts_cant_find_who_youre_looking_for">Éprouvez-vous des difficultés à trouver qui vous cherchiez ?</string>
   <string name="CameraContacts_invite_a_contact_to_join_signal">Inviter un contact à se joindre à Signal</string>
   <string name="CameraContacts__menu_search">Chercher</string>
-  <!--Censorship Circumvention Megaphone-->
-  <!--Title for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off_censorship_circumvention">Désactiver le contournement de la censure ?</string>
-  <!--Body for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_you_can_now_connect_to_the_signal_service">Vous pouvez désormais vous connecter directement au service Signal pour une meilleure expérience.</string>
-  <!--Action to prompt the user to disable circumvention since it is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off">Désactiver</string>
-  <!--Action to prompt the user to dismiss the alert at the bottom of the chat list-->
-  <string name="CensorshipCircumventionMegaphone_no_thanks">Non merci</string>
   <!--ClearProfileActivity-->
   <string name="ClearProfileActivity_remove">Supprimer</string>
   <string name="ClearProfileActivity_remove_profile_photo">Supprimer la photo de profil ?</string>
@@ -146,7 +135,7 @@
   <string name="CommunicationActions_no_browser_found">Aucun navigateur Web n’a été trouvé.</string>
   <string name="CommunicationActions_send_email">Envoyer un courriel</string>
   <string name="CommunicationActions_a_cellular_call_is_already_in_progress">Un appel cellulaire est déjà en cours.</string>
-  <string name="CommunicationActions_start_voice_call">Lancer un appel audio ?</string>
+  <string name="CommunicationActions_start_voice_call">Lancer un appel vocal ?</string>
   <string name="CommunicationActions_cancel">Annuler</string>
   <string name="CommunicationActions_call">Appeler</string>
   <string name="CommunicationActions_insecure_call">Appel non sécurisé</string>
@@ -853,12 +842,12 @@
   <string name="MediaOverviewActivity_Selected_description">Sélectionné</string>
   <string name="MediaOverviewActivity_select_all">Tout sélectionner</string>
   <plurals name="MediaOverviewActivity_save_plural">
-    <item quantity="one">Enregistrer</item>
-    <item quantity="other">Enregistrer</item>
+    <item quantity="one">Enregistré</item>
+    <item quantity="other">Enregistrés</item>
   </plurals>
   <plurals name="MediaOverviewActivity_delete_plural">
-    <item quantity="one">Supprimer</item>
-    <item quantity="other">Supprimer</item>
+    <item quantity="one">Supprimé</item>
+    <item quantity="other">Supprimés</item>
   </plurals>
   <plurals name="MediaOverviewActivity_d_selected_s">
     <item quantity="one">%1$d sélectionnée (%2$s)</item>
@@ -937,7 +926,7 @@
   <string name="MessageRecord_you_updated_group">Vous avez mis le groupe à jour.</string>
   <string name="MessageRecord_the_group_was_updated">Le groupe a été mis à jour.</string>
   <string name="MessageRecord_you_called_date">Vous avez appelé – %1$s</string>
-  <string name="MessageRecord_missed_audio_call_date">Appel audio manqué –· %1$s</string>
+  <string name="MessageRecord_missed_audio_call_date">Appel vocal manqué –· %1$s</string>
   <string name="MessageRecord_missed_video_call_date">Appel vidéo manqué – %1$s</string>
   <string name="MessageRecord_s_updated_group">%s a mis le groupe à jour.</string>
   <string name="MessageRecord_s_called_you_date">%1$s vous a appelé – %2$s</string>
@@ -1099,9 +1088,7 @@
   <string name="MessageRecord_a_message_from_s_couldnt_be_delivered">Un message de %s n’a pas pu être remis</string>
   <string name="MessageRecord_s_changed_their_phone_number">%1$s a changé de numéro de téléphone</string>
   <!--Update item message shown in the release channel when someone is already a sustainer so we ask them if they want to boost.-->
-  <string name="MessageRecord_like_this_new_feature_say_thanks_with_a_boost">Vous aimez cette nouvelle fonction ? Dites merci avec un coup de pouce.</string>
   <!--Update item message shown in the release channel when someone is not a sustainer so we ask them to consider becoming one-->
-  <string name="MessageRecord_signal_is_powered_by_people_like_you_become_a_sustainer_today">Signal est propulsé par des personnes comme vous. Devenez un donateur mensuel dès aujourd’hui.</string>
   <!--Group Calling update messages-->
   <string name="MessageRecord_s_started_a_group_call_s">%1$s a lancé un appel de groupe · %2$s</string>
   <string name="MessageRecord_s_is_in_the_group_call_s">%1$s fait partie de l’appel de groupe · %2$s</string>
@@ -1130,7 +1117,6 @@
   <string name="MessageRequestBottomView_unblock">Débloquer</string>
   <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">Autoriser %1$s à échanger des messages et partager votre nom et votre photo avec ce contact ? Ce contact ne saura pas que vous avez vu ses messages tant que vous n’aurez pas accepté.</string>
   <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">Autoriser %1$s à échanger des messages et partager votre nom et votre photo avec ce contact ? Vous ne recevrez aucun message tant que vous ne l’aurez pas débloqué.</string>
-  <string name="MessageRequestBottomView_get_updates_and_news_from_s_you_wont_receive_any_updates_until_you_unblock_them">Recevoir voir des mises à jour et des nouvelles de%1$s ? Vous ne recevrez aucune mise à jour tant que vous ne l’aurez pas débloqué.</string>
   <string name="MessageRequestBottomView_continue_your_conversation_with_this_group_and_share_your_name_and_photo">Poursuivre votre conversation avec ce groupe et partager vos nom et photo avec ses membres ?</string>
   <string name="MessageRequestBottomView_upgrade_this_group_to_activate_new_features">Convertissez ce groupe pour activer de nouvelles fonctions telles que les @mentions et l’administration. Les membres qui n’ont pas partagé leur nom ou leur photo dans ce groupe seront invités à s’y joindre.</string>
   <string name="MessageRequestBottomView_this_legacy_group_can_no_longer_be_used">Ce groupe hérité ne peut plus être utilisé, car il comporte trop de membres. Le nombre maximal de membres d’un groupe est %1$d.</string>
@@ -1175,9 +1161,9 @@
   <string name="DeviceProvisioningActivity_sorry_you_have_too_many_devices_linked_already">Désolé, trop d’appareils sont déjà reliés. Essayez d’en supprimer</string>
   <string name="DeviceActivity_sorry_this_is_not_a_valid_device_link_qr_code">Désolé, ce n’est pas un code QR valide de liaison d’appareil.</string>
   <string name="DeviceProvisioningActivity_link_a_signal_device">Relier un appareil Signal ?</string>
-  <string name="DeviceProvisioningActivity_it_looks_like_youre_trying_to_link_a_signal_device_using_a_3rd_party_scanner">Il semble que vous tentiez de relier un appareil Signal en utilisant un lecteur tiers. Pour votre protection, veuillez lire le code de nouveau à partir Signal.</string>
-  <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">Signal a besoin de l’autorisation Appareil photo afin de lire un code QR, mais elle a été refusée définitivement. Veuillez accéder aux paramètres de l’appli, sélectionner Autorisations et activer Appareil photo.</string>
-  <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">Impossible de lire un code QR sans l’autorisation Appareil photo</string>
+  <string name="DeviceProvisioningActivity_it_looks_like_youre_trying_to_link_a_signal_device_using_a_3rd_party_scanner">Il semble que vous tentiez de relier un appareil Signal en utilisant un lecteur tiers. Pour votre protection, veuillez balayer le code de nouveau à partir Signal.</string>
+  <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">Signal a besoin de l’autorisation Appareil photo afin de balayer un code QR, mais elle a été refusée définitivement. Veuillez accéder aux paramètres de l’appli, sélectionner Autorisations et activer Appareil photo.</string>
+  <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">Impossible de balayer un code QR sans l’autorisation Appareil photo</string>
   <!--OutdatedBuildReminder-->
   <string name="OutdatedBuildReminder_update_now">Mettre Signal à jour maintenant</string>
   <string name="OutdatedBuildReminder_your_version_of_signal_will_expire_today">Cette version de Signal expirera aujourd’hui. Passez à la version la plus récente.</string>
@@ -1256,11 +1242,6 @@
   <string name="RedPhone_number_not_registered">Le numéro n’est pas inscrit.</string>
   <string name="RedPhone_the_number_you_dialed_does_not_support_secure_voice">Le numéro que vous avez composé ne prend pas en charge les communications vocales sécurisées.</string>
   <string name="RedPhone_got_it">Compris</string>
-  <!--Valentine\'s Day Megaphone-->
-  <!--Title text for the Valentine\'s Day donation megaphone. The placeholder will always be a heart emoji. Needs to be a placeholder for Android reasons.-->
-  <string name="ValentinesDayMegaphone_happy_heart_day">Joyeuse Saint-Valentin !</string>
-  <!--Body text for the Valentine\'s Day donation megaphone.-->
-  <string name="ValentinesDayMegaphone_show_your_affection">Montrez votre affection en devenant donateur mensuel.</string>
   <!--WebRtcCallActivity-->
   <string name="WebRtcCallActivity__tap_here_to_turn_on_your_video">Touchez ici pour activer votre vidéo</string>
   <string name="WebRtcCallActivity__to_call_s_signal_needs_access_to_your_camera">Pour appeler %1$s, Signal a besoin d’accéder à votre appareil photo</string>
@@ -1270,7 +1251,7 @@
   <!--WebRtcCallView-->
   <string name="WebRtcCallView__signal_call">Appel Signal</string>
   <string name="WebRtcCallView__signal_video_call">Appel vidéo Signal</string>
-  <string name="WebRtcCallView__start_call">Lancer un appel</string>
+  <string name="WebRtcCallView__start_call">Démarrer un appel</string>
   <string name="WebRtcCallView__join_call">Me joindre à l’appel</string>
   <string name="WebRtcCallView__call_is_full">L’appel est complet</string>
   <string name="WebRtcCallView__the_maximum_number_of_d_participants_has_been_Reached_for_this_call">Le nombre maximal de %1$d participants a été atteint pour cet appel. Veuillez réessayer plus tard.</string>
@@ -1316,7 +1297,6 @@
   <string name="WebRtcCallView__flip">Basculer</string>
   <string name="WebRtcCallView__speaker">Haut-parleur</string>
   <string name="WebRtcCallView__camera">Caméra</string>
-  <string name="WebRtcCallView__unmute">Réactiver</string>
   <string name="WebRtcCallView__mute">Sourdine</string>
   <string name="WebRtcCallView__ring">Sonnerie</string>
   <string name="WebRtcCallView__end_call">Raccrocher</string>
@@ -1475,7 +1455,7 @@
   <string name="ThreadRecord_draft">Brouillon :</string>
   <string name="ThreadRecord_called">Vous avez appelé</string>
   <string name="ThreadRecord_called_you">Vous a appelé</string>
-  <string name="ThreadRecord_missed_audio_call">Appel audio manqué</string>
+  <string name="ThreadRecord_missed_audio_call">Appel vocal manqué</string>
   <string name="ThreadRecord_missed_video_call">Appel vidéo manqué</string>
   <string name="ThreadRecord_media_message">Message multimédia</string>
   <string name="ThreadRecord_sticker">Autocollant</string>
@@ -1529,13 +1509,13 @@
   <!--VerifyIdentityActivity-->
   <string name="VerifyIdentityActivity_your_contact_is_running_an_old_version_of_signal">Votre contact utilise une ancienne version de Signal. Veuillez lui demander de la mettre à jour avant de confirmer votre numéro de sécurité.</string>
   <string name="VerifyIdentityActivity_your_contact_is_running_a_newer_version_of_Signal">Votre contact utilise une version plus récente de Signal dont le format de code QR est incompatible. Veuillez mettre Signal à jour pour comparer.</string>
-  <string name="VerifyIdentityActivity_the_scanned_qr_code_is_not_a_correctly_formatted_safety_number">Le code QR lu n’est pas un code de confirmation du numéro de sécurité correctement formaté. Veuillez réessayer de le lire.</string>
+  <string name="VerifyIdentityActivity_the_scanned_qr_code_is_not_a_correctly_formatted_safety_number">Le code QR balayé n’est pas un code de confirmation du numéro de sécurité correctement formaté. Veuillez réessayer de le balayer.</string>
   <string name="VerifyIdentityActivity_share_safety_number_via">Partager le numéro de sécurité par…</string>
   <string name="VerifyIdentityActivity_our_signal_safety_number">Notre numéro de sécurité Signal :</string>
   <string name="VerifyIdentityActivity_no_app_to_share_to">Vous semblez n’avoir aucune appli vers laquelle partager.</string>
   <string name="VerifyIdentityActivity_no_safety_number_to_compare_was_found_in_the_clipboard">Aucun numéro de sécurité à comparer n’a été trouvé dans le presse-papiers</string>
-  <string name="VerifyIdentityActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code_but_it_has_been_permanently_denied">Signal a besoin de l’autorisation Appareil photo afin de lire un code QR, mais elle a été refusée définitivement. Veuillez accéder aux paramètres de l’appli, sélectionner Autorisations et activer Appareil photo.</string>
-  <string name="VerifyIdentityActivity_unable_to_scan_qr_code_without_camera_permission">Impossible de lire le code QR sans l’autorisation Appareil photo</string>
+  <string name="VerifyIdentityActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code_but_it_has_been_permanently_denied">Signal a besoin de l’autorisation Appareil photo afin de balayer un code QR, mais elle a été refusée définitivement. Veuillez accéder aux paramètres de l’appli, sélectionner Autorisations et activer Appareil photo.</string>
+  <string name="VerifyIdentityActivity_unable_to_scan_qr_code_without_camera_permission">Impossible de balayer le code QR sans l’autorisation Appareil photo</string>
   <string name="VerifyIdentityActivity_you_must_first_exchange_messages_in_order_to_view">Vous devez d’abord échanger des messages afin d’afficher le numéro de sécurité de %1$s.</string>
   <!--ViewOnceMessageActivity-->
   <!--AudioView-->
@@ -1610,10 +1590,6 @@
   <string name="NotificationChannel_voice_notes">Notes vocales</string>
   <string name="NotificationChannel_contact_joined_signal">Un contact s’est joint à Signal</string>
   <string name="NotificationChannels__no_activity_available_to_open_notification_channel_settings">Aucune activité n’est disponible pour ouvrir les paramètres du canal de notification.</string>
-  <!--Notification channel name for showing persistent background connection on devices without push notifications-->
-  <string name="NotificationChannel_background_connection">Connexion en arrière-plan</string>
-  <!--Notification channel name for showing call status information (like connection, ongoing, etc.) Not ringing.-->
-  <string name="NotificationChannel_call_status">État de l’appel</string>
   <!--ProfileEditNameFragment-->
   <!--QuickResponseService-->
   <string name="QuickResponseService_quick_response_unavailable_when_Signal_is_locked">La réponse rapide n’est pas proposée quand Signal est verrouillée.</string>
@@ -1716,7 +1692,7 @@
   <string name="conversation_activity__quick_attachment_drawer_record_and_send_audio_description">Enregistrer et envoyer une fichier son joint</string>
   <string name="conversation_activity__quick_attachment_drawer_lock_record_description">Verrouiller l’enregistrement de fichiers son joints</string>
   <string name="conversation_activity__enable_signal_for_sms">Gérer les textos avec Signal</string>
-  <string name="conversation_activity__message_could_not_be_sent">Le message n’a pas pu être envoyé. Veuillez vérifier votre connexion et réessayer.</string>
+  <string name="conversation_activity__message_could_not_be_sent">Le message n’a pas pu être envoyé. Veuillez vérifier votre connexion et réessayez.</string>
   <!--conversation_input_panel-->
   <string name="conversation_input_panel__slide_to_cancel">Faire glisser pour annuler</string>
   <string name="conversation_input_panel__cancel">Annuler</string>
@@ -1912,8 +1888,8 @@
   <!--recipients_panel-->
   <string name="recipients_panel__to"><small>Saisir un nom ou un numéro</small></string>
   <!--verify_display_fragment-->
-  <string name="verify_display_fragment__to_verify_the_security_of_your_end_to_end_encryption_with_s"><![CDATA[Pour confirmer la sécurité de votre chiffrement de bout en bout avec %s, comparez les chiffres ci-dessous avec ceux de son appareil. Vous pouvez aussi lire le code sur son téléphone. <a href="https://signal.org/redirect/safety-numbers">En apprendre davantage.</a>]]></string>
-  <string name="verify_display_fragment__tap_to_scan">Touchez pour lire</string>
+  <string name="verify_display_fragment__to_verify_the_security_of_your_end_to_end_encryption_with_s"><![CDATA[Pour confirmer la sécurité de votre chiffrement de bout en bout avec %s, comparez les chiffres ci-dessous avec ceux de son appareil. Vous pouvez aussi balayer le code sur son téléphone. <a href="https://signal.org/redirect/safety-numbers">En apprendre davantage.</a>]]></string>
+  <string name="verify_display_fragment__tap_to_scan">Touchez pour balayer</string>
   <string name="verify_display_fragment__successful_match">Correspondance effective</string>
   <string name="verify_display_fragment__failed_to_verify_safety_number">Échec de la confirmation du numéro de sécurité.</string>
   <string name="verify_display_fragment__loading">Chargement…</string>
@@ -2179,19 +2155,6 @@
   <string name="preferences_chats__message_text_size">Taille de police des messages</string>
   <string name="preferences_events__contact_joined_signal">Un contact s’est joint à Signal</string>
   <string name="preferences_notifications__priority">Priorité</string>
-  <!--Heading for the \'censorship circumvention\' section of privacy preferences-->
-  <string name="preferences_communication__category_censorship_circumvention">Contournement de la censure</string>
-  <!--Title of the \'censorship circumvention\' toggle switch-->
-  <string name="preferences_communication__censorship_circumvention">Contournement de la censure</string>
-  <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Si cette option est activée, Signal tentera de contourner la censure. N’activez cette fonction que si vous êtes situé en un lieu où Signal est censurée.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Le contournement de la censure a été activé d’après le numéro de téléphone de votre compte.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Vous avez manuellement désactivé le contournement de la censure.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service-->
-  <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Le contournement de la censure n’est pas nécessaire ; vous êtes déjà connecté au service Signal.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet-->
-  <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Le contournement de la censure ne peut être activé qu’une fois connecté à Internet.</string>
   <string name="preferences_communication__category_sealed_sender">Expéditeur scellé</string>
   <string name="preferences_communication__sealed_sender_display_indicators">Afficher les indicateurs</string>
   <string name="preferences_communication__sealed_sender_display_indicators_description">Afficher une icône d’état quand vous sélectionnez « Détails du message » pour les messages qui ont été remis avec l’option « expéditeur scellé ».</string>
@@ -2291,19 +2254,19 @@
   <string name="PaymentsDetailsFragment__block_number">Bloquer le numéro</string>
   <!--PaymentsTransferFragment-->
   <string name="PaymentsTransferFragment__transfer">Transférer</string>
-  <string name="PaymentsTransferFragment__scan_qr_code">Lire le code QR</string>
+  <string name="PaymentsTransferFragment__scan_qr_code">Balayer le code QR</string>
   <string name="PaymentsTransferFragment__to_scan_or_enter_wallet_address">À : balayez ou saisissez l’adresse du portefeuille</string>
   <string name="PaymentsTransferFragment__you_can_transfer">Vous pouvez transférer des MobileCoins en finalisant un transfert vers l’adresse de porte-monnaie indiquée par la plateforme de change. L’adresse de porte-monnaie est une chaîne de chiffres et de lettres généralement située sous le code QR.</string>
   <string name="PaymentsTransferFragment__next">Suivant</string>
   <string name="PaymentsTransferFragment__invalid_address">Adresse invalide</string>
   <string name="PaymentsTransferFragment__check_the_wallet_address">Vérifiez l’adresse de porte-monnaie vers laquelle vous tentez de faire un transfert, puis réessayez.</string>
   <string name="PaymentsTransferFragment__you_cant_transfer_to_your_own_signal_wallet_address">Vous ne pouvez pas effectuer de transferts vers l’adresse de votre propre porte-monnaie Signal. Saisissez l’adresse de porte-monnaie de votre compte sur une plateforme de change prise en charge.</string>
-  <string name="PaymentsTransferFragment__to_scan_a_qr_code_signal_needs">Pour lire un code QR, Signal a besoin d’accéder à l’appareil photo.</string>
+  <string name="PaymentsTransferFragment__to_scan_a_qr_code_signal_needs">Pour balayer un code QR, Signal a besoin d’accéder à l’appareil photo.</string>
   <string name="PaymentsTransferFragment__signal_needs_the_camera_permission_to_capture_qr_code_go_to_settings">Signal a besoin de l’autorisation Appareil photo afin de capturer un code QR. Veuillez accéder aux paramètres, sélectionnez Autorisations et activez Appareil photo.</string>
-  <string name="PaymentsTransferFragment__to_scan_a_qr_code_signal_needs_access_to_the_camera">Pour lire un code QR, Signal a besoin d’accéder à l’appareil photo.</string>
+  <string name="PaymentsTransferFragment__to_scan_a_qr_code_signal_needs_access_to_the_camera">Pour balayer un code QR, Signal a besoin d’accéder à l’appareil photo.</string>
   <string name="PaymentsTransferFragment__settings">Paramètres</string>
   <!--PaymentsTransferQrScanFragment-->
-  <string name="PaymentsTransferQrScanFragment__scan_address_qr_code">Lire le code QR de l’adresse</string>
+  <string name="PaymentsTransferQrScanFragment__scan_address_qr_code">Balayer le code QR de l’adresse</string>
   <string name="PaymentsTransferQrScanFragment__scan_the_address_qr_code_of_the_payee">Balayez le code QR de l’adresse du bénéficiaire</string>
   <!--CreatePaymentFragment-->
   <string name="CreatePaymentFragment__request">Demande</string>
@@ -2802,8 +2765,8 @@
   <string name="RecipientBottomSheet_remove_as_admin">Supprimer en tant qu’administrateur</string>
   <string name="RecipientBottomSheet_remove_from_group">Supprimer du groupe</string>
   <string name="RecipientBottomSheet_message_description">Message</string>
-  <string name="RecipientBottomSheet_voice_call_description">Appel audio</string>
-  <string name="RecipientBottomSheet_insecure_voice_call_description">Appel audio non sécurisé</string>
+  <string name="RecipientBottomSheet_voice_call_description">Appel vocal</string>
+  <string name="RecipientBottomSheet_insecure_voice_call_description">Appel vocal non sécurisé</string>
   <string name="RecipientBottomSheet_video_call_description">Appel vidéo</string>
   <string name="RecipientBottomSheet_remove_s_as_group_admin">Supprimer %1$s en tant qu’administrateur du groupe ?</string>
   <string name="RecipientBottomSheet_s_will_be_able_to_edit_group">%1$s pourra modifier ce groupe et ses membres.</string>
@@ -3139,7 +3102,7 @@ Nouvelle tentative…</string>
   <!--Button text to create a notification profile-->
   <string name="NotificationProfilesFragment__create_profile">Créer le profil</string>
   <!--PrivacySettingsFragment-->
-  <string name="PrivacySettingsFragment__blocked">Bloqués</string>
+  <string name="PrivacySettingsFragment__blocked">Bloquée</string>
   <string name="PrivacySettingsFragment__d_contacts">%1$d contacts</string>
   <string name="PrivacySettingsFragment__messaging">Messagerie</string>
   <string name="PrivacySettingsFragment__disappearing_messages">Messages éphémères</string>
@@ -3255,10 +3218,10 @@ Nouvelle tentative…</string>
   <!--ConversationSettingsFragment-->
   <string name="ConversationSettingsFragment__send_message">Envoyer un message</string>
   <string name="ConversationSettingsFragment__start_video_call">Lancer un appel vidéo</string>
-  <string name="ConversationSettingsFragment__start_audio_call">Lancer un appel audio</string>
+  <string name="ConversationSettingsFragment__start_audio_call">Lancer un appel vocal</string>
   <string name="ConversationSettingsFragment__message">Message</string>
   <string name="ConversationSettingsFragment__video">Vidéo</string>
-  <string name="ConversationSettingsFragment__audio">Audio</string>
+  <string name="ConversationSettingsFragment__audio">Vocal</string>
   <string name="ConversationSettingsFragment__call">Appeler</string>
   <string name="ConversationSettingsFragment__mute">Sourdine</string>
   <string name="ConversationSettingsFragment__muted">En sourdine</string>
@@ -3463,15 +3426,9 @@ Nouvelle tentative…</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__become_a_sustainer">Devenir donateur mensuel</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__add_a_boost">Donner un coup de pouce</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__not_now">Pas maintenant</string>
-  <!--Copy displayed when badge expires after user inactivity-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_automatically">Votre don mensuel a automatiquement été résilié en raison d’une inaction trop longue. Votre macaron %1$s n’est plus visible sur votre profil.</string>
-  <!--Copy displayed when badge expires after payment failure-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_canceled">Votre don mensuel a automatiquement été résilié car nous n’avons pas pu traiter votre paiement. Votre macaron n’est plus visible sur votre profil.</string>
+  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer">Votre don mensuel a automatiquement été résilié en raison d’une inaction trop longue. Votre macaron %1$s n’est plus visible sur votre profil.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Vous pouvez continuer à utiliser Signal mais pour soutenir l\'application et réactiver votre macaron, renouvelez maintenant.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__renew_subscription">Renouveler l’abonnement</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__cant_process_subscription_payment">Impossible de traiter le paiement de l’abonnement</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__were_having_trouble">Nous avons des difficultés à encaisser le paiement de votre don mensuel à Signal. Vérifiez que votre mode de paiement est à jour. Si ce n’est pas le cas, mettez-le à jour dans Google Pay. Signal essaiera de traiter à nouveau le paiement dans quelques jours.</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__dont_show_this_again">Ne plus montrer cela</string>
   <string name="Subscription__please_contact_support_for_more_information">Veuillez contacter l’assistance pour plus de renseignements.</string>
   <string name="Subscription__contact_support">Contacter l’assistance</string>
   <string name="Subscription__earn_a_s_badge">Obtenez un macaron %1$s</string>
@@ -3493,34 +3450,6 @@ Nouvelle tentative…</string>
   <string name="ViewBadgeBottomSheetDialogFragment__your_device_doesn_t_support_google_pay_so_you_can_t_subscribe_to_earn_a_badge_you_can_still_support_signal_by_making_a_donation_on_our_website">Votre appareil ne prend pas en charge Google Pay, vous ne pouvez donc pas vous abonner pour gagner un macaron. Vous pouvez toujours soutenir Signal en faisant un don sur notre site Web.</string>
   <string name="NetworkFailure__network_error_check_your_connection_and_try_again">Erreur de réseau. Vérifiez votre connexion et réessayez.</string>
   <string name="NetworkFailure__retry">Réessayer</string>
-  <!--Stripe decline code generic_failure-->
-  <string name="DeclineCode__try_another_payment_method_or_contact_your_bank">Essayez un autre mode de paiement ou contactez votre banque pour plus d’informations.</string>
-  <!--Stripe decline code verify on Google Pay and try again-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again">Vérifiez que votre mode de paiement est à jour dans Google Pay puis réessayez.</string>
-  <!--Stripe decline code learn more action label-->
-  <string name="DeclineCode__learn_more">En apprendre davantage</string>
-  <!--Stripe decline code contact issuer-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again_if_the_problem">Vérifiez que votre mode de paiement est à jour dans Google Pay puis réessayez. Si le problème persiste, contactez votre banque.</string>
-  <!--Stripe decline code purchase not supported-->
-  <string name="DeclineCode__your_card_does_not_support_this_type_of_purchase">Votre carte ne permet pas ce type d’achat. Essayez un autre mode de paiement.</string>
-  <!--Stripe decline code your card has expired-->
-  <string name="DeclineCode__your_card_has_expired">Votre carte a expiré. Mettez à jour votre mode de paiement dans Google Pay puis réessayez.</string>
-  <!--Stripe decline code go to google pay action label-->
-  <string name="DeclineCode__go_to_google_pay">Allez sur Google Pay</string>
-  <!--Stripe decline code incorrect card number-->
-  <string name="DeclineCode__your_card_number_is_incorrect">Votre numéro de carte est erroné. Mettez-le à jour dans Google Pay puis réessayez.</string>
-  <!--Stripe decline code incorrect cvc-->
-  <string name="DeclineCode__your_cards_cvc_number_is_incorrect">Le numéro CVC de votre carte est erroné. Mettez-le à jour dans Google Pay puis réessayez.</string>
-  <!--Stripe decline code insufficient funds-->
-  <string name="DeclineCode__your_card_does_not_have_sufficient_funds">Votre carte ne dispose pas de fonds suffisants pour effectuer cet achat. Essayez un autre mode de paiement.</string>
-  <!--Stripe decline code incorrect expiration month-->
-  <string name="DeclineCode__the_expiration_month">Le mois d’expiration de votre mode de paiement est erroné. Mettez-le à jour dans Google Pay puis réessayez.</string>
-  <!--Stripe decline code incorrect expiration year-->
-  <string name="DeclineCode__the_expiration_year">L’année d’expiration de votre mode de paiement est erronée. Mettez-la à jour dans Google Pay puis réessayez.</string>
-  <!--Stripe decline code issuer not available-->
-  <string name="DeclineCode__try_completing_the_payment_again">Essayez à nouveau d’effectuer le paiement ou contactez votre banque pour plus d’informations.</string>
-  <!--Stripe decline code processing error-->
-  <string name="DeclineCode__try_again">Essayez à nouveau ou contactez votre banque pour plus d’informations.</string>
   <!--Title of create notification profile screen-->
   <string name="EditNotificationProfileFragment__name_your_profile">Nommez votre profil</string>
   <!--Hint text for create/edit notification profile name-->
@@ -3532,7 +3461,7 @@ Nouvelle tentative…</string>
   <!--Call to action button once the profile is named to create the profile and continue to the customization steps-->
   <string name="EditNotificationProfileFragment__create">Créer</string>
   <!--Call to action button once the profile name is edited-->
-  <string name="EditNotificationProfileFragment__save">Enregistrer</string>
+  <string name="EditNotificationProfileFragment__save">Enregistrés</string>
   <!--Title of edit notification profile screen-->
   <string name="EditNotificationProfileFragment__edit_this_profile">Modifier ce profil</string>
   <!--Error message shown when attempting to create or edit a profile name to an existing profile name-->
@@ -3662,6 +3591,5 @@ Nouvelle tentative…</string>
   <!--Displayed in a toast when we fail to open the ringtone picker-->
   <string name="NotificationSettingsFragment__failed_to_open_picker">Échec d’ouverture du sélecteur.</string>
   <!--Description shown for the Signal Release Notes channel-->
-  <string name="ReleaseNotes__signal_release_notes_and_news">Notes de mise à jour et actualités de Signal</string>
   <!--EOF-->
 </resources>

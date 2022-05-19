@@ -102,7 +102,7 @@ public final class WelcomeFragment extends LoggingFragment {
 
       Log.i(TAG, "Skipping restore because this is a reregistration.");
       viewModel.setWelcomeSkippedOnRestore();
-      SafeNavigation.safeNavigate(NavHostFragment.findNavController(this),
+      SafeNavigation.safeNavigate(Navigation.findNavController(view),
                                   WelcomeFragmentDirections.actionSkipRestore());
     } else {
 
@@ -112,15 +112,15 @@ public final class WelcomeFragment extends LoggingFragment {
       continueButton = view.findViewById(R.id.welcome_continue_button);
       continueButton.setOnClickListener(this::continueClicked);
 
-      Button restoreFromBackup = view.findViewById(R.id.welcome_transfer_or_restore);
-      restoreFromBackup.setOnClickListener(this::restoreFromBackupClicked);
+//      Button restoreFromBackup = view.findViewById(R.id.welcome_transfer_or_restore);
+//      restoreFromBackup.setOnClickListener(this::restoreFromBackupClicked);
 
       TextView welcomeTermsButton = view.findViewById(R.id.welcome_terms_button);
       welcomeTermsButton.setOnClickListener(v -> onTermsClicked());
 
-      if (!canUserSelectBackup()) {
-        restoreFromBackup.setText(R.string.registration_activity__transfer_account);
-      }
+//      if (!canUserSelectBackup()) {
+//        restoreFromBackup.setText(R.string.registration_activity__transfer_account);
+//      }
     }
   }
 
@@ -180,10 +180,10 @@ public final class WelcomeFragment extends LoggingFragment {
 
       if (backup == null) {
         Log.i(TAG, "Skipping backup. No backup found, or no permission to look.");
-        SafeNavigation.safeNavigate(NavHostFragment.findNavController(this),
+        SafeNavigation.safeNavigate(Navigation.findNavController(view),
                                     WelcomeFragmentDirections.actionSkipRestore());
       } else {
-        SafeNavigation.safeNavigate(NavHostFragment.findNavController(this),
+        SafeNavigation.safeNavigate(Navigation.findNavController(view),
                                     WelcomeFragmentDirections.actionRestore());
       }
     });
@@ -194,7 +194,7 @@ public final class WelcomeFragment extends LoggingFragment {
 
     initializeNumber();
 
-    SafeNavigation.safeNavigate(NavHostFragment.findNavController(this),
+    SafeNavigation.safeNavigate(Navigation.findNavController(view),
                                 WelcomeFragmentDirections.actionTransferOrRestore());
   }
 

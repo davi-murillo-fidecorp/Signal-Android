@@ -12,94 +12,10 @@ import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
-import org.thoughtcrime.securesms.recipients.RecipientId
-import org.thoughtcrime.securesms.service.webrtc.AndroidTelecomUtil
 import org.thoughtcrime.securesms.util.safeUnregisterReceiver
 import org.whispersystems.libsignal.util.guava.Preconditions
 
 private val TAG = Log.tag(SignalAudioManager::class.java)
-
-sealed class SignalAudioManager(protected val context: Context, protected val eventListener: EventListener?) {
-
-  private var commandAndControlThread = SignalExecutors.getAndStartHandlerThread("call-audio")
-  protected val handler = SignalAudioHandler(commandAndControlThread.looper)
-
-  protected var state: State = State.UNINITIALIZED
-
-  protected val androidAudioManager = ApplicationDependencies.getAndroidCallAudioManager()
-
-  protected var selectedAudioDevice: AudioDevice = AudioDevice.NONE
-
-  protected val soundPool: SoundPool = androidAudioManager.createSoundPool()
-  protected val connectedSoundId = soundPool.load(context, R.raw.webrtc_completed, 1)
-  protected val disconnectedSoundId = soundPool.load(context, R.raw.webrtc_disconnected, 1)
-
-  protected val incomingRinger = IncomingRinger(context)
-  protected val outgoingRinger = OutgoingRinger(context)
-
-  companion object {
-    @JvmStatic
-    fun create(context: Context, eventListener: EventListener?, isGroup: Boolean): SignalAudioManager {
-      return if (AndroidTelecomUtil.telecomSupported && !isGroup) {
-        TelecomAwareSignalAudioManager(context, eventListener)
-      } else {
-        FullSignalAudioManager(context, eventListener)
-      }
-    }
-  }
-
-  fun handleCommand(command: AudioManagerCommand) {
-    handler.post {
-      when (command) {
-        is AudioManagerCommand.Initialize -> initialize()
-        is AudioManagerCommand.Start -> start()
-        is AudioManagerCommand.Stop -> stop(command.playDisconnect)
-        is AudioManagerCommand.SetDefaultDevice -> setDefaultAudioDevice(command.recipientId, command.device, command.clearUserEarpieceSelection)
-        is AudioManagerCommand.SetUserDevice -> selectAudioDevice(command.recipientId, command.device)
-        is AudioManagerCommand.StartIncomingRinger -> startIncomingRinger(command.ringtoneUri, command.vibrate)
-        is AudioManagerCommand.SilenceIncomingRinger -> silenceIncomingRinger()
-        is AudioManagerCommand.StartOutgoingRinger -> startOutgoingRinger()
-      }
-    }
-  }
-
-  fun shutdown() {
-    handler.post {
-      stop(false)
-      if (commandAndControlThread != null) {
-        Log.i(TAG, "Shutting down command and control")
-        commandAndControlThread.quitSafely()
-        commandAndControlThread = null
-      }
-    }
-  }
-
-  protected abstract fun initialize()
-  protected abstract fun start()
-  protected abstract fun stop(playDisconnect: Boolean)
-  protected abstract fun setDefaultAudioDevice(recipientId: RecipientId?, newDefaultDevice: AudioDevice, clearUserEarpieceSelection: Boolean)
-  protected abstract fun selectAudioDevice(recipientId: RecipientId?, device: AudioDevice)
-  protected abstract fun startIncomingRinger(ringtoneUri: Uri?, vibrate: Boolean)
-  protected abstract fun startOutgoingRinger()
-
-  protected open fun silenceIncomingRinger() {
-    Log.i(TAG, "silenceIncomingRinger():")
-    incomingRinger.stop()
-  }
-
-  enum class AudioDevice {
-    SPEAKER_PHONE, WIRED_HEADSET, EARPIECE, BLUETOOTH, NONE
-  }
-
-  enum class State {
-    UNINITIALIZED, PREINITIALIZED, RUNNING
-  }
-
-  interface EventListener {
-    @JvmSuppressWildcards
-    fun onAudioDeviceChanged(activeDevice: AudioDevice, devices: Set<AudioDevice>)
-  }
-}
 
 /**
  * Manage all audio and bluetooth routing for calling. Primarily, operates by maintaining a list
@@ -115,12 +31,15 @@ sealed class SignalAudioManager(protected val context: Context, protected val ev
  * bluetooth headset is then disconnected, and reconnected, the audio will again automatically switch to
  * the bluetooth headset.
  */
-class FullSignalAudioManager(context: Context, eventListener: EventListener?) : SignalAudioManager(context, eventListener) {
+class SignalAudioManager(private val context: Context, private val eventListener: EventListener?) {
+
+  private var commandAndControlThread = SignalExecutors.getAndStartHandlerThread("call-audio")
+  private val handler = SignalAudioHandler(commandAndControlThread.looper)
+
+  private val androidAudioManager = ApplicationDependencies.getAndroidCallAudioManager()
   private val signalBluetoothManager = SignalBluetoothManager(context, this, handler)
 
-  private var audioDevices: MutableSet<AudioDevice> = mutableSetOf()
-  private var defaultAudioDevice: AudioDevice = AudioDevice.EARPIECE
-  private var userSelectedAudioDevice: AudioDevice = AudioDevice.NONE
+  private var state: State = State.UNINITIALIZED
 
   private var savedAudioMode = AudioManager.MODE_INVALID
   private var savedIsSpeakerPhoneOn = false
@@ -129,9 +48,37 @@ class FullSignalAudioManager(context: Context, eventListener: EventListener?) : 
   private var autoSwitchToWiredHeadset = true
   private var autoSwitchToBluetooth = true
 
+  private var defaultAudioDevice: AudioDevice = AudioDevice.EARPIECE
+  private var selectedAudioDevice: AudioDevice = AudioDevice.NONE
+  private var userSelectedAudioDevice: AudioDevice = AudioDevice.NONE
+
+  private var audioDevices: MutableSet<AudioDevice> = mutableSetOf()
+
+  private val soundPool: SoundPool = androidAudioManager.createSoundPool()
+  private val connectedSoundId = soundPool.load(context, R.raw.webrtc_completed, 1)
+  private val disconnectedSoundId = soundPool.load(context, R.raw.webrtc_disconnected, 1)
+
+  private val incomingRinger = IncomingRinger(context)
+  private val outgoingRinger = OutgoingRinger(context)
+
   private var wiredHeadsetReceiver: WiredHeadsetReceiver? = null
 
-  override fun initialize() {
+  fun handleCommand(command: AudioManagerCommand) {
+    handler.post {
+      when (command) {
+        is AudioManagerCommand.Initialize -> initialize()
+        is AudioManagerCommand.Start -> start()
+        is AudioManagerCommand.Stop -> stop(command.playDisconnect)
+        is AudioManagerCommand.SetDefaultDevice -> setDefaultAudioDevice(command.device, command.clearUserEarpieceSelection)
+        is AudioManagerCommand.SetUserDevice -> selectAudioDevice(command.device)
+        is AudioManagerCommand.StartIncomingRinger -> startIncomingRinger(command.ringtoneUri, command.vibrate)
+        is AudioManagerCommand.SilenceIncomingRinger -> silenceIncomingRinger()
+        is AudioManagerCommand.StartOutgoingRinger -> startOutgoingRinger()
+      }
+    }
+  }
+
+  private fun initialize() {
     Log.i(TAG, "Initializing audio manager state: $state")
 
     if (state == State.UNINITIALIZED) {
@@ -140,10 +87,7 @@ class FullSignalAudioManager(context: Context, eventListener: EventListener?) : 
       savedIsMicrophoneMute = androidAudioManager.isMicrophoneMute
       hasWiredHeadset = androidAudioManager.isWiredHeadsetOn
 
-      val focusedGained = androidAudioManager.requestCallAudioFocus()
-      if (!focusedGained) {
-        handler.postDelayed({ androidAudioManager.requestCallAudioFocus() }, 500)
-      }
+      androidAudioManager.requestCallAudioFocus()
 
       setMicrophoneMute(false)
 
@@ -162,7 +106,7 @@ class FullSignalAudioManager(context: Context, eventListener: EventListener?) : 
     }
   }
 
-  override fun start() {
+  private fun start() {
     Log.d(TAG, "Starting. state: $state")
     if (state == State.RUNNING) {
       Log.w(TAG, "Skipping, already active")
@@ -171,11 +115,6 @@ class FullSignalAudioManager(context: Context, eventListener: EventListener?) : 
 
     incomingRinger.stop()
     outgoingRinger.stop()
-
-    val focusedGained = androidAudioManager.requestCallAudioFocus()
-    if (!focusedGained) {
-      handler.postDelayed({ androidAudioManager.requestCallAudioFocus() }, 500)
-    }
 
     state = State.RUNNING
 
@@ -187,7 +126,7 @@ class FullSignalAudioManager(context: Context, eventListener: EventListener?) : 
     Log.d(TAG, "Started")
   }
 
-  override fun stop(playDisconnect: Boolean) {
+  private fun stop(playDisconnect: Boolean) {
     Log.d(TAG, "Stopping. state: $state")
 
     incomingRinger.stop()
@@ -213,6 +152,17 @@ class FullSignalAudioManager(context: Context, eventListener: EventListener?) : 
     Log.d(TAG, "Abandoned audio focus for VOICE_CALL streams")
 
     Log.d(TAG, "Stopped")
+  }
+
+  fun shutdown() {
+    handler.post {
+      stop(false)
+      if (commandAndControlThread != null) {
+        Log.i(TAG, "Shutting down command and control")
+        commandAndControlThread.quitSafely()
+        commandAndControlThread = null
+      }
+    }
   }
 
   fun updateAudioDeviceState() {
@@ -307,7 +257,7 @@ class FullSignalAudioManager(context: Context, eventListener: EventListener?) : 
     }
   }
 
-  override fun setDefaultAudioDevice(recipientId: RecipientId?, newDefaultDevice: AudioDevice, clearUserEarpieceSelection: Boolean) {
+  private fun setDefaultAudioDevice(newDefaultDevice: AudioDevice, clearUserEarpieceSelection: Boolean) {
     Log.d(TAG, "setDefaultAudioDevice(): currentDefault: $defaultAudioDevice device: $newDefaultDevice clearUser: $clearUserEarpieceSelection")
     defaultAudioDevice = when (newDefaultDevice) {
       AudioDevice.SPEAKER_PHONE -> newDefaultDevice
@@ -330,7 +280,7 @@ class FullSignalAudioManager(context: Context, eventListener: EventListener?) : 
     updateAudioDeviceState()
   }
 
-  override fun selectAudioDevice(recipientId: RecipientId?, device: AudioDevice) {
+  private fun selectAudioDevice(device: AudioDevice) {
     val actualDevice = if (device == AudioDevice.EARPIECE && audioDevices.contains(AudioDevice.WIRED_HEADSET)) AudioDevice.WIRED_HEADSET else device
 
     Log.d(TAG, "selectAudioDevice(): device: $device actualDevice: $actualDevice")
@@ -366,16 +316,21 @@ class FullSignalAudioManager(context: Context, eventListener: EventListener?) : 
     }
   }
 
-  override fun startIncomingRinger(ringtoneUri: Uri?, vibrate: Boolean) {
+  private fun startIncomingRinger(ringtoneUri: Uri?, vibrate: Boolean) {
     Log.i(TAG, "startIncomingRinger(): uri: ${if (ringtoneUri != null) "present" else "null"} vibrate: $vibrate")
     androidAudioManager.mode = AudioManager.MODE_RINGTONE
     setMicrophoneMute(false)
-    setDefaultAudioDevice(null, AudioDevice.SPEAKER_PHONE, false)
+    setDefaultAudioDevice(AudioDevice.SPEAKER_PHONE, false)
 
     incomingRinger.start(ringtoneUri, vibrate)
   }
 
-  override fun startOutgoingRinger() {
+  private fun silenceIncomingRinger() {
+    Log.i(TAG, "silenceIncomingRinger():")
+    incomingRinger.stop()
+  }
+
+  private fun startOutgoingRinger() {
     Log.i(TAG, "startOutgoingRinger(): currentDevice: $selectedAudioDevice")
 
     androidAudioManager.mode = AudioManager.MODE_IN_COMMUNICATION
@@ -398,52 +353,17 @@ class FullSignalAudioManager(context: Context, eventListener: EventListener?) : 
       handler.post { onWiredHeadsetChange(pluggedIn, hasMic) }
     }
   }
-}
 
-class TelecomAwareSignalAudioManager(context: Context, eventListener: EventListener?) : SignalAudioManager(context, eventListener) {
-
-  override fun setDefaultAudioDevice(recipientId: RecipientId?, newDefaultDevice: AudioDevice, clearUserEarpieceSelection: Boolean) {
-    if (recipientId != null && AndroidTelecomUtil.getSelectedAudioDevice(recipientId) == AudioDevice.EARPIECE) {
-      selectAudioDevice(recipientId, newDefaultDevice)
-    }
+  enum class AudioDevice {
+    SPEAKER_PHONE, WIRED_HEADSET, EARPIECE, BLUETOOTH, NONE
   }
 
-  override fun initialize() {
-    val focusedGained = androidAudioManager.requestCallAudioFocus()
-    if (!focusedGained) {
-      handler.postDelayed({ androidAudioManager.requestCallAudioFocus() }, 500)
-    }
+  enum class State {
+    UNINITIALIZED, PREINITIALIZED, RUNNING
   }
 
-  override fun start() {
-    incomingRinger.stop()
-    outgoingRinger.stop()
-
-    val focusedGained = androidAudioManager.requestCallAudioFocus()
-    if (!focusedGained) {
-      handler.postDelayed({ androidAudioManager.requestCallAudioFocus() }, 500)
-    }
-  }
-
-  override fun stop(playDisconnect: Boolean) {
-    incomingRinger.stop()
-    outgoingRinger.stop()
-    androidAudioManager.abandonCallAudioFocus()
-  }
-
-  override fun selectAudioDevice(recipientId: RecipientId?, device: AudioDevice) {
-    if (recipientId != null) {
-      selectedAudioDevice = device
-      AndroidTelecomUtil.selectAudioDevice(recipientId, device)
-      handler.postDelayed({ AndroidTelecomUtil.selectAudioDevice(recipientId, selectedAudioDevice) }, 1000)
-    }
-  }
-
-  override fun startIncomingRinger(ringtoneUri: Uri?, vibrate: Boolean) {
-    incomingRinger.start(ringtoneUri, vibrate)
-  }
-
-  override fun startOutgoingRinger() {
-    outgoingRinger.start(OutgoingRinger.Type.RINGING)
+  interface EventListener {
+    @JvmSuppressWildcards
+    fun onAudioDeviceChanged(activeDevice: AudioDevice, devices: Set<AudioDevice>)
   }
 }

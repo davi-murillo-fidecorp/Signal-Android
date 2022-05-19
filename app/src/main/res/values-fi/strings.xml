@@ -122,15 +122,6 @@
   <string name="CameraContacts_cant_find_who_youre_looking_for">Etkö löydä etsimääsi?</string>
   <string name="CameraContacts_invite_a_contact_to_join_signal">Kutsu kavereita Signaliin</string>
   <string name="CameraContacts__menu_search">Hae</string>
-  <!--Censorship Circumvention Megaphone-->
-  <!--Title for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off_censorship_circumvention">Kytketäänkö sensuurin kiertäminen pois päältä?</string>
-  <!--Body for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_you_can_now_connect_to_the_signal_service">Voit nyt kytkeytyä suoraan Signalin palvelimiin ja tämä parantaa käyttökokemusta.</string>
-  <!--Action to prompt the user to disable circumvention since it is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off">Poista käytöstä</string>
-  <!--Action to prompt the user to dismiss the alert at the bottom of the chat list-->
-  <string name="CensorshipCircumventionMegaphone_no_thanks">Ei kiitos</string>
   <!--ClearProfileActivity-->
   <string name="ClearProfileActivity_remove">Poista</string>
   <string name="ClearProfileActivity_remove_profile_photo">Poistetaanko profiilikuva?</string>
@@ -1255,11 +1246,6 @@
   <string name="RedPhone_number_not_registered">Numeroa ei rekisteröity!</string>
   <string name="RedPhone_the_number_you_dialed_does_not_support_secure_voice">Numero, johon yritit soittaa, ei tue salattuja puheluita!</string>
   <string name="RedPhone_got_it">Selvä</string>
-  <!--Valentine\'s Day Megaphone-->
-  <!--Title text for the Valentine\'s Day donation megaphone. The placeholder will always be a heart emoji. Needs to be a placeholder for Android reasons.-->
-  <string name="ValentinesDayMegaphone_happy_heart_day">Iloista 💜päivää!</string>
-  <!--Body text for the Valentine\'s Day donation megaphone.-->
-  <string name="ValentinesDayMegaphone_show_your_affection">Näytä arvostuksesi ryhtymällä Signalin tukijaksi.</string>
   <!--WebRtcCallActivity-->
   <string name="WebRtcCallActivity__tap_here_to_turn_on_your_video">Ota video käyttöön napauttamalla tästä</string>
   <string name="WebRtcCallActivity__to_call_s_signal_needs_access_to_your_camera">Jotta voit soittaa yhteystiedolle %1$s, Signal tarvitsee lupaa käyttää kameraa.</string>
@@ -1315,7 +1301,6 @@
   <string name="WebRtcCallView__flip">Käännä</string>
   <string name="WebRtcCallView__speaker">Kaiutin</string>
   <string name="WebRtcCallView__camera">Kamera</string>
-  <string name="WebRtcCallView__unmute">Poista mykistys</string>
   <string name="WebRtcCallView__mute">Mykistä</string>
   <string name="WebRtcCallView__ring">Soita</string>
   <string name="WebRtcCallView__end_call">Lopeta puhelu</string>
@@ -1613,10 +1598,6 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="NotificationChannel_voice_notes">Ääniviestit</string>
   <string name="NotificationChannel_contact_joined_signal">Yhteystieto liittyi Signaliin</string>
   <string name="NotificationChannels__no_activity_available_to_open_notification_channel_settings">Ei aktiviteettia saatavilla jonka kautta avata kanava-asetukset.</string>
-  <!--Notification channel name for showing persistent background connection on devices without push notifications-->
-  <string name="NotificationChannel_background_connection">Taustayhteys</string>
-  <!--Notification channel name for showing call status information (like connection, ongoing, etc.) Not ringing.-->
-  <string name="NotificationChannel_call_status">Puhelun tila</string>
   <!--ProfileEditNameFragment-->
   <!--QuickResponseService-->
   <string name="QuickResponseService_quick_response_unavailable_when_Signal_is_locked">Pikavastaus ei toimi, kun Signal on lukittu!</string>
@@ -2182,19 +2163,6 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="preferences_chats__message_text_size">Viestien tekstin koko</string>
   <string name="preferences_events__contact_joined_signal">Yhteystieto liittyi Signaliin</string>
   <string name="preferences_notifications__priority">Prioriteetti</string>
-  <!--Heading for the \'censorship circumvention\' section of privacy preferences-->
-  <string name="preferences_communication__category_censorship_circumvention">Sensuurin kiertäminen</string>
-  <!--Title of the \'censorship circumvention\' toggle switch-->
-  <string name="preferences_communication__censorship_circumvention">Sensuurin kiertäminen</string>
-  <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Signal yrittää kiertää sensuuria toiminnon ollessa käytössä. Käytä toimintoa vain paikassa, jossa Signal on sensuroitu.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Puhelinnumerosi sijaintiin perustuva sensuurin kiertäminen otettu käyttöön.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Olet manuaalisesti poistanut käytöstä sensuurin kiertämisen.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service-->
-  <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Sensuurin kiertäminen ei ole tarpeellista, sillä laite on jo yhdistetty Signal-palvelimeen.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet-->
-  <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Sensuurin kiertäminen toimii ainoastaan laitteen ollessa Internet-yhteydessä.</string>
   <string name="preferences_communication__category_sealed_sender">Lähettäjäsinetti</string>
   <string name="preferences_communication__sealed_sender_display_indicators">Näytä tilailmaisin</string>
   <string name="preferences_communication__sealed_sender_display_indicators_description">Näytä viestin lisätiedoissa kuvake niille viesteille, jotka toimitettiin lähettäjäsinetillä. </string>
@@ -3462,15 +3430,9 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="ExpiredBadgeBottomSheetDialogFragment__become_a_sustainer">Ryhdy Tukijaksi</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__add_a_boost">Lisää Boostaus</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__not_now">Ei nyt</string>
-  <!--Copy displayed when badge expires after user inactivity-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_automatically">Tukija-tilauksesi on lopetettu automaattisesti, koska olit liian pitkään toimettomana. %1$s -merkkisi ei ole enää nähtävillä profiilissasi.</string>
-  <!--Copy displayed when badge expires after payment failure-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_canceled">Tukija-tilkauksesi peruttiin, koska maksuasi ei voitu käsitellä. Merkkiäsi ei enää näytetä profiilissasi.</string>
+  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer">Tukija-tilauksesi on lopetettu automaattisesti, koska olit liian pitkään toimettomana. %1$s -merkkisi ei ole enää nähtävillä profiilissasi.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Voit jatkaa Signalin käyttöä, mutta tukeaksesi sovellusta ja aktivoidaksesi merkkisi uudelleen, uudista nyt.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__renew_subscription">Uudista tilaus</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__cant_process_subscription_payment">Tilauksen maksua ei voitu käsitellä</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__were_having_trouble">Signal Tukija-tilauksesi maksun veloituksessa on ongelmia. Varmista, että maksutapasi on ajan tasalla. Jos näin ei ole, päitä se Google Playssa. Signal yrittää veloitusta uudelleen muutaman päivän kuluessa.</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__dont_show_this_again">Älä näytä tätä uudelleen</string>
   <string name="Subscription__please_contact_support_for_more_information">Ota yhteyttä tukeen saadaksesi lisätietoja.</string>
   <string name="Subscription__contact_support">Ota yhteyttä tukeen</string>
   <string name="Subscription__earn_a_s_badge">Ansaitse %1$s merkki</string>
@@ -3492,34 +3454,6 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="ViewBadgeBottomSheetDialogFragment__your_device_doesn_t_support_google_pay_so_you_can_t_subscribe_to_earn_a_badge_you_can_still_support_signal_by_making_a_donation_on_our_website">Laitteesi ei tue Google Payta, joten et voi tehdä tilausta ansaitaksesi merkin. Voit silti tukea Signalia tekemällä lahjoituksen verkkosivustomme kautta.</string>
   <string name="NetworkFailure__network_error_check_your_connection_and_try_again">Verkkovirhe. Tarkista yhteys ja yritä uudelleen.</string>
   <string name="NetworkFailure__retry">Yritä uudelleen</string>
-  <!--Stripe decline code generic_failure-->
-  <string name="DeclineCode__try_another_payment_method_or_contact_your_bank">Kokeile toista maksutapaa tai ole yhteydessä pankkiisi saadaksesi lisätietoja.</string>
-  <!--Stripe decline code verify on Google Pay and try again-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again">Varmista, että maksutapasi on ajan tasalla Google Playssa ja yritä uudelleen.</string>
-  <!--Stripe decline code learn more action label-->
-  <string name="DeclineCode__learn_more">Lue lisää</string>
-  <!--Stripe decline code contact issuer-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again_if_the_problem">Varmista, että maksutapasi on ajan tasalla Google Playssa ja yritä uudelleen. Jos ongelma jatkuu, ole yhteydessä pankkiisi.</string>
-  <!--Stripe decline code purchase not supported-->
-  <string name="DeclineCode__your_card_does_not_support_this_type_of_purchase">Korttisi ei tue tämän tyyppistä maksua. Kokeile toista maksutapaa.</string>
-  <!--Stripe decline code your card has expired-->
-  <string name="DeclineCode__your_card_has_expired">Korttisi on erääntynyt. Päivitä maksutapasi Google Playssa ja yritä uudelleen.</string>
-  <!--Stripe decline code go to google pay action label-->
-  <string name="DeclineCode__go_to_google_pay">Siirry Google Playhin</string>
-  <!--Stripe decline code incorrect card number-->
-  <string name="DeclineCode__your_card_number_is_incorrect">Korttisi numero on virheellinen. Päivitä se Google Playssa ja yritä uudelleen.</string>
-  <!--Stripe decline code incorrect cvc-->
-  <string name="DeclineCode__your_cards_cvc_number_is_incorrect">Korttisi CVC-numero on virheellinen. Päivitä se Google Playssa ja yritä uudelleen.</string>
-  <!--Stripe decline code insufficient funds-->
-  <string name="DeclineCode__your_card_does_not_have_sufficient_funds">Kortillasi ei ole riittävästi varaa maksun suorittamiseen. Kokeile toista maksutapaa.</string>
-  <!--Stripe decline code incorrect expiration month-->
-  <string name="DeclineCode__the_expiration_month">Maksutapasi erääntymiskuukausi on virheellinen. Päivitä se Google Playssa ja yritä uudelleen.</string>
-  <!--Stripe decline code incorrect expiration year-->
-  <string name="DeclineCode__the_expiration_year">Maksutapasi erääntymisvuosi on virheellinen. Päivitä se Google Playssa ja yritä uudelleen.</string>
-  <!--Stripe decline code issuer not available-->
-  <string name="DeclineCode__try_completing_the_payment_again">Yritä suorittaa maksu uudelleen tai ole yhteydessä pankkiisi saadaksesi lisätietoja.</string>
-  <!--Stripe decline code processing error-->
-  <string name="DeclineCode__try_again">Yritä uudelleen tai ole yhteydessä pankkiisi saadaksesi lisätietoja.</string>
   <!--Title of create notification profile screen-->
   <string name="EditNotificationProfileFragment__name_your_profile">Nimeä profiili</string>
   <!--Hint text for create/edit notification profile name-->

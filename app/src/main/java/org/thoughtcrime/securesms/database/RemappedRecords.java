@@ -1,11 +1,12 @@
 package org.thoughtcrime.securesms.database;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.whispersystems.libsignal.util.guava.Optional;
-import org.whispersystems.libsignal.util.guava.Preconditions;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -87,7 +88,6 @@ class RemappedRecords {
    */
   void addRecipient(@NonNull RecipientId oldId, @NonNull RecipientId newId) {
     Log.w(TAG, "[Recipient] Remapping " + oldId + " to " + newId);
-    Preconditions.checkArgument(!oldId.equals(newId), "Cannot remap an ID to the same thing!");
     ensureInTransaction();
     ensureRecipientMapIsPopulated();
     recipientMap.put(oldId, newId);
@@ -99,18 +99,10 @@ class RemappedRecords {
    */
   void addThread(long oldId, long newId) {
     Log.w(TAG, "[Thread] Remapping " + oldId + " to " + newId);
-    Preconditions.checkArgument(oldId != newId, "Cannot remap an ID to the same thing!");
     ensureInTransaction();
     ensureThreadMapIsPopulated();
     threadMap.put(oldId, newId);
     SignalDatabase.remappedRecords().addThreadMapping(oldId, newId);
-  }
-
-  /**
-   * Clears out the memory cache. The next read will pull values from disk.
-   */
-  void resetCache() {
-    recipientMap = null;
   }
 
   private void ensureRecipientMapIsPopulated() {

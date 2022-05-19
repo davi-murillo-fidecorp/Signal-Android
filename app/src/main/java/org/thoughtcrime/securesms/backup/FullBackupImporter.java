@@ -32,7 +32,6 @@ import org.thoughtcrime.securesms.database.SearchDatabase;
 import org.thoughtcrime.securesms.database.StickerDatabase;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.keyvalue.KeyValueDataSet;
-import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.profiles.AvatarHelper;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.util.BackupUtil;
@@ -68,17 +67,6 @@ public class FullBackupImporter extends FullBackupBase {
 
   @SuppressWarnings("unused")
   private static final String TAG = Log.tag(FullBackupImporter.class);
-
-  private static final String[] TABLES_TO_DROP_FIRST = {
-      "distribution_list_member",
-      "distribution_list",
-      "message_send_log_recipients",
-      "msl_recipient",
-      "msl_message",
-      "reaction",
-      "notification_profile_schedule",
-      "notification_profile_allowed_members"
-  };
 
   public static void importFile(@NonNull Context context, @NonNull AttachmentSecret attachmentSecret,
                                 @NonNull SQLiteDatabase db, @NonNull Uri uri, @NonNull String passphrase)
@@ -262,17 +250,6 @@ public class FullBackupImporter extends FullBackupBase {
   private static void processPreference(@NonNull Context context, SharedPreference preference) {
     SharedPreferences preferences = context.getSharedPreferences(preference.getFile(), 0);
 
-    // Identity keys were moved from shared prefs into SignalStore. Need to handle importing backups made before the migration.
-    if ("SecureSMS-Preferences".equals(preference.getFile())) {
-      if ("pref_identity_public_v3".equals(preference.getKey()) && preference.hasValue()) {
-        SignalStore.account().restoreLegacyIdentityPublicKeyFromBackup(preference.getValue());
-      } else if ("pref_identity_private_v3".equals(preference.getKey()) && preference.hasValue()) {
-        SignalStore.account().restoreLegacyIdentityPrivateKeyFromBackup(preference.getValue());
-      }
-
-      return;
-    }
-
     if (preference.hasValue()) {
       preferences.edit().putString(preference.getKey(), preference.getValue()).commit();
     } else if (preference.hasBooleanValue()) {
@@ -283,10 +260,6 @@ public class FullBackupImporter extends FullBackupBase {
   }
 
   private static void dropAllTables(@NonNull SQLiteDatabase db) {
-    for (String name : TABLES_TO_DROP_FIRST) {
-      db.execSQL("DROP TABLE IF EXISTS " + name);
-    }
-
     try (Cursor cursor = db.rawQuery("SELECT name, type FROM sqlite_master", null)) {
       while (cursor != null && cursor.moveToNext()) {
         String name = cursor.getString(0);

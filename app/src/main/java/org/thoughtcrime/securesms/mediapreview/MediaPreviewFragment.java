@@ -20,8 +20,7 @@ import java.util.Objects;
 
 public abstract class MediaPreviewFragment extends Fragment {
 
-  public static final String DATA_URI = "DATA_URI";
-
+  static final String DATA_URI          = "DATA_URI";
   static final String DATA_SIZE         = "DATA_SIZE";
   static final String DATA_CONTENT_TYPE = "DATA_CONTENT_TYPE";
   static final String AUTO_PLAY         = "AUTO_PLAY";
@@ -63,14 +62,11 @@ public abstract class MediaPreviewFragment extends Fragment {
   @Override
   public void onAttach(@NonNull Context context) {
     super.onAttach(context);
-
-    if (context instanceof Events) {
-      events = (Events) context;
-    } else if (getParentFragment() instanceof Events) {
-      events = (Events) getParentFragment();
-    } else {
-      throw new AssertionError("Parent component must support " + Events.class);
+    if (!(context instanceof Events)) {
+      throw new AssertionError("Activity must support " + Events.class);
     }
+
+    events = (Events) context;
   }
 
   @Override
@@ -102,8 +98,5 @@ public abstract class MediaPreviewFragment extends Fragment {
   public interface Events {
     boolean singleTapOnMedia();
     void mediaNotAvailable();
-    default @Nullable VideoControlsDelegate getVideoControlsDelegate() {
-      return null;
-    }
   }
 }

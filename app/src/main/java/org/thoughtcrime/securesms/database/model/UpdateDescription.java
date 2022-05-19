@@ -9,7 +9,6 @@ import androidx.annotation.WorkerThread;
 
 import org.signal.core.util.ThreadUtil;
 import org.whispersystems.signalservice.api.push.ACI;
-import org.whispersystems.signalservice.api.push.ServiceId;
 import org.whispersystems.signalservice.api.util.UuidUtil;
 
 import java.util.Collection;
@@ -29,14 +28,14 @@ public final class UpdateDescription {
     String create();
   }
 
-  private final Collection<ServiceId> mentioned;
-  private final StringFactory         stringFactory;
-  private final String                staticString;
-  private final int                   lightIconResource;
-  private final int                   lightTint;
-  private final int                   darkTint;
+  private final Collection<ACI> mentioned;
+  private final StringFactory   stringFactory;
+  private final String          staticString;
+  private final int             lightIconResource;
+  private final int             lightTint;
+  private final int             darkTint;
 
-  private UpdateDescription(@NonNull Collection<ServiceId> mentioned,
+  private UpdateDescription(@NonNull Collection<ACI> mentioned,
                             @Nullable StringFactory stringFactory,
                             @Nullable String staticString,
                             @DrawableRes int iconResource,
@@ -61,11 +60,11 @@ public final class UpdateDescription {
    * @param mentioned     UUIDs of recipients that are mentioned in the string.
    * @param stringFactory The background method for generating the string.
    */
-  public static UpdateDescription mentioning(@NonNull Collection<ServiceId> mentioned,
+  public static UpdateDescription mentioning(@NonNull Collection<ACI> mentioned,
                                              @NonNull StringFactory stringFactory,
                                              @DrawableRes int iconResource)
   {
-    return new UpdateDescription(ServiceId.filterKnown(mentioned),
+    return new UpdateDescription(ACI.filterKnown(mentioned),
                                  stringFactory,
                                  null,
                                  iconResource,
@@ -119,7 +118,7 @@ public final class UpdateDescription {
   }
 
   @AnyThread
-  public Collection<ServiceId> getMentioned() {
+  public Collection<ACI> getMentioned() {
     return mentioned;
   }
 
@@ -150,7 +149,7 @@ public final class UpdateDescription {
       );
     }
 
-    Set<ServiceId> allMentioned = new HashSet<>();
+    Set<ACI> allMentioned = new HashSet<>();
 
     for (UpdateDescription updateDescription : updateDescriptions) {
       allMentioned.addAll(updateDescription.getMentioned());

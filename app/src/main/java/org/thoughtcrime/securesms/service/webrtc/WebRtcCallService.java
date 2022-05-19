@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -16,8 +18,6 @@ import androidx.core.content.ContextCompat;
 
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
-import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint;
-import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraintObserver;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.util.TelephonyUtil;
@@ -54,14 +54,13 @@ public final class WebRtcCallService extends Service implements SignalAudioManag
 
   private SignalCallManager callManager;
 
-  private NetworkListener                 networkListener;
+  private NetworkReceiver                 networkReceiver;
   private PowerButtonReceiver             powerButtonReceiver;
   private UncaughtExceptionHandlerManager uncaughtExceptionHandlerManager;
   private PhoneStateListener              hangUpRtcOnDeviceCallAnswered;
   private SignalAudioManager              signalAudioManager;
   private int                             lastNotificationId;
   private Notification                    lastNotification;
-  private boolean                         isGroup = true;
 
   public static void update(@NonNull Context context, int type, @NonNull RecipientId recipientId) {
     Intent intent = new Intent(context, WebRtcCallService.class);
@@ -70,14 +69,6 @@ public final class WebRtcCallService extends Service implements SignalAudioManag
           .putExtra(EXTRA_RECIPIENT_ID, recipientId);
 
     ContextCompat.startForegroundService(context, intent);
-  }
-
-  public static void denyCall(@NonNull Context context) {
-    ContextCompat.startForegroundService(context, denyCallIntent(context));
-  }
-
-  public static void hangup(@NonNull Context context) {
-    ContextCompat.startForegroundService(context, hangupIntent(context));
   }
 
   public static void stop(@NonNull Context context) {
@@ -115,15 +106,15 @@ public final class WebRtcCallService extends Service implements SignalAudioManag
     Log.v(TAG, "onCreate");
     super.onCreate();
     this.callManager                   = ApplicationDependencies.getSignalCallManager();
+    this.signalAudioManager            = new SignalAudioManager(this, this);
     this.hangUpRtcOnDeviceCallAnswered = new HangUpRtcOnPstnCallAnsweredListener();
     this.lastNotificationId            = INVALID_NOTIFICATION_ID;
 
     registerUncaughtExceptionHandler();
     registerNetworkReceiver();
 
-    if (!AndroidTelecomUtil.getTelecomSupported()) {
-      TelephonyUtil.getManager(this).listen(hangUpRtcOnDeviceCallAnswered, PhoneStateListener.LISTEN_CALL_STATE);
-    }
+    TelephonyUtil.getManager(this)
+                 .listen(hangUpRtcOnDeviceCallAnswered, PhoneStateListener.LISTEN_CALL_STATE);
   }
 
   @Override
@@ -142,9 +133,8 @@ public final class WebRtcCallService extends Service implements SignalAudioManag
     unregisterNetworkReceiver();
     unregisterPowerButtonReceiver();
 
-    if (!AndroidTelecomUtil.getTelecomSupported()) {
-      TelephonyUtil.getManager(this).listen(hangUpRtcOnDeviceCallAnswered, PhoneStateListener.LISTEN_NONE);
-    }
+    TelephonyUtil.getManager(this)
+                 .listen(hangUpRtcOnDeviceCallAnswered, PhoneStateListener.LISTEN_NONE);
   }
 
   @Override
@@ -157,19 +147,12 @@ public final class WebRtcCallService extends Service implements SignalAudioManag
 
     switch (intent.getAction()) {
       case ACTION_UPDATE:
-        RecipientId recipientId = Objects.requireNonNull(intent.getParcelableExtra(EXTRA_RECIPIENT_ID));
-        isGroup = Recipient.resolved(recipientId).isGroup();
         setCallInProgressNotification(intent.getIntExtra(EXTRA_UPDATE_TYPE, 0),
                                       Objects.requireNonNull(intent.getParcelableExtra(EXTRA_RECIPIENT_ID)));
         return START_STICKY;
       case ACTION_SEND_AUDIO_COMMAND:
         setCallNotification();
-        if (signalAudioManager == null) {
-          signalAudioManager = SignalAudioManager.create(this, this, isGroup);
-        }
-        AudioManagerCommand audioCommand = Objects.requireNonNull(intent.getParcelableExtra(EXTRA_AUDIO_COMMAND));
-        Log.i(TAG, "Sending audio command [" + audioCommand.getClass().getSimpleName() + "] to " + signalAudioManager.getClass().getSimpleName());
-        signalAudioManager.handleCommand(audioCommand);
+        signalAudioManager.handleCommand(Objects.requireNonNull(intent.getParcelableExtra(EXTRA_AUDIO_COMMAND)));
         return START_STICKY;
       case ACTION_CHANGE_POWER_BUTTON:
         setCallNotification();
@@ -224,21 +207,23 @@ public final class WebRtcCallService extends Service implements SignalAudioManag
   }
 
   private void registerNetworkReceiver() {
-    if (networkListener == null) {
-      networkListener = new NetworkListener();
-      NetworkConstraintObserver.getInstance(ApplicationDependencies.getApplication()).addListener(networkListener);
+    if (networkReceiver == null) {
+      networkReceiver = new NetworkReceiver();
+
+      registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
   }
 
   private void unregisterNetworkReceiver() {
-    if (networkListener != null) {
-      NetworkConstraintObserver.getInstance(ApplicationDependencies.getApplication()).removeListener(networkListener);
-      networkListener = null;
+    if (networkReceiver != null) {
+      unregisterReceiver(networkReceiver);
+
+      networkReceiver = null;
     }
   }
 
   public void registerPowerButtonReceiver() {
-    if (!AndroidTelecomUtil.getTelecomSupported() && powerButtonReceiver == null) {
+    if (powerButtonReceiver == null) {
       powerButtonReceiver = new PowerButtonReceiver();
 
       registerReceiver(powerButtonReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
@@ -278,10 +263,13 @@ public final class WebRtcCallService extends Service implements SignalAudioManag
     }
   }
 
-  private static class NetworkListener implements NetworkConstraintObserver.NetworkListener {
+  private static class NetworkReceiver extends BroadcastReceiver {
     @Override
-    public void onNetworkChanged() {
-      ApplicationDependencies.getSignalCallManager().networkChange(NetworkConstraint.isMet(ApplicationDependencies.getApplication()));
+    public void onReceive(Context context, Intent intent) {
+      ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+      NetworkInfo         activeNetworkInfo   = connectivityManager.getActiveNetworkInfo();
+
+      ApplicationDependencies.getSignalCallManager().networkChange(activeNetworkInfo != null && activeNetworkInfo.isConnected());
       ApplicationDependencies.getSignalCallManager().bandwidthModeUpdate();
     }
   }

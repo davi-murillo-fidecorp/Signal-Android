@@ -15,7 +15,6 @@ import org.thoughtcrime.securesms.database.RecipientDatabase;
 import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.jobmanager.Data;
 import org.thoughtcrime.securesms.jobmanager.Job;
-import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.messages.GroupSendUtil;
 import org.thoughtcrime.securesms.mms.MessageGroupContext;
 import org.thoughtcrime.securesms.mms.OutgoingGroupUpdateMessage;
@@ -32,7 +31,6 @@ import org.whispersystems.signalservice.api.messages.SendMessageResult;
 import org.whispersystems.signalservice.api.messages.SignalServiceDataMessage;
 import org.whispersystems.signalservice.api.messages.SignalServiceGroupV2;
 import org.whispersystems.signalservice.api.push.ACI;
-import org.whispersystems.signalservice.api.push.ServiceId;
 import org.whispersystems.signalservice.api.push.exceptions.ServerRejectedException;
 import org.whispersystems.signalservice.api.util.UuidUtil;
 import org.whispersystems.signalservice.internal.push.SignalServiceProtos;
@@ -76,8 +74,8 @@ public final class PushGroupSilentUpdateSendJob extends BaseJob {
 
     Set<RecipientId> recipients = Stream.concat(Stream.of(memberUuids), Stream.of(pendingUuids))
                                         .filter(uuid -> !UuidUtil.UNKNOWN_UUID.equals(uuid))
-                                        .filter(uuid -> !SignalStore.account().requireAci().uuid().equals(uuid))
-                                        .map(uuid -> Recipient.externalPush(ServiceId.from(uuid), null, false))
+                                        .filter(uuid -> !Recipient.self().requireAci().uuid().equals(uuid))
+                                        .map(uuid -> Recipient.externalPush(context, ACI.from(uuid), null, false))
                                         .filter(recipient -> recipient.getRegistered() != RecipientDatabase.RegisteredState.NOT_REGISTERED)
                                         .map(Recipient::getId)
                                         .collect(Collectors.toSet());
@@ -178,7 +176,7 @@ public final class PushGroupSilentUpdateSendJob extends BaseJob {
 
     List<SendMessageResult> results = GroupSendUtil.sendUnresendableDataMessage(context, groupId, destinations, false, ContentHint.IMPLICIT, groupDataMessage);
 
-    return GroupSendJobHelper.getCompletedSends(destinations, results).completed;
+    return GroupSendJobHelper.getCompletedSends(destinations, results);
   }
 
   public static class Factory implements Job.Factory<PushGroupSilentUpdateSendJob> {

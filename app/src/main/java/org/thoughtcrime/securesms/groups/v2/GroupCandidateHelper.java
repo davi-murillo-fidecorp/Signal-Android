@@ -18,7 +18,6 @@ import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.SignalServiceAccountManager;
 import org.whispersystems.signalservice.api.groupsv2.GroupCandidate;
 import org.whispersystems.signalservice.api.push.ACI;
-import org.whispersystems.signalservice.api.push.ServiceId;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -26,7 +25,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-public class GroupCandidateHelper {
+public final class GroupCandidateHelper {
   private final SignalServiceAccountManager signalServiceAccountManager;
   private final RecipientDatabase           recipientDatabase;
 
@@ -48,13 +47,13 @@ public class GroupCandidateHelper {
   {
     final Recipient recipient = Recipient.resolved(recipientId);
 
-    ServiceId serviceId = recipient.getServiceId().orNull();
-    if (serviceId == null) {
+    ACI aci = recipient.getAci().orNull();
+    if (aci == null) {
       throw new AssertionError("Non UUID members should have need detected by now");
     }
 
     Optional<ProfileKeyCredential> profileKeyCredential = Optional.fromNullable(recipient.getProfileKeyCredential());
-    GroupCandidate                 candidate            = new GroupCandidate(serviceId.uuid(), profileKeyCredential);
+    GroupCandidate                 candidate            = new GroupCandidate(aci.uuid(), profileKeyCredential);
 
     if (!candidate.hasProfileKeyCredential()) {
       ProfileKey profileKey = ProfileKeyUtil.profileKeyOrNull(recipient.getProfileKey());
@@ -62,7 +61,7 @@ public class GroupCandidateHelper {
       if (profileKey != null) {
         Log.i(TAG, String.format("No profile key credential on recipient %s, fetching", recipient.getId()));
 
-        Optional<ProfileKeyCredential> profileKeyCredentialOptional = signalServiceAccountManager.resolveProfileKeyCredential(serviceId, profileKey, Locale.getDefault());
+        Optional<ProfileKeyCredential> profileKeyCredentialOptional = signalServiceAccountManager.resolveProfileKeyCredential(aci, profileKey, Locale.getDefault());
 
         if (profileKeyCredentialOptional.isPresent()) {
           boolean updatedProfileKey = recipientDatabase.setProfileKeyCredential(recipient.getId(), profileKey, profileKeyCredentialOptional.get());

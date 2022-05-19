@@ -124,15 +124,6 @@
   <string name="CameraContacts_cant_find_who_youre_looking_for">Не можете найти нужного человека?</string>
   <string name="CameraContacts_invite_a_contact_to_join_signal">Пригласите контакт в Signal</string>
   <string name="CameraContacts__menu_search">Поиск</string>
-  <!--Censorship Circumvention Megaphone-->
-  <!--Title for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off_censorship_circumvention">Отключить обход цензуры?</string>
-  <!--Body for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_you_can_now_connect_to_the_signal_service">Теперь вы можете подключаться к сервису Signal напрямую для лучшего опыта использования.</string>
-  <!--Action to prompt the user to disable circumvention since it is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off">Отключить</string>
-  <!--Action to prompt the user to dismiss the alert at the bottom of the chat list-->
-  <string name="CensorshipCircumventionMegaphone_no_thanks">Нет, спасибо</string>
   <!--ClearProfileActivity-->
   <string name="ClearProfileActivity_remove">Удалить</string>
   <string name="ClearProfileActivity_remove_profile_photo">Удалить фото профиля?</string>
@@ -363,7 +354,7 @@
     <item quantity="one">Не прочитан</item>
     <item quantity="few">Не прочитаны</item>
     <item quantity="many">Не прочитаны</item>
-    <item quantity="other">Не прочитано</item>
+    <item quantity="other">Не прочитаны</item>
   </plurals>
   <plurals name="ConversationListFragment_pin_plural">
     <item quantity="one">Прикрепить</item>
@@ -1391,11 +1382,6 @@
   <string name="RedPhone_number_not_registered">Номер не зарегистрирован!</string>
   <string name="RedPhone_the_number_you_dialed_does_not_support_secure_voice">Вызываемый номер не поддерживает защищённые звонки!</string>
   <string name="RedPhone_got_it">Понятно</string>
-  <!--Valentine\'s Day Megaphone-->
-  <!--Title text for the Valentine\'s Day donation megaphone. The placeholder will always be a heart emoji. Needs to be a placeholder for Android reasons.-->
-  <string name="ValentinesDayMegaphone_happy_heart_day">Счастливого дня 💜!</string>
-  <!--Body text for the Valentine\'s Day donation megaphone.-->
-  <string name="ValentinesDayMegaphone_show_your_affection">Покажите свою привязанность, став Поддерживающим Signal.</string>
   <!--WebRtcCallActivity-->
   <string name="WebRtcCallActivity__tap_here_to_turn_on_your_video">Нажмите здесь, чтобы включить своё видео</string>
   <string name="WebRtcCallActivity__to_call_s_signal_needs_access_to_your_camera">Чтобы позвонить %1$s, Signal необходим доступ к вашей камере</string>
@@ -1461,7 +1447,6 @@
   <string name="WebRtcCallView__flip">Перекл. камеру</string>
   <string name="WebRtcCallView__speaker">Громкая связь</string>
   <string name="WebRtcCallView__camera">Камера</string>
-  <string name="WebRtcCallView__unmute">Вкл. микрофон</string>
   <string name="WebRtcCallView__mute">Откл. микрофон</string>
   <string name="WebRtcCallView__ring">Звонить</string>
   <string name="WebRtcCallView__end_call">Завершить звонок</string>
@@ -1764,10 +1749,6 @@
   <string name="NotificationChannel_voice_notes">Голосовые заметки</string>
   <string name="NotificationChannel_contact_joined_signal">Контакт присоединился к Signal</string>
   <string name="NotificationChannels__no_activity_available_to_open_notification_channel_settings">Нет доступной активности для открытия настроек категорий уведомлений.</string>
-  <!--Notification channel name for showing persistent background connection on devices without push notifications-->
-  <string name="NotificationChannel_background_connection">Фоновое соединение</string>
-  <!--Notification channel name for showing call status information (like connection, ongoing, etc.) Not ringing.-->
-  <string name="NotificationChannel_call_status">Статус звонка</string>
   <!--ProfileEditNameFragment-->
   <!--QuickResponseService-->
   <string name="QuickResponseService_quick_response_unavailable_when_Signal_is_locked">Быстрые ответы недоступны, когда Signal заблокирован!</string>
@@ -1799,7 +1780,7 @@
   <string name="UnauthorizedReminder_device_no_longer_registered">Устройство больше не зарегистрировано</string>
   <string name="UnauthorizedReminder_this_is_likely_because_you_registered_your_phone_number_with_Signal_on_a_different_device">Это может быть вызвано тем, что вы зарегистрировали свой номер телефона в Signal на другом устройстве. Нажмите для повторной регистрации.</string>
   <!--WebRtcCallActivity-->
-  <string name="WebRtcCallActivity_to_answer_the_call_give_signal_access_to_your_microphone">Для ответа на звонок предоставьте Signal доступ к микрофону.</string>
+  <string name="WebRtcCallActivity_to_answer_the_call_give_signal_access_to_your_microphone">Для ответа на звонок разрешите Signal доступ к микрофону.</string>
   <string name="WebRtcCallActivity_to_answer_the_call_from_s_give_signal_access_to_your_microphone">Для ответа на звонок от %s разрешите Signal доступ к микрофону.</string>
   <string name="WebRtcCallActivity_signal_requires_microphone_and_camera_permissions_in_order_to_make_or_receive_calls">Signal требуются разрешения на доступ к микрофону и камере для совершения или принятия звонков, но они были вами отклонены. Нажмите «Продолжить», чтобы перейти в настройки приложения, откройте «Разрешения» и включите «Микрофон» и «Камера».</string>
   <string name="WebRtcCallActivity__answered_on_a_linked_device">Принят на привязанном устройстве.</string>
@@ -2355,19 +2336,6 @@
   <string name="preferences_chats__message_text_size">Размер шрифта сообщения</string>
   <string name="preferences_events__contact_joined_signal">Контакт присоединился к Signal</string>
   <string name="preferences_notifications__priority">Приоритет</string>
-  <!--Heading for the \'censorship circumvention\' section of privacy preferences-->
-  <string name="preferences_communication__category_censorship_circumvention">Обход цензуры</string>
-  <!--Title of the \'censorship circumvention\' toggle switch-->
-  <string name="preferences_communication__censorship_circumvention">Обход цензуры</string>
-  <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Если включить эту опцию, Signal будет пытаться обойти цензуру (блокировку провайдером). Не включайте её, если там, где вы находитесь, Signal не блокируется.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Обход цензуры был автоматически активирован на основе номера телефона вашей учётной записи.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Вы вручную отключили обход цензуры.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service-->
-  <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Обход цензуры не требуется; вы уже подключены к сервису Signal.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet-->
-  <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Обход цензуры (блокировки провайдером) может быть активирован, только когда есть подключение к интернету.</string>
   <string name="preferences_communication__category_sealed_sender">Запечатанный отправитель</string>
   <string name="preferences_communication__sealed_sender_display_indicators">Показывать индикаторы</string>
   <string name="preferences_communication__sealed_sender_display_indicators_description">Показывать значок в «Подробностях сообщения» для сообщений, доставленных с использованием запечатанного отправителя.</string>
@@ -3090,13 +3058,13 @@
   <string name="DeleteAccountFragment__failed_to_delete_local_data">Не удалось удалить локальные данные. Вы можете удалить их вручную в системных настройках приложения.</string>
   <string name="DeleteAccountFragment__launch_app_settings">Открыть настройки приложения</string>
   <!--Title of progress dialog shown when a user deletes their account and the process is leaving all groups-->
-  <string name="DeleteAccountFragment__leaving_groups">Выход из групп…</string>
+  <string name="DeleteAccountFragment__leaving_groups">Покидаем группы…</string>
   <!--Title of progress dialog shown when a user deletes their account and the process has left all groups-->
-  <string name="DeleteAccountFragment__deleting_account">Удаление учётной записи…</string>
+  <string name="DeleteAccountFragment__deleting_account">Удаляем учётную запись…</string>
   <!--Message of progress dialog shown when a user deletes their account and the process is leaving groups-->
   <string name="DeleteAccountFragment__depending_on_the_number_of_groups">В зависимости от количества групп, в которых вы состоите, это может занять несколько минут</string>
   <!--Message of progress dialog shown when a user deletes their account and the process has left all groups-->
-  <string name="DeleteAccountFragment__deleting_all_user_data_and_resetting">Удаление данных пользователя и сброс приложения</string>
+  <string name="DeleteAccountFragment__deleting_all_user_data_and_resetting">Удаляем данные пользователя и сбрасываем приложение</string>
   <!--Title of error dialog shown when a network error occurs during account deletion-->
   <string name="DeleteAccountFragment__account_not_deleted">Учётная запись не удалена</string>
   <!--Message of error dialog shown when a network error occurs during account deletion-->
@@ -3420,7 +3388,7 @@
   <string name="CustomChatColorCreatorFragment__drag_to_change_the_direction_of_the_gradient">Перетащите для изменения направления градиента</string>
   <!--ChatColorsMegaphone-->
   <string name="ChatColorsMegaphone__new_chat_colors">Новые цвета чатов</string>
-  <string name="ChatColorsMegaphone__we_switched_up_chat_colors">Мы изменили цвета чата, чтобы предоставить вам больше возможностей и повысить удобность чтения чатов.</string>
+  <string name="ChatColorsMegaphone__we_switched_up_chat_colors">Мы поменяли цвета чатов, чтобы предоставить вам больше опций и сделать чаты более удобными для чтения.</string>
   <string name="ChatColorsMegaphone__appearance">Внешний вид</string>
   <string name="ChatColorsMegaphone__not_now">Не сейчас</string>
   <!--AddAProfilePhotoMegaphone-->
@@ -3430,7 +3398,7 @@
   <string name="AddAProfilePhotoMegaphone__add_photo">Добавить фото</string>
   <!--BecomeASustainerMegaphone-->
   <string name="BecomeASustainerMegaphone__become_a_sustainer">Станьте Поддерживающим</string>
-  <string name="BecomeASustainerMegaphone__signal_is_powered">Signal существует благодаря таким людям, как вы. Поддержите нас и получите значок в профиль.</string>
+  <string name="BecomeASustainerMegaphone__signal_is_powered">Signal существует благодаря таким людям, как вы. Поддержите нас и получите значок для профиля.</string>
   <string name="BecomeASustainerMegaphone__no_thanks">Нет, спасибо</string>
   <string name="BecomeASustainerMegaphone__contribute">Поддержать</string>
   <!--KeyboardPagerFragment-->
@@ -3647,7 +3615,7 @@
   <string name="ManageDonationsFragment__my_support">Моя поддержка</string>
   <string name="ManageDonationsFragment__manage_subscription">Управлять подпиской</string>
   <string name="ManageDonationsFragment__badges">Значки</string>
-  <string name="ManageDonationsFragment__subscription_faq">ЧаВо о подписке</string>
+  <string name="ManageDonationsFragment__subscription_faq">ЧаВО по подписке</string>
   <string name="ManageDonationsFragment__error_getting_subscription">Не удалось получить информацию о подписке.</string>
   <string name="BoostFragment__give_signal_a_boost">Дайте «Ускорение» приложению Signal</string>
   <string name="BoostFragment__say_thanks_and_earn">Скажите «Спасибо!» и получите значок «Ускорение» на %1$d дней.</string>
@@ -3669,15 +3637,9 @@
   <string name="ExpiredBadgeBottomSheetDialogFragment__become_a_sustainer">Стать Поддерживающим</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__add_a_boost">Добавить Ускорение</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__not_now">Не сейчас</string>
-  <!--Copy displayed when badge expires after user inactivity-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_automatically">Ваша подписка Поддерживающего была автоматически отменена, потому что вы были неактивны слишком долго. Ваш значок «%1$s» больше не виден в вашем профиле.</string>
-  <!--Copy displayed when badge expires after payment failure-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_canceled">Ваша подписка Поддерживающего была отменена, потому что нам не удалось обработать ваш платёж. Ваш значок больше не виден в вашем профиле.</string>
+  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer">Ваша подписка Поддерживающего была автоматически отменена, потому что вы были неактивны слишком долго. Ваш значок «%1$s» больше не виден в вашем профиле.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Вы можете продолжать использовать Signal, но чтобы поддержать приложение и заново активировать значок, продлите подписку сейчас.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__renew_subscription">Продлить подписку</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__cant_process_subscription_payment">Не удалось обработать платёж для подписки</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__were_having_trouble">Нам не удалось получить ваш платёж Поддерживающего Signal. Убедитесь, что ваш способ оплаты актуален. Если это не так, обновите его в Google Pay. Signal попробует обработать платёж ещё раз через несколько дней.</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__dont_show_this_again">Больше не показывать это</string>
   <string name="Subscription__please_contact_support_for_more_information">Пожалуйста, свяжитесь с поддержкой, чтобы получить больше информации.</string>
   <string name="Subscription__contact_support">Связаться с поддержкой</string>
   <string name="Subscription__earn_a_s_badge">Заработайте значок «%1$s»</string>
@@ -3699,34 +3661,6 @@
   <string name="ViewBadgeBottomSheetDialogFragment__your_device_doesn_t_support_google_pay_so_you_can_t_subscribe_to_earn_a_badge_you_can_still_support_signal_by_making_a_donation_on_our_website">Ваше устройство не поддерживает Google Pay, поэтому вы не можете подписаться, чтобы получить значок. Вы всё равно можете поддержать Signal, сделав пожертвование на нашем сайте.</string>
   <string name="NetworkFailure__network_error_check_your_connection_and_try_again">Ошибка сети. Проверьте ваше подключение к интернету и попробуйте ещё раз.</string>
   <string name="NetworkFailure__retry">Повторить попытку</string>
-  <!--Stripe decline code generic_failure-->
-  <string name="DeclineCode__try_another_payment_method_or_contact_your_bank">Попробуйте другой способ оплаты или свяжитесь со своим банком для получения дополнительной информации.</string>
-  <!--Stripe decline code verify on Google Pay and try again-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again">Проверьте, что ваш способ оплаты актуален в Google Pay, и попробуйте ещё раз.</string>
-  <!--Stripe decline code learn more action label-->
-  <string name="DeclineCode__learn_more">Узнать больше</string>
-  <!--Stripe decline code contact issuer-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again_if_the_problem">Проверьте, что ваш способ оплаты актуален в Google Pay, и попробуйте ещё раз. Если проблема не решается, свяжитесь со своим банком.</string>
-  <!--Stripe decline code purchase not supported-->
-  <string name="DeclineCode__your_card_does_not_support_this_type_of_purchase">Ваша карта не поддерживает этот тип покупки. Попробуйте другой способ оплаты.</string>
-  <!--Stripe decline code your card has expired-->
-  <string name="DeclineCode__your_card_has_expired">Срок действия вашей карты истёк. Обновите свой способ оплаты в Google Pay и попробуйте ещё раз.</string>
-  <!--Stripe decline code go to google pay action label-->
-  <string name="DeclineCode__go_to_google_pay">Перейти в Google Pay</string>
-  <!--Stripe decline code incorrect card number-->
-  <string name="DeclineCode__your_card_number_is_incorrect">Номер вашей карты неверен. Обновите его в Google Pay и попробуйте ещё раз.</string>
-  <!--Stripe decline code incorrect cvc-->
-  <string name="DeclineCode__your_cards_cvc_number_is_incorrect">CVC-код вашей карты неверен. Обновите его в Google Pay и попробуйте ещё раз.</string>
-  <!--Stripe decline code insufficient funds-->
-  <string name="DeclineCode__your_card_does_not_have_sufficient_funds">На вашей карте недостаточно средств для завершения этой покупки. Попробуйте другой способ оплаты.</string>
-  <!--Stripe decline code incorrect expiration month-->
-  <string name="DeclineCode__the_expiration_month">Месяц истечения срока действия вашего способа оплаты неверен. Обновите его в Google Pay и попробуйте ещё раз.</string>
-  <!--Stripe decline code incorrect expiration year-->
-  <string name="DeclineCode__the_expiration_year">Год истечения срока действия вашего способа оплаты неверен. Обновите его в Google Pay и попробуйте ещё раз.</string>
-  <!--Stripe decline code issuer not available-->
-  <string name="DeclineCode__try_completing_the_payment_again">Попробуйте завершить платёж ещё раз или свяжитесь со своим банком для получения дополнительной информации.</string>
-  <!--Stripe decline code processing error-->
-  <string name="DeclineCode__try_again">Попробуйте ещё раз или свяжитесь со своим банком для получения дополнительной информации.</string>
   <!--Title of create notification profile screen-->
   <string name="EditNotificationProfileFragment__name_your_profile">Назовите свой профиль</string>
   <!--Hint text for create/edit notification profile name-->

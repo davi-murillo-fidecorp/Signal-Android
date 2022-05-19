@@ -144,7 +144,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A view that displays an individual conversation item within a conversation
@@ -165,7 +164,6 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
   public  static final float LONG_PRESS_SCALE_FACTOR    = 0.95f;
   private static final int   SHRINK_BUBBLE_DELAY_MILLIS = 100;
-  private static final long  MAX_CLUSTERING_TIME_DIFF   = TimeUnit.MINUTES.toMillis(3);
 
   private ConversationMessage     conversationMessage;
   private MessageRecord           messageRecord;
@@ -244,10 +242,6 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
                     parent.invalidate();
                   }
                 });
-
-      reactionsView.animate()
-                   .scaleX(LONG_PRESS_SCALE_FACTOR)
-                   .scaleY(LONG_PRESS_SCALE_FACTOR);
     }
   };
 
@@ -383,9 +377,6 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         bodyBubble.animate()
                   .scaleX(1.0f)
                   .scaleY(1.0f);
-        reactionsView.animate()
-                     .scaleX(1.0f)
-                     .scaleY(1.0f);
         break;
     }
 
@@ -457,7 +448,6 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         isFooterVisible(messageRecord, nextMessageRecord, groupThread) &&
         !bodyText.isJumbomoji()                                        &&
         conversationMessage.getBottomButton() == null                  &&
-        !StringUtil.hasMixedTextDirection(bodyText.getText())          &&
         bodyText.getLastLineWidth() > 0)
     {
       TextView dateView           = footer.getDateView();
@@ -808,7 +798,6 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
   private void startPulseOutlinerAnimation() {
     pulseOutlinerAlphaAnimator = ValueAnimator.ofInt(0, 0x66, 0).setDuration(600);
-    pulseOutlinerAlphaAnimator.setRepeatCount(1);
     pulseOutlinerAlphaAnimator.addUpdateListener(animator -> {
       pulseOutliner.setAlpha((Integer) animator.getAnimatedValue());
       bodyBubble.invalidate();
@@ -1400,13 +1389,6 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         throw new AssertionError();
       }
       Quote quote = ((MediaMmsMessageRecord)current).getQuote();
-
-      if (((MediaMmsMessageRecord) current).getParentStoryId() != null) {
-        quoteView.setMessageType(QuoteView.MessageType.STORY_REPLY);
-      } else {
-        quoteView.setMessageType(current.isOutgoing() ? QuoteView.MessageType.OUTGOING : QuoteView.MessageType.INCOMING);
-      }
-
       //noinspection ConstantConditions
       quoteView.setQuote(glideRequests, quote.getId(), Recipient.live(quote.getAuthor()).get(), quote.getDisplayText(), quote.isOriginalMissing(), quote.getAttachment(), chatColors);
       quoteView.setVisibility(View.VISIBLE);
@@ -1571,7 +1553,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       contactPhotoHolder.setVisibility(VISIBLE);
 
       if (!previous.isPresent() || previous.get().isUpdate() || !current.getRecipient().equals(previous.get().getRecipient()) ||
-          !DateUtils.isSameDay(previous.get().getTimestamp(), current.getTimestamp()) || !isWithinClusteringTime(current, previous.get()))
+          !DateUtils.isSameDay(previous.get().getTimestamp(), current.getTimestamp()))
       {
         groupSenderHolder.setVisibility(VISIBLE);
 
@@ -1585,7 +1567,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         groupSenderHolder.setVisibility(GONE);
       }
 
-      if (!next.isPresent() || next.get().isUpdate() || !current.getRecipient().equals(next.get().getRecipient()) || !isWithinClusteringTime(current, next.get())) {
+      if (!next.isPresent() || next.get().isUpdate() || !current.getRecipient().equals(next.get().getRecipient())) {
         contactPhoto.setVisibility(VISIBLE);
         badgeImageView.setVisibility(VISIBLE);
       } else {
@@ -1685,21 +1667,20 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   private boolean isStartOfMessageCluster(@NonNull MessageRecord current, @NonNull Optional<MessageRecord> previous, boolean isGroupThread) {
     if (isGroupThread) {
       return !previous.isPresent() || previous.get().isUpdate() || !DateUtils.isSameDay(current.getTimestamp(), previous.get().getTimestamp()) ||
-             !current.getRecipient().equals(previous.get().getRecipient()) || !isWithinClusteringTime(current, previous.get());
+             !current.getRecipient().equals(previous.get().getRecipient());
     } else {
       return !previous.isPresent() || previous.get().isUpdate() || !DateUtils.isSameDay(current.getTimestamp(), previous.get().getTimestamp()) ||
-             current.isOutgoing() != previous.get().isOutgoing() || previous.get().isSecure() != current.isSecure() || !isWithinClusteringTime(current, previous.get());
+             current.isOutgoing() != previous.get().isOutgoing();
     }
   }
 
   private boolean isEndOfMessageCluster(@NonNull MessageRecord current, @NonNull Optional<MessageRecord> next, boolean isGroupThread) {
     if (isGroupThread) {
       return !next.isPresent() || next.get().isUpdate() || !DateUtils.isSameDay(current.getTimestamp(), next.get().getTimestamp()) ||
-             !current.getRecipient().equals(next.get().getRecipient()) || !current.getReactions().isEmpty() || !isWithinClusteringTime(current, next.get());
+             !current.getRecipient().equals(next.get().getRecipient()) || !current.getReactions().isEmpty();
     } else {
       return !next.isPresent() || next.get().isUpdate() || !DateUtils.isSameDay(current.getTimestamp(), next.get().getTimestamp()) ||
-             current.isOutgoing() != next.get().isOutgoing() || !current.getReactions().isEmpty() || next.get().isSecure() != current.isSecure() ||
-             !isWithinClusteringTime(current, next.get());
+             current.isOutgoing() != next.get().isOutgoing() || !current.getReactions().isEmpty();
     }
   }
 
@@ -1712,11 +1693,6 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
     return forceFooter(messageRecord) || current.getExpiresIn() > 0 || !current.isSecure() || current.isPending() || current.isPendingInsecureSmsFallback() ||
            current.isFailed() || current.isRateLimited() || differentTimestamps || isEndOfMessageCluster(current, next, isGroupThread);
-  }
-
-  private static boolean isWithinClusteringTime(@NonNull MessageRecord lhs, @NonNull MessageRecord rhs) {
-    long timeDiff = Math.abs(lhs.getDateSent() - rhs.getDateSent());
-    return timeDiff <= MAX_CLUSTERING_TIME_DIFF;
   }
 
   private void setMessageSpacing(@NonNull Context context, @NonNull MessageRecord current, @NonNull Optional<MessageRecord> previous, @NonNull Optional<MessageRecord> next, boolean isGroupThread) {

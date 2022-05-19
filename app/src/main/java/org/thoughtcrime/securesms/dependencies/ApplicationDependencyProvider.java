@@ -13,11 +13,10 @@ import org.thoughtcrime.securesms.BuildConfig;
 import org.thoughtcrime.securesms.components.TypingStatusRepository;
 import org.thoughtcrime.securesms.components.TypingStatusSender;
 import org.thoughtcrime.securesms.crypto.ReentrantSessionLock;
-import org.thoughtcrime.securesms.crypto.storage.SignalBaseIdentityKeyStore;
 import org.thoughtcrime.securesms.crypto.storage.SignalServiceDataStoreImpl;
 import org.thoughtcrime.securesms.crypto.storage.SignalServiceAccountDataStoreImpl;
 import org.thoughtcrime.securesms.crypto.storage.SignalSenderKeyStore;
-import org.thoughtcrime.securesms.crypto.storage.SignalIdentityKeyStore;
+import org.thoughtcrime.securesms.crypto.storage.TextSecureIdentityKeyStore;
 import org.thoughtcrime.securesms.crypto.storage.TextSecurePreKeyStore;
 import org.thoughtcrime.securesms.crypto.storage.TextSecureSessionStore;
 import org.thoughtcrime.securesms.database.DatabaseObserver;
@@ -27,7 +26,6 @@ import org.thoughtcrime.securesms.jobmanager.JobManager;
 import org.thoughtcrime.securesms.jobmanager.JobMigrator;
 import org.thoughtcrime.securesms.jobmanager.impl.FactoryJobPredicate;
 import org.thoughtcrime.securesms.jobmanager.impl.JsonDataSerializer;
-import org.thoughtcrime.securesms.jobs.CreateSignedPreKeyJob;
 import org.thoughtcrime.securesms.jobs.FastJobStorage;
 import org.thoughtcrime.securesms.jobs.GroupCallUpdateSendJob;
 import org.thoughtcrime.securesms.jobs.JobManagerFactories;
@@ -53,7 +51,6 @@ import org.thoughtcrime.securesms.push.SecurityEventListener;
 import org.thoughtcrime.securesms.push.SignalServiceNetworkAccess;
 import org.thoughtcrime.securesms.recipients.LiveRecipientCache;
 import org.thoughtcrime.securesms.revealable.ViewOnceMessageManager;
-import org.thoughtcrime.securesms.service.ExpiringStoriesManager;
 import org.thoughtcrime.securesms.service.ExpiringMessageManager;
 import org.thoughtcrime.securesms.service.PendingRetryReceiptManager;
 import org.thoughtcrime.securesms.service.TrimThreadsByDateManager;
@@ -71,14 +68,12 @@ import org.thoughtcrime.securesms.video.exo.GiphyMp4Cache;
 import org.thoughtcrime.securesms.webrtc.audio.AudioManagerCompat;
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.SignalServiceAccountManager;
-import org.whispersystems.signalservice.api.SignalServiceDataStore;
 import org.whispersystems.signalservice.api.SignalServiceMessageReceiver;
 import org.whispersystems.signalservice.api.SignalServiceMessageSender;
 import org.whispersystems.signalservice.api.SignalWebSocket;
 import org.whispersystems.signalservice.api.groupsv2.ClientZkOperations;
 import org.whispersystems.signalservice.api.groupsv2.GroupsV2Operations;
 import org.whispersystems.signalservice.api.push.ACI;
-import org.whispersystems.signalservice.api.push.PNI;
 import org.whispersystems.signalservice.api.services.DonationsService;
 import org.whispersystems.signalservice.api.util.CredentialsProvider;
 import org.whispersystems.signalservice.api.util.SleepTimer;
@@ -118,17 +113,17 @@ public class ApplicationDependencyProvider implements ApplicationDependencies.Pr
   }
 
   @Override
-  public @NonNull SignalServiceMessageSender provideSignalServiceMessageSender(@NonNull SignalWebSocket signalWebSocket, @NonNull SignalServiceDataStore protocolStore) {
+  public @NonNull SignalServiceMessageSender provideSignalServiceMessageSender(@NonNull SignalWebSocket signalWebSocket) {
       return new SignalServiceMessageSender(provideSignalServiceNetworkAccess().getConfiguration(),
                                             new DynamicCredentialsProvider(),
-                                            protocolStore,
+                                            provideProtocolStore(),
                                             ReentrantSessionLock.INSTANCE,
                                             BuildConfig.SIGNAL_AGENT,
                                             signalWebSocket,
                                             Optional.of(new SecurityEventListener(context)),
                                             provideClientZkOperations().getProfileOperations(),
                                             SignalExecutors.newCachedBoundedExecutor("signal-messages", 1, 16, 30),
-                                            ByteUnit.KILOBYTES.toBytes(256),
+                                            ByteUnit.KILOBYTES.toBytes(512),
                                             FeatureFlags.okHttpAutomaticRetry());
   }
 
@@ -211,11 +206,6 @@ public class ApplicationDependencyProvider implements ApplicationDependencies.Pr
   }
 
   @Override
-  public @NonNull ExpiringStoriesManager provideExpiringStoriesManager() {
-    return new ExpiringStoriesManager(context);
-  }
-
-  @Override
   public @NonNull ExpiringMessageManager provideExpiringMessageManager() {
     return new ExpiringMessageManager(context);
   }
@@ -285,47 +275,12 @@ public class ApplicationDependencyProvider implements ApplicationDependencies.Pr
 
   @Override
   public @NonNull SignalServiceDataStoreImpl provideProtocolStore() {
-    ACI localAci = SignalStore.account().getAci();
-    PNI localPni = SignalStore.account().getPni();
-
-    if (localAci == null) {
-      throw new IllegalStateException("No ACI set!");
-    }
-
-    if (localPni == null) {
-      throw new IllegalStateException("No PNI set!");
-    }
-
-    boolean needsPreKeyJob = false;
-
-    if (!SignalStore.account().hasAciIdentityKey()) {
-      SignalStore.account().generateAciIdentityKeyIfNecessary();
-      needsPreKeyJob = true;
-    }
-
-    if (!SignalStore.account().hasPniIdentityKey()) {
-      SignalStore.account().generatePniIdentityKeyIfNecessary();
-      needsPreKeyJob = true;
-    }
-
-    if (needsPreKeyJob) {
-      CreateSignedPreKeyJob.enqueueIfNeeded();
-    }
-
-    SignalBaseIdentityKeyStore baseIdentityStore = new SignalBaseIdentityKeyStore(context);
-
-    SignalServiceAccountDataStoreImpl aciStore = new SignalServiceAccountDataStoreImpl(context,
-                                                                                       new TextSecurePreKeyStore(localAci),
-                                                                                       new SignalIdentityKeyStore(baseIdentityStore, () -> SignalStore.account().getAciIdentityKey()),
-                                                                                       new TextSecureSessionStore(localAci),
-                                                                                       new SignalSenderKeyStore(context));
-
-    SignalServiceAccountDataStoreImpl pniStore = new SignalServiceAccountDataStoreImpl(context,
-                                                                                       new TextSecurePreKeyStore(localPni),
-                                                                                       new SignalIdentityKeyStore(baseIdentityStore, () -> SignalStore.account().getPniIdentityKey()),
-                                                                                       new TextSecureSessionStore(localPni),
-                                                                                       new SignalSenderKeyStore(context));
-    return new SignalServiceDataStoreImpl(context, aciStore, pniStore);
+    SignalServiceAccountDataStoreImpl aci = new SignalServiceAccountDataStoreImpl(context,
+                                                                                  new TextSecurePreKeyStore(context),
+                                                                                  new TextSecureIdentityKeyStore(context),
+                                                                                  new TextSecureSessionStore(context),
+                                                                                  new SignalSenderKeyStore(context));
+    return new SignalServiceDataStoreImpl(context, aci, aci);
   }
 
   @Override
@@ -391,11 +346,6 @@ public class ApplicationDependencyProvider implements ApplicationDependencies.Pr
     @Override
     public ACI getAci() {
       return SignalStore.account().getAci();
-    }
-
-    @Override
-    public PNI getPni() {
-      return SignalStore.account().getPni();
     }
 
     @Override

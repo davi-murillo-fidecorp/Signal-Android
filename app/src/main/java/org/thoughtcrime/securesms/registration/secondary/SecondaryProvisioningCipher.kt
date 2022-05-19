@@ -67,9 +67,9 @@ class SecondaryProvisioningCipher private constructor(private val secondaryIdent
     val provisioningMessage = ProvisioningProtos.ProvisionMessage.parseFrom(plaintext)
 
     return ProvisionDecryptResult.Success(
-      uuid = UuidUtil.parseOrThrow(provisioningMessage.aci),
+      uuid = UuidUtil.parseOrThrow(provisioningMessage.uuid),
       e164 = provisioningMessage.number,
-      identityKeyPair = IdentityKeyPair(IdentityKey(provisioningMessage.aciIdentityKeyPublic.toByteArray()), Curve.decodePrivatePoint(provisioningMessage.aciIdentityKeyPrivate.toByteArray())),
+      identityKeyPair = IdentityKeyPair(IdentityKey(provisioningMessage.identityKeyPublic.toByteArray()), Curve.decodePrivatePoint(provisioningMessage.identityKeyPrivate.toByteArray())),
       profileKey = ProfileKey(provisioningMessage.profileKey.toByteArray()),
       areReadReceiptsEnabled = provisioningMessage.readReceipts,
       primaryUserAgent = provisioningMessage.userAgent,

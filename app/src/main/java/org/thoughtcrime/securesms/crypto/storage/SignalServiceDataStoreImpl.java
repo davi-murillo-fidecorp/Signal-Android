@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.whispersystems.signalservice.api.SignalServiceDataStore;
-import org.whispersystems.signalservice.api.push.ServiceId;
+import org.whispersystems.signalservice.api.push.AccountIdentifier;
 
 public final class SignalServiceDataStoreImpl implements SignalServiceDataStore {
 
@@ -25,11 +25,11 @@ public final class SignalServiceDataStoreImpl implements SignalServiceDataStore 
   }
 
   @Override
-  public SignalServiceAccountDataStoreImpl get(@NonNull ServiceId accountIdentifier) {
+  public SignalServiceAccountDataStoreImpl get(@NonNull AccountIdentifier accountIdentifier) {
     if (accountIdentifier.equals(SignalStore.account().getAci())) {
       return aciStore;
     } else if (accountIdentifier.equals(SignalStore.account().getPni())) {
-      throw new AssertionError("Not to be used yet!");
+      return pniStore;
     } else {
       throw new IllegalArgumentException("No matching store found for " + accountIdentifier);
     }

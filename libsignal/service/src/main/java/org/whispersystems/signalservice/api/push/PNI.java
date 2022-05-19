@@ -8,7 +8,7 @@ import java.util.UUID;
  * A PNI is a "Phone Number Identity". They're just UUIDs, but given multiple different things could be UUIDs, this wrapper exists to give us type safety around
  * this *specific type* of UUID.
  */
-public final class PNI extends ServiceId {
+public final class PNI extends AccountIdentifier {
 
   public static PNI from(UUID uuid) {
     return new PNI(uuid);

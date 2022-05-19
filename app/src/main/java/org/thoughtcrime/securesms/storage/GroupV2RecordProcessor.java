@@ -66,31 +66,28 @@ public final class GroupV2RecordProcessor extends DefaultStorageRecordProcessor<
 
   @Override
   @NonNull SignalGroupV2Record merge(@NonNull SignalGroupV2Record remote, @NonNull SignalGroupV2Record local, @NonNull StorageKeyGenerator keyGenerator) {
-    byte[]  unknownFields              = remote.serializeUnknownFields();
-    boolean blocked                    = remote.isBlocked();
-    boolean profileSharing             = remote.isProfileSharingEnabled();
-    boolean archived                   = remote.isArchived();
-    boolean forcedUnread               = remote.isForcedUnread();
-    long    muteUntil                  = remote.getMuteUntil();
-    boolean notifyForMentionsWhenMuted = remote.notifyForMentionsWhenMuted();
-    boolean hideStory      = remote.shouldHideStory();
+    byte[]  unknownFields  = remote.serializeUnknownFields();
+    boolean blocked        = remote.isBlocked();
+    boolean profileSharing = remote.isProfileSharingEnabled();
+    boolean archived       = remote.isArchived();
+    boolean forcedUnread   = remote.isForcedUnread();
+    long    muteUntil      = remote.getMuteUntil();
 
-    boolean matchesRemote = doParamsMatch(remote, unknownFields, blocked, profileSharing, archived, forcedUnread, muteUntil, notifyForMentionsWhenMuted, hideStory);
-    boolean matchesLocal  = doParamsMatch(local, unknownFields, blocked, profileSharing, archived, forcedUnread, muteUntil, notifyForMentionsWhenMuted, hideStory);
+    boolean matchesRemote = doParamsMatch(remote, unknownFields, blocked, profileSharing, archived, forcedUnread, muteUntil);
+    boolean matchesLocal  = doParamsMatch(local, unknownFields, blocked, profileSharing, archived, forcedUnread, muteUntil);
 
     if (matchesRemote) {
       return remote;
     } else if (matchesLocal) {
       return local;
     } else {
-      return new SignalGroupV2Record.Builder(keyGenerator.generate(), remote.getMasterKeyBytes(), unknownFields)
+      return new SignalGroupV2Record.Builder(keyGenerator.generate(), remote.getMasterKeyBytes())
+                                    .setUnknownFields(unknownFields)
                                     .setBlocked(blocked)
                                     .setProfileSharingEnabled(blocked)
                                     .setArchived(archived)
                                     .setForcedUnread(forcedUnread)
                                     .setMuteUntil(muteUntil)
-                                    .setNotifyForMentionsWhenMuted(notifyForMentionsWhenMuted)
-                                    .setHideStory(hideStory)
                                     .build();
     }
   }
@@ -137,17 +134,13 @@ public final class GroupV2RecordProcessor extends DefaultStorageRecordProcessor<
                                 boolean profileSharing,
                                 boolean archived,
                                 boolean forcedUnread,
-                                long muteUntil,
-                                boolean notifyForMentionsWhenMuted,
-                                boolean hideStory)
+                                long muteUntil)
   {
-    return Arrays.equals(unknownFields, group.serializeUnknownFields())     &&
-           blocked == group.isBlocked()                                     &&
-           profileSharing == group.isProfileSharingEnabled()                &&
-           archived == group.isArchived()                                   &&
-           forcedUnread == group.isForcedUnread()                           &&
-           muteUntil == group.getMuteUntil()                                &&
-           notifyForMentionsWhenMuted == group.notifyForMentionsWhenMuted() &&
-           hideStory == group.shouldHideStory();
+    return Arrays.equals(unknownFields, group.serializeUnknownFields()) &&
+           blocked == group.isBlocked()                                 &&
+           profileSharing == group.isProfileSharingEnabled()            &&
+           archived == group.isArchived()                               &&
+           forcedUnread == group.isForcedUnread()                       &&
+           muteUntil == group.getMuteUntil();
   }
 }

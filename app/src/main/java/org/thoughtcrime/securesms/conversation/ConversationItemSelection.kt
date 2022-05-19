@@ -2,6 +2,7 @@ package org.thoughtcrime.securesms.conversation
 
 import android.graphics.Bitmap
 import android.graphics.Path
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
@@ -9,7 +10,6 @@ import androidx.core.graphics.withClip
 import androidx.core.graphics.withTranslation
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
-import org.signal.core.util.DimensionUnit
 import org.thoughtcrime.securesms.database.model.MessageRecord
 import org.thoughtcrime.securesms.util.hasNoBubble
 
@@ -30,7 +30,6 @@ object ConversationItemSelection {
       list = list,
       videoBitmap = videoBitmap,
       drawConversationItem = !isOutgoing || hasNoBubble,
-      hasReaction = messageRecord.reactions.isNotEmpty(),
     )
   }
 
@@ -39,21 +38,22 @@ object ConversationItemSelection {
     list: RecyclerView,
     videoBitmap: Bitmap?,
     drawConversationItem: Boolean,
-    hasReaction: Boolean,
   ): Bitmap {
-    val bodyBubble = conversationItem.bodyBubble
-    val reactionsView = conversationItem.reactionsView
+    val initialReactionVisibility = conversationItem.reactionsView.visibility
+    if (initialReactionVisibility == View.VISIBLE) {
+      conversationItem.reactionsView.visibility = View.INVISIBLE
+    }
 
-    val originalScale = bodyBubble.scaleX
-    bodyBubble.scaleX = 1.0f
-    bodyBubble.scaleY = 1.0f
+    val originalScale = conversationItem.bodyBubble.scaleX
+    conversationItem.bodyBubble.scaleX = 1.0f
+    conversationItem.bodyBubble.scaleY = 1.0f
 
     val projections = conversationItem.getColorizerProjections(list)
 
     val path = Path()
 
-    val xTranslation = -conversationItem.x - bodyBubble.x
-    val yTranslation = -conversationItem.y - bodyBubble.y
+    val xTranslation = -conversationItem.x - conversationItem.bodyBubble.x
+    val yTranslation = -conversationItem.y - conversationItem.bodyBubble.y
 
     val mp4Projection = conversationItem.getGiphyMp4PlayableProjection(list)
     var scaledVideoBitmap = videoBitmap
@@ -80,13 +80,9 @@ object ConversationItemSelection {
 
     conversationItem.destroyAllDrawingCaches()
 
-    var bitmapHeight = bodyBubble.height
-    if (hasReaction) {
-      bitmapHeight += (reactionsView.height - DimensionUnit.DP.toPixels(4f)).toInt()
-    }
-    return createBitmap(bodyBubble.width, bitmapHeight).applyCanvas {
+    return createBitmap(conversationItem.bodyBubble.width, conversationItem.bodyBubble.height).applyCanvas {
       if (drawConversationItem) {
-        bodyBubble.draw(this)
+        conversationItem.bodyBubble.draw(this)
       }
 
       withClip(path) {
@@ -98,17 +94,11 @@ object ConversationItemSelection {
           }
         }
       }
-
-      withTranslation(
-        x = reactionsView.x - bodyBubble.x,
-        y = reactionsView.y - bodyBubble.y
-      ) {
-        reactionsView.draw(this)
-      }
     }.also {
       mp4Projection.release()
-      bodyBubble.scaleX = originalScale
-      bodyBubble.scaleY = originalScale
+      conversationItem.reactionsView.visibility = initialReactionVisibility
+      conversationItem.bodyBubble.scaleX = originalScale
+      conversationItem.bodyBubble.scaleY = originalScale
     }
   }
 }

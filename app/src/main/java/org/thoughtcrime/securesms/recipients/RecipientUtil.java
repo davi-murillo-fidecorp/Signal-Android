@@ -49,11 +49,11 @@ public class RecipientUtil {
   {
     recipient = recipient.resolve();
 
-    if (!recipient.getServiceId().isPresent() && !recipient.getE164().isPresent()) {
+    if (!recipient.getAci().isPresent() && !recipient.getE164().isPresent()) {
       throw new AssertionError(recipient.getId() + " - No UUID or phone number!");
     }
 
-    if (!recipient.getServiceId().isPresent()) {
+    if (!recipient.getAci().isPresent()) {
       Log.i(TAG, recipient.getId() + " is missing a UUID...");
       RegisteredState state = DirectoryHelper.refreshDirectoryFor(context, recipient, false);
 
@@ -61,8 +61,8 @@ public class RecipientUtil {
       Log.i(TAG, "Successfully performed a UUID fetch for " + recipient.getId() + ". Registered: " + state);
     }
 
-    if (recipient.hasServiceId()) {
-      return new SignalServiceAddress(recipient.requireServiceId(), Optional.fromNullable(recipient.resolve().getE164().orNull()));
+    if (recipient.hasAci()) {
+      return new SignalServiceAddress(recipient.requireAci(), Optional.fromNullable(recipient.resolve().getE164().orNull()));
     } else {
       throw new NotFoundException(recipient.getId() + " is not registered!");
     }
@@ -81,7 +81,7 @@ public class RecipientUtil {
 
     return Stream.of(recipients)
                  .map(Recipient::resolve)
-                 .map(r -> new SignalServiceAddress(r.requireServiceId(), r.getE164().orNull()))
+                 .map(r -> new SignalServiceAddress(r.requireAci(), r.getE164().orNull()))
                  .toList();
   }
 
@@ -93,7 +93,7 @@ public class RecipientUtil {
   {
     List<Recipient> recipientsWithoutUuids = Stream.of(recipients)
                                                    .map(Recipient::resolve)
-                                                   .filterNot(Recipient::hasServiceId)
+                                                   .filterNot(Recipient::hasAci)
                                                    .toList();
 
     if (recipientsWithoutUuids.size() > 0) {
@@ -117,7 +117,6 @@ public class RecipientUtil {
   public static List<Recipient> getEligibleForSending(@NonNull List<Recipient> recipients) {
     return Stream.of(recipients)
                  .filter(r -> r.getRegistered() != RegisteredState.NOT_REGISTERED)
-                 .filter(r -> !r.isBlocked())
                  .toList();
   }
 
@@ -179,7 +178,7 @@ public class RecipientUtil {
     ApplicationDependencies.getJobManager().add(new MultiDeviceBlockedUpdateJob());
     StorageSyncHelper.scheduleSyncForDataChange();
 
-    if (recipient.hasServiceId()) {
+    if (recipient.hasServiceIdentifier()) {
       ApplicationDependencies.getJobManager().add(MultiDeviceMessageRequestResponseJob.forAccept(recipient.getId()));
     }
   }

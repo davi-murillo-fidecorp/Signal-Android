@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.MutableLiveData;
@@ -19,7 +18,6 @@ import com.annimon.stream.Stream;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.reactivestreams.Publisher;
 import org.signal.core.util.MapUtil;
 import org.signal.core.util.logging.Log;
 import org.signal.paging.PagedData;
@@ -32,7 +30,6 @@ import org.thoughtcrime.securesms.conversation.colors.ChatColorsPalette;
 import org.thoughtcrime.securesms.conversation.colors.NameColor;
 import org.thoughtcrime.securesms.database.DatabaseObserver;
 import org.thoughtcrime.securesms.database.model.MessageId;
-import org.thoughtcrime.securesms.database.model.StoryViewState;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.groups.LiveGroup;
@@ -64,7 +61,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.BackpressureStrategy;
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 
 public class ConversationViewModel extends ViewModel {
@@ -202,14 +198,6 @@ public class ConversationViewModel extends ViewModel {
     threadAnimationStateStore.getStateLiveData().observeForever(threadAnimationStateStoreDriver);
   }
 
-  LiveData<StoryViewState> getStoryViewState(@NonNull LifecycleOwner lifecycle) {
-    Publisher<RecipientId>   recipientIdPublisher = LiveDataReactiveStreams.toPublisher(lifecycle, recipientId);
-    Flowable<StoryViewState> storyViewState       = Flowable.fromPublisher(recipientIdPublisher)
-                                                            .flatMap(id -> StoryViewState.getForRecipientId(id).toFlowable(BackpressureStrategy.LATEST));
-
-    return LiveDataReactiveStreams.fromPublisher(storyViewState);
-  }
-
   void onMessagesCommitted(@NonNull List<ConversationMessage> conversationMessages) {
     if (Util.hasItems(conversationMessages)) {
       threadAnimationStateStore.update(state -> {
@@ -296,10 +284,6 @@ public class ConversationViewModel extends ViewModel {
 
   void setHasUnreadMentions(boolean hasUnreadMentions) {
     this.hasUnreadMentions.setValue(hasUnreadMentions);
-  }
-
-  boolean getShowScrollButtons() {
-    return this.showScrollButtons.getValue();
   }
 
   void setShowScrollButtons(boolean showScrollButtons) {

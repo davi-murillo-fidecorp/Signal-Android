@@ -10,7 +10,6 @@ import org.thoughtcrime.securesms.components.settings.DSLSettingsAdapter
 import org.thoughtcrime.securesms.components.settings.DSLSettingsBottomSheetFragment
 import org.thoughtcrime.securesms.components.settings.DSLSettingsText
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
-import org.thoughtcrime.securesms.components.settings.app.subscription.errors.UnexpectedSubscriptionCancellation
 import org.thoughtcrime.securesms.components.settings.configure
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.util.BottomSheetUtil
@@ -28,12 +27,8 @@ class ExpiredBadgeBottomSheetDialogFragment : DSLSettingsBottomSheetFragment(
   }
 
   private fun getConfiguration(): DSLConfiguration {
-    val args = ExpiredBadgeBottomSheetDialogFragmentArgs.fromBundle(requireArguments())
-    val badge: Badge = args.badge
-    val cancellationReason: UnexpectedSubscriptionCancellation? = UnexpectedSubscriptionCancellation.fromStatus(args.cancelationReason)
+    val badge: Badge = ExpiredBadgeBottomSheetDialogFragmentArgs.fromBundle(requireArguments()).badge
     val isLikelyASustainer = SignalStore.donationsValues().isLikelyASustainer()
-
-    val inactive = cancellationReason == UnexpectedSubscriptionCancellation.INACTIVE
 
     return configure {
       customPref(ExpiredBadge.Model(badge))
@@ -55,10 +50,8 @@ class ExpiredBadgeBottomSheetDialogFragment : DSLSettingsBottomSheetFragment(
         DSLSettingsText.from(
           if (badge.isBoost()) {
             getString(R.string.ExpiredBadgeBottomSheetDialogFragment__your_boost_badge_has_expired)
-          } else if (inactive) {
-            getString(R.string.ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_automatically, badge.name)
           } else {
-            getString(R.string.ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_canceled)
+            getString(R.string.ExpiredBadgeBottomSheetDialogFragment__your_sustainer, badge.name)
           },
           DSLSettingsText.CenterModifier
         )
@@ -116,8 +109,8 @@ class ExpiredBadgeBottomSheetDialogFragment : DSLSettingsBottomSheetFragment(
 
   companion object {
     @JvmStatic
-    fun show(badge: Badge, cancellationReason: UnexpectedSubscriptionCancellation?, fragmentManager: FragmentManager) {
-      val args = ExpiredBadgeBottomSheetDialogFragmentArgs.Builder(badge, cancellationReason?.status).build()
+    fun show(badge: Badge, fragmentManager: FragmentManager) {
+      val args = ExpiredBadgeBottomSheetDialogFragmentArgs.Builder(badge).build()
       val fragment = ExpiredBadgeBottomSheetDialogFragment()
       fragment.arguments = args.toBundle()
 

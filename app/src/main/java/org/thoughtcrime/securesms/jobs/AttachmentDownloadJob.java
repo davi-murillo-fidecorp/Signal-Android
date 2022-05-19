@@ -117,10 +117,7 @@ public final class AttachmentDownloadJob extends BaseJob {
   @Override
   public void onRun() throws Exception {
     doWork();
-
-    if (!SignalDatabase.mms().isStory(messageId)) {
-      ApplicationDependencies.getMessageNotifier().updateNotification(context, 0);
-    }
+    ApplicationDependencies.getMessageNotifier().updateNotification(context, 0);
   }
 
   public void doWork() throws IOException, RetryLaterException {

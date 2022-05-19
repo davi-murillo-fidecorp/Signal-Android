@@ -52,8 +52,7 @@ import org.whispersystems.signalservice.api.payments.CurrencyConversions;
 import org.whispersystems.signalservice.api.profiles.ProfileAndCredential;
 import org.whispersystems.signalservice.api.profiles.SignalServiceProfile;
 import org.whispersystems.signalservice.api.profiles.SignalServiceProfileWrite;
-import org.whispersystems.signalservice.api.push.ServiceId;
-import org.whispersystems.signalservice.api.push.ServiceIdType;
+import org.whispersystems.signalservice.api.push.AccountIdentifier;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
 import org.whispersystems.signalservice.api.push.SignedPreKeyEntity;
 import org.whispersystems.signalservice.api.push.exceptions.AuthorizationFailedException;
@@ -124,7 +123,6 @@ import org.whispersystems.signalservice.internal.util.Util;
 import org.whispersystems.signalservice.internal.util.concurrent.FutureTransformers;
 import org.whispersystems.signalservice.internal.util.concurrent.ListenableFuture;
 import org.whispersystems.signalservice.internal.util.concurrent.SettableFuture;
-import org.whispersystems.signalservice.internal.websocket.DefaultErrorMapper;
 import org.whispersystems.util.Base64;
 import org.whispersystems.util.Base64UrlSafe;
 
@@ -195,10 +193,10 @@ public class PushServiceSocket {
   private static final String CHANGE_NUMBER_PATH         = "/v1/accounts/number";
   private static final String IDENTIFIER_REGISTERED_PATH = "/v1/accounts/account/%s";
 
-  private static final String PREKEY_METADATA_PATH      = "/v2/keys?identity=%s";
-  private static final String PREKEY_PATH               = "/v2/keys/%s?identity=%s";
+  private static final String PREKEY_METADATA_PATH      = "/v2/keys/";
+  private static final String PREKEY_PATH               = "/v2/keys/%s";
   private static final String PREKEY_DEVICE_PATH        = "/v2/keys/%s/%s";
-  private static final String SIGNED_PREKEY_PATH        = "/v2/keys/signed?identity=%s";
+  private static final String SIGNED_PREKEY_PATH        = "/v2/keys/signed";
 
   private static final String PROVISIONING_CODE_PATH    = "/v1/devices/provisioning/code";
   private static final String PROVISIONING_MESSAGE_PATH = "/v1/provisioning/%s";
@@ -233,7 +231,7 @@ public class PushServiceSocket {
   private static final String GROUPSV2_CREDENTIAL       = "/v1/certificate/group/%d/%d";
   private static final String GROUPSV2_GROUP            = "/v1/groups/";
   private static final String GROUPSV2_GROUP_PASSWORD   = "/v1/groups/?inviteLinkPassword=%s";
-  private static final String GROUPSV2_GROUP_CHANGES    = "/v1/groups/logs/%s?maxSupportedChangeEpoch=%d&includeFirstState=%s&includeLastState=false";
+  private static final String GROUPSV2_GROUP_CHANGES    = "/v1/groups/logs/%s";
   private static final String GROUPSV2_AVATAR_REQUEST   = "/v1/groups/avatar/form";
   private static final String GROUPSV2_GROUP_JOIN       = "/v1/groups/join/%s";
   private static final String GROUPSV2_TOKEN            = "/v1/groups/token";
@@ -332,7 +330,7 @@ public class PushServiceSocket {
     return JsonUtil.fromJson(makeServiceRequest(WHO_AM_I, "GET", null), WhoAmIResponse.class);
   }
 
-  public boolean isIdentifierRegistered(ServiceId identifier) throws IOException {
+  public boolean isIdentifierRegistered(AccountIdentifier identifier) throws IOException {
     try {
       makeServiceRequestWithoutAuthentication(String.format(IDENTIFIER_REGISTERED_PATH, identifier.toString()), "HEAD", null);
       return true;
@@ -517,15 +515,22 @@ public class PushServiceSocket {
       throws IOException
   {
     try {
-      String              responseText = makeServiceRequest(String.format(MESSAGE_PATH, bundle.getDestination()), "PUT", JsonUtil.toJson(bundle), NO_HEADERS, unidentifiedAccess);
-      SendMessageResponse response     = JsonUtil.fromJson(responseText, SendMessageResponse.class);
+      String responseText = makeServiceRequest(String.format(MESSAGE_PATH, bundle.getDestination()), "PUT", JsonUtil.toJson(bundle), NO_HEADERS, unidentifiedAccess);
 
-      response.setSentUnidentfied(unidentifiedAccess.isPresent());
-
-      return response;
+      if (responseText == null) return new SendMessageResponse(false, unidentifiedAccess.isPresent());
+      else                      return JsonUtil.fromJson(responseText, SendMessageResponse.class);
     } catch (NotFoundException nfe) {
       throw new UnregisteredUserException(bundle.getDestination(), nfe);
     }
+  }
+
+  public Future<SendMessageResponse> submitMessage(OutgoingPushMessageList bundle, Optional<UnidentifiedAccess> unidentifiedAccess) {
+    ListenableFuture<String> response = submitServiceRequest(String.format(MESSAGE_PATH, bundle.getDestination()), "PUT", JsonUtil.toJson(bundle), NO_HEADERS, unidentifiedAccess);
+
+    return FutureTransformers.map(response, body -> {
+      return body == null ? new SendMessageResponse(false, unidentifiedAccess.isPresent())
+          : JsonUtil.fromJson(body, SendMessageResponse.class);
+    });
   }
 
   public SignalServiceMessagesResult getMessages() throws IOException {
@@ -556,8 +561,7 @@ public class PushServiceSocket {
     makeServiceRequest(String.format(UUID_ACK_MESSAGE_PATH, uuid), "DELETE", null);
   }
 
-  public void registerPreKeys(ServiceIdType serviceIdType,
-                              IdentityKey identityKey,
+  public void registerPreKeys(IdentityKey identityKey,
                               SignedPreKeyRecord signedPreKey,
                               List<PreKeyRecord> records)
       throws IOException
@@ -572,17 +576,15 @@ public class PushServiceSocket {
     }
 
     SignedPreKeyEntity signedPreKeyEntity = new SignedPreKeyEntity(signedPreKey.getId(),
-                                                                   signedPreKey.getKeyPair().getPublicKey(),
-                                                                   signedPreKey.getSignature());
+        signedPreKey.getKeyPair().getPublicKey(),
+        signedPreKey.getSignature());
 
-    makeServiceRequest(String.format(Locale.US, PREKEY_PATH, "", serviceIdType.queryParam()),
-                       "PUT",
-                       JsonUtil.toJson(new PreKeyState(entities, signedPreKeyEntity, identityKey)));
+    String response = makeServiceRequest(String.format(PREKEY_PATH, ""), "PUT",
+        JsonUtil.toJson(new PreKeyState(entities, signedPreKeyEntity, identityKey)));
   }
 
-  public int getAvailablePreKeys(ServiceIdType serviceIdType) throws IOException {
-    String       path         = String.format(PREKEY_METADATA_PATH, serviceIdType.queryParam());
-    String       responseText = makeServiceRequest(path, "GET", null);
+  public int getAvailablePreKeys() throws IOException {
+    String       responseText = makeServiceRequest(PREKEY_METADATA_PATH, "GET", null);
     PreKeyStatus preKeyStatus = JsonUtil.fromJson(responseText, PreKeyStatus.class);
 
     return preKeyStatus.getCount();
@@ -671,10 +673,9 @@ public class PushServiceSocket {
     }
   }
 
-  public SignedPreKeyEntity getCurrentSignedPreKey(ServiceIdType serviceIdType) throws IOException {
+  public SignedPreKeyEntity getCurrentSignedPreKey() throws IOException {
     try {
-      String path         = String.format(SIGNED_PREKEY_PATH, serviceIdType.queryParam());
-      String responseText = makeServiceRequest(path, "GET", null);
+      String responseText = makeServiceRequest(SIGNED_PREKEY_PATH, "GET", null);
       return JsonUtil.fromJson(responseText, SignedPreKeyEntity.class);
     } catch (NotFoundException e) {
       Log.w(TAG, e);
@@ -682,12 +683,11 @@ public class PushServiceSocket {
     }
   }
 
-  public void setCurrentSignedPreKey(ServiceIdType serviceIdType, SignedPreKeyRecord signedPreKey) throws IOException {
-    String             path               = String.format(SIGNED_PREKEY_PATH, serviceIdType.queryParam());
+  public void setCurrentSignedPreKey(SignedPreKeyRecord signedPreKey) throws IOException {
     SignedPreKeyEntity signedPreKeyEntity = new SignedPreKeyEntity(signedPreKey.getId(),
                                                                    signedPreKey.getKeyPair().getPublicKey(),
                                                                    signedPreKey.getSignature());
-    makeServiceRequest(path, "PUT", JsonUtil.toJson(signedPreKeyEntity));
+    makeServiceRequest(SIGNED_PREKEY_PATH, "PUT", JsonUtil.toJson(signedPreKeyEntity));
   }
 
   public void retrieveAttachment(int cdnNumber, SignalServiceAttachmentRemoteId cdnPath, File destination, long maxSizeBytes, ProgressListener listener)
@@ -1337,7 +1337,6 @@ public class PushServiceSocket {
                                                         .newBuilder()
                                                         .connectTimeout(soTimeoutMillis, TimeUnit.MILLISECONDS)
                                                         .readTimeout(soTimeoutMillis, TimeUnit.MILLISECONDS)
-                                                        .eventListener(new LoggingOkhttpEventListener())
                                                         .build();
 
     Request.Builder request = new Request.Builder().url(buildConfiguredUrl(connectionHolder, signedUrl))
@@ -1679,11 +1678,7 @@ public class PushServiceSocket {
 
     switch (responseCode) {
       case 413:
-      case 429: {
-        long           retryAfterLong = Util.parseLong(response.header("Retry-After"), -1);
-        Optional<Long> retryAfter     = retryAfterLong != -1 ? Optional.of(TimeUnit.SECONDS.toMillis(retryAfterLong)) : Optional.absent();
-        throw new RateLimitException(responseCode, "Rate limit exceeded: " + responseCode, retryAfter);
-      }
+        throw new RateLimitException("Rate limit exceeded: " + responseCode);
       case 401:
       case 403:
         throw new AuthorizationFailedException(responseCode, "Authorization failed!");
@@ -1888,7 +1883,7 @@ public class PushServiceSocket {
       case 409:
         throw new RemoteAttestationResponseExpiredException("Remote attestation response expired");
       case 429:
-        throw new RateLimitException(response.code(), "Rate limit exceeded: " + response.code());
+        throw new RateLimitException("Rate limit exceeded: " + response.code());
     }
 
     throw new NonSuccessfulResponseCodeException(response.code(), "Response: " + response);
@@ -1985,7 +1980,7 @@ public class PushServiceSocket {
             throw new ConflictException();
           }
         case 429:
-          throw new RateLimitException(response.code(), "Rate limit exceeded: " + response.code());
+          throw new RateLimitException("Rate limit exceeded: " + response.code());
         case 499:
           throw new DeprecatedVersionException();
       }
@@ -2386,11 +2381,11 @@ public class PushServiceSocket {
     return GroupChange.parseFrom(readBodyBytes(response));
   }
 
-  public GroupHistory getGroupsV2GroupHistory(int fromVersion, GroupsV2AuthorizationString authorization, int highestKnownEpoch, boolean includeFirstState)
+  public GroupHistory getGroupsV2GroupHistory(int fromVersion, GroupsV2AuthorizationString authorization)
     throws IOException
   {
     Response response = makeStorageRequestResponse(authorization.toString(),
-                                                   String.format(Locale.US, GROUPSV2_GROUP_CHANGES, fromVersion, highestKnownEpoch, includeFirstState),
+                                                   String.format(Locale.US, GROUPSV2_GROUP_CHANGES, fromVersion),
                                                    "GET",
                                                    null,
                                                    GROUPS_V2_GET_LOGS_HANDLER);

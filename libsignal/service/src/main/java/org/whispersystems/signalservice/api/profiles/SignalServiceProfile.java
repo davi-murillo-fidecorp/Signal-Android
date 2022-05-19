@@ -12,7 +12,6 @@ import org.signal.zkgroup.InvalidInputException;
 import org.signal.zkgroup.profiles.ProfileKeyCredentialResponse;
 import org.whispersystems.libsignal.logging.Log;
 import org.whispersystems.signalservice.api.push.ACI;
-import org.whispersystems.signalservice.api.push.ServiceId;
 import org.whispersystems.signalservice.internal.util.JsonUtil;
 
 import java.math.BigDecimal;
@@ -56,9 +55,9 @@ public class SignalServiceProfile {
   private Capabilities capabilities;
 
   @JsonProperty
-  @JsonSerialize(using = JsonUtil.ServiceIdSerializer.class)
-  @JsonDeserialize(using = JsonUtil.ServiceIdDeserializer.class)
-  private ServiceId uuid;
+  @JsonSerialize(using = JsonUtil.AciSerializer.class)
+  @JsonDeserialize(using = JsonUtil.AciDeserializer.class)
+  private ACI uuid;
 
   @JsonProperty
   private byte[] credential;
@@ -111,7 +110,7 @@ public class SignalServiceProfile {
     return badges;
   }
 
-  public ServiceId getServiceId() {
+  public ACI getAci() {
     return uuid;
   }
 
@@ -193,9 +192,6 @@ public class SignalServiceProfile {
     @JsonProperty
     private boolean changeNumber;
 
-    @JsonProperty
-    private boolean stories;
-
     @JsonCreator
     public Capabilities() {}
 
@@ -221,10 +217,6 @@ public class SignalServiceProfile {
 
     public boolean isChangeNumber() {
       return changeNumber;
-    }
-
-    public boolean isStories() {
-      return stories;
     }
   }
 

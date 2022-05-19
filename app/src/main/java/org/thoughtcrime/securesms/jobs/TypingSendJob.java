@@ -122,6 +122,7 @@ public class TypingSendJob extends BaseJob {
 
     recipients = RecipientUtil.getEligibleForSending(Stream.of(recipients)
                                                            .map(Recipient::resolve)
+                                                           .filter(r -> !r.isBlocked())
                                                            .toList());
 
     SignalServiceTypingMessage typingMessage = new SignalServiceTypingMessage(typing ? Action.STARTED : Action.STOPPED, System.currentTimeMillis(), groupId);

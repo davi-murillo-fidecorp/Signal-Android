@@ -122,15 +122,6 @@
   <string name="CameraContacts_cant_find_who_youre_looking_for">Kan du ikke finde den du leder efter?</string>
   <string name="CameraContacts_invite_a_contact_to_join_signal">Inviter en kontakt til at bruge Signal</string>
   <string name="CameraContacts__menu_search">Søg</string>
-  <!--Censorship Circumvention Megaphone-->
-  <!--Title for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off_censorship_circumvention">Slå omgåelse af censur fra?</string>
-  <!--Body for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_you_can_now_connect_to_the_signal_service">Du kan nu forbinde direkte til Signal-tjenesten for at få en bedre oplevelse.</string>
-  <!--Action to prompt the user to disable circumvention since it is no longer needed-->
-  <string name="CensorshipCircumventionMegaphone_turn_off">Deaktiver</string>
-  <!--Action to prompt the user to dismiss the alert at the bottom of the chat list-->
-  <string name="CensorshipCircumventionMegaphone_no_thanks">Nej tak</string>
   <!--ClearProfileActivity-->
   <string name="ClearProfileActivity_remove">Fjern</string>
   <string name="ClearProfileActivity_remove_profile_photo">Fjern profilbillede?</string>
@@ -150,7 +141,7 @@
   <string name="CommunicationActions_cancel">Annuller</string>
   <string name="CommunicationActions_call">Ring op</string>
   <string name="CommunicationActions_insecure_call">Usikkert opkald</string>
-  <string name="CommunicationActions_carrier_charges_may_apply">Ekstra omkostninger til dit teleselskab kan forekomme. Nummeret du ringer til, er ikke et registreret Signal-nummer. Opkaldet vil ske via dit teleselskab og ikke over internettet.</string>
+  <string name="CommunicationActions_carrier_charges_may_apply">Ekstra omkostninger til dit teleselskab kan forekomme. Nummeret du ringer til er ikke et registreret Signal-nummer. Opkaldet vil ske via dit teleselskab og ikke over internettet.</string>
   <!--ConfirmIdentityDialog-->
   <string name="ConfirmIdentityDialog_your_safety_number_with_s_has_changed">Sikkerhedsnummeret for %1$s er blevet ændret. Dette kan enten betyde at nogen forsøger at opsnappe kommunikationen, eller at %2$s blot har geninstalleret Signal.</string>
   <string name="ConfirmIdentityDialog_you_may_wish_to_verify_your_safety_number_with_this_contact">Du bør verificere dit sikkerhedsnummer med denne kontakt.</string>
@@ -357,7 +348,7 @@
   </plurals>
   <string name="ConversationListFragment_select">Vælg</string>
   <plurals name="ConversationListFragment_archive_plural">
-    <item quantity="one">Arkivér</item>
+    <item quantity="one">Arkiver</item>
     <item quantity="other">Arkivér</item>
   </plurals>
   <plurals name="ConversationListFragment_unarchive_plural">
@@ -595,7 +586,7 @@
   <string name="PendingMembersActivity_you_have_no_pending_invites">Du har ingen afventende invitationer.</string>
   <string name="PendingMembersActivity_invites_by_other_group_members">Invitationer fra andre medlemmer af gruppen</string>
   <string name="PendingMembersActivity_no_pending_invites_by_other_group_members">Ingen afventende invitationer fra andre gruppemedlemmer.</string>
-  <string name="PendingMembersActivity_missing_detail_explanation">Detaljer om personer inviteret af andre medlemmer af gruppen vises ikke. Hvis de inviterede accepterer at deltage, vil deres information blive delt med gruppen derefter. De vil ingen beskeder se fra gruppen, før de tilmelder sig.</string>
+  <string name="PendingMembersActivity_missing_detail_explanation">Detaljer om personer inviteret af andre medlemmer af gruppen, vises ikke. Hvis de inviterede accepterer at deltage, vil deres information blive delt med gruppen derefter. De vil ingen beskeder se fra gruppen, før de tilmelder sig.</string>
   <string name="PendingMembersActivity_revoke_invite">Tilbagetræk invitation</string>
   <string name="PendingMembersActivity_revoke_invites">Tilbagetræk invitationer</string>
   <plurals name="PendingMembersActivity_revoke_d_invites">
@@ -936,8 +927,8 @@
   <string name="MessageRecord_left_group">Du har forladt gruppen.</string>
   <string name="MessageRecord_you_updated_group">Du opdaterede gruppen.</string>
   <string name="MessageRecord_the_group_was_updated">Gruppen blev opdateret.</string>
-  <string name="MessageRecord_you_called_date">Du ringede op · %1$s</string>
-  <string name="MessageRecord_missed_audio_call_date">Ubesvaret lydopkald · %1$s</string>
+  <string name="MessageRecord_you_called_date">Du ringede til · %1$s</string>
+  <string name="MessageRecord_missed_audio_call_date">Mistede lydopkald - %1$s</string>
   <string name="MessageRecord_missed_video_call_date">Mistet videoopkald · %1$s</string>
   <string name="MessageRecord_s_updated_group">%s opdaterede gruppen.</string>
   <string name="MessageRecord_s_called_you_date">%1$s ringede til dig · %2$s</string>
@@ -1256,11 +1247,6 @@
   <string name="RedPhone_number_not_registered">Telefonnummer ikke registreret!</string>
   <string name="RedPhone_the_number_you_dialed_does_not_support_secure_voice">Det indtastede telefonnummer understøtter ikke secure voice!</string>
   <string name="RedPhone_got_it">Forstået</string>
-  <!--Valentine\'s Day Megaphone-->
-  <!--Title text for the Valentine\'s Day donation megaphone. The placeholder will always be a heart emoji. Needs to be a placeholder for Android reasons.-->
-  <string name="ValentinesDayMegaphone_happy_heart_day">Glædelig 💜 dag!</string>
-  <!--Body text for the Valentine\'s Day donation megaphone.-->
-  <string name="ValentinesDayMegaphone_show_your_affection">Vis din hengivenhed ved at blive Signal-bidragsyder.</string>
   <!--WebRtcCallActivity-->
   <string name="WebRtcCallActivity__tap_here_to_turn_on_your_video">Tryk her for at starte video</string>
   <string name="WebRtcCallActivity__to_call_s_signal_needs_access_to_your_camera">For at ringe til %1$s kræver Signal tilladelse til at tilgå din kamera</string>
@@ -1316,7 +1302,6 @@
   <string name="WebRtcCallView__flip">Vend</string>
   <string name="WebRtcCallView__speaker">Højttaler</string>
   <string name="WebRtcCallView__camera">Kamera</string>
-  <string name="WebRtcCallView__unmute">Slå notifikationer til</string>
   <string name="WebRtcCallView__mute">Ignorer</string>
   <string name="WebRtcCallView__ring">Ring</string>
   <string name="WebRtcCallView__end_call">Afslut opkald</string>
@@ -1481,7 +1466,7 @@ nummer (%s) er ugyldigt</string>
   <string name="ThreadRecord_left_the_group">Forlod gruppen</string>
   <string name="ThreadRecord_secure_session_reset">Nulstil sikker forbindelse</string>
   <string name="ThreadRecord_draft">Kladde:</string>
-  <string name="ThreadRecord_called">Du ringede op</string>
+  <string name="ThreadRecord_called">Du ringede</string>
   <string name="ThreadRecord_called_you">Ringede til dig</string>
   <string name="ThreadRecord_missed_audio_call">Mistet lydopkald</string>
   <string name="ThreadRecord_missed_video_call">Mistet videoopkald</string>
@@ -1618,10 +1603,6 @@ nummer (%s) er ugyldigt</string>
   <string name="NotificationChannel_voice_notes">Stemmenoter</string>
   <string name="NotificationChannel_contact_joined_signal">Kontakt bruger nu Signal</string>
   <string name="NotificationChannels__no_activity_available_to_open_notification_channel_settings">Ingen aktivitet tilgængelig for at åbne indstillinger for notifikationsskanal.</string>
-  <!--Notification channel name for showing persistent background connection on devices without push notifications-->
-  <string name="NotificationChannel_background_connection">Forbindelse i baggrunden</string>
-  <!--Notification channel name for showing call status information (like connection, ongoing, etc.) Not ringing.-->
-  <string name="NotificationChannel_call_status">Opkaldsstatus</string>
   <!--ProfileEditNameFragment-->
   <!--QuickResponseService-->
   <string name="QuickResponseService_quick_response_unavailable_when_Signal_is_locked">Hurtig svar utilgængelig når Signal er låst!</string>
@@ -2187,19 +2168,6 @@ nummer (%s) er ugyldigt</string>
   <string name="preferences_chats__message_text_size">Skriftstørrelse på beskeder</string>
   <string name="preferences_events__contact_joined_signal">Kontakt er nu tilmeldt Signal</string>
   <string name="preferences_notifications__priority">Prioritet</string>
-  <!--Heading for the \'censorship circumvention\' section of privacy preferences-->
-  <string name="preferences_communication__category_censorship_circumvention">Omgåelse af censur</string>
-  <!--Title of the \'censorship circumvention\' toggle switch-->
-  <string name="preferences_communication__censorship_circumvention">Omgåelse af censur</string>
-  <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Hvis aktiveret vil Signal forsøge at omgå censur. Aktivér ikke denne funktion, medmindre du er på et sted hvor Signal er censureret</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Omgåelse af censur er blevet aktiveret baseret på din kontos telefonnummer.</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country-->
-  <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Du har manuelt deaktiveret omgåelse af censur</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service-->
-  <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Omgåelse af censur er ikke nødvendigt; du har allerede forbindelse til Signal tjenesten</string>
-  <!--Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet-->
-  <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Omgåelse af censur kan kun aktiveres, når den er tilsluttet internettet</string>
   <string name="preferences_communication__category_sealed_sender">Forseglet afsender</string>
   <string name="preferences_communication__sealed_sender_display_indicators">Vis indikator</string>
   <string name="preferences_communication__sealed_sender_display_indicators_description">Vis statusikon når du vælger \"Beskeddetaljer\" på beskeder, som er modtaget ved brug af forseglet afsender.</string>
@@ -3428,8 +3396,8 @@ nummer (%s) er ugyldigt</string>
   <string name="Subscription__s_per_month_dot_expires_s">%1$s/måned · Udløber %2$s</string>
   <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_non_profit_with_no">Signal er en non-profit uden annoncører eller investorer, som kun støttes af de mennesker, der bruger og værdsætter den. Giv et fast månedligt bidrag og få et profilemblem til at vise din støtte.</string>
   <string name="SubscribeLearnMoreBottomSheetDialogFragment__why_contribute">Hvorfor bidrage?</string>
-  <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_committed_to_developing">Signal er dedikeret til udviklingen af open source-privatlivsteknologi, der beskytter ytringsfriheden og muliggør sikker global kommunikation.</string>
-  <string name="SubscribeLearnMoreBottomSheetDialogFragment__your_contribution">Dit bidrag støtter denne sag og betaler for udviklingen og driften af en app, der bruges af millioner til privat kommunikation. Ingen reklamer. Ingen trackere. Helt seriøst.</string>
+  <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_committed_to_developing">Signal er dedikeret til udviklingen af open source-privatlivsteknologi, der beskytter ytringsfrihed og muliggør sikker global kommunikation.</string>
+  <string name="SubscribeLearnMoreBottomSheetDialogFragment__your_contribution">Dit bidrag støtter denne sag og betaler for udviklingen og driften af en app, der bruges af millioner til privat kommunikation. Ingen reklamer. Ingen trackere. Ingen spøg.</string>
   <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__thanks_for_your_support">Tak for din støtte!</string>
   <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__thanks_for_the_boost">Tak for boostet!</string>
   <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__youve_earned_s_badge_help_signal">Du har gjort dig fortjent til et %s-emblem! Hjælp Signal med at skabe opmærksomhed ved at vise dette emblem på din profil.</string>
@@ -3467,15 +3435,9 @@ nummer (%s) er ugyldigt</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__become_a_sustainer">Bliv bidragsyder</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__add_a_boost">Tilføj et Boost</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__not_now">Ikke nu</string>
-  <!--Copy displayed when badge expires after user inactivity-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_automatically">Dit abonnement som bidragsyder blev automatisk annulleret, fordi du har været inaktiv for længe. Dit %1$s-emblem er ikke længere synligt på din profil.</string>
-  <!--Copy displayed when badge expires after payment failure-->
-  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer_subscription_was_canceled">Dit Bidragsyder-abonnement blev annulleret, fordi vi ikke kunne behandle din betaling. Dit badge er ikke længere synligt på din profil.</string>
+  <string name="ExpiredBadgeBottomSheetDialogFragment__your_sustainer">Dit abonnement som bidragsyder blev automatisk annulleret, fordi du har været inaktiv for længe. Dit %1$s-emblem er ikke længere synligt på din profil.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Du kan fortsætte med at bruge Signal, men hvis du vil støtte appen og genaktivere dit badge, skal du forny nu.</string>
   <string name="ExpiredBadgeBottomSheetDialogFragment__renew_subscription">Forny abonnement</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__cant_process_subscription_payment">Kan ikke behandle betaling af abonnement</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__were_having_trouble">Vi har problemer med at modtage din Signal-bidragsyderbetaling. Sørg for, at din betalingsmetode er opdateret. Hvis den ikke er det, skal du opdatere den i Google Pay. Signal vil forsøge at behandle betalingen igen om et par dage.</string>
-  <string name="CantProcessSubscriptionPaymentBottomSheetDialogFragment__dont_show_this_again">Vis ikke dette igen</string>
   <string name="Subscription__please_contact_support_for_more_information">Kontakt venligst support for at få mere information.</string>
   <string name="Subscription__contact_support">Kontakt Support</string>
   <string name="Subscription__earn_a_s_badge">Opnå ret til et %1$s-emblem </string>
@@ -3497,34 +3459,6 @@ nummer (%s) er ugyldigt</string>
   <string name="ViewBadgeBottomSheetDialogFragment__your_device_doesn_t_support_google_pay_so_you_can_t_subscribe_to_earn_a_badge_you_can_still_support_signal_by_making_a_donation_on_our_website">Din enhed understøtter ikke Google Pay, så du kan ikke abonnere for at optjene et emblem. Du kan stadig støtte Signal ved at give et bidrag på vores hjemmeside.</string>
   <string name="NetworkFailure__network_error_check_your_connection_and_try_again">Netværksfejl. Kontroller din forbindelse, og prøv igen.</string>
   <string name="NetworkFailure__retry">Prøv igen</string>
-  <!--Stripe decline code generic_failure-->
-  <string name="DeclineCode__try_another_payment_method_or_contact_your_bank">Prøv en anden betalingsmetode, eller kontakt din bank for at få flere oplysninger.</string>
-  <!--Stripe decline code verify on Google Pay and try again-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again">Kontroller, at din betalingsmetode er opdateret i Google Pay, og prøv igen.</string>
-  <!--Stripe decline code learn more action label-->
-  <string name="DeclineCode__learn_more">Lær mere</string>
-  <!--Stripe decline code contact issuer-->
-  <string name="DeclineCode__verify_your_payment_method_is_up_to_date_in_google_pay_and_try_again_if_the_problem">Kontroller, at din betalingsmetode er opdateret i Google Pay, og prøv igen. Hvis problemet fortsætter, skal du kontakte din bank.</string>
-  <!--Stripe decline code purchase not supported-->
-  <string name="DeclineCode__your_card_does_not_support_this_type_of_purchase">Dit kort understøtter ikke denne type køb. Prøv en anden betalingsmetode.</string>
-  <!--Stripe decline code your card has expired-->
-  <string name="DeclineCode__your_card_has_expired">Dit kort er udløbet. Opdater din betalingsmetode i Google Pay, og prøv igen.</string>
-  <!--Stripe decline code go to google pay action label-->
-  <string name="DeclineCode__go_to_google_pay">Gå til Google Pay</string>
-  <!--Stripe decline code incorrect card number-->
-  <string name="DeclineCode__your_card_number_is_incorrect">Dit kortnummer er forkert. Opdater det i Google Pay, og prøv igen.</string>
-  <!--Stripe decline code incorrect cvc-->
-  <string name="DeclineCode__your_cards_cvc_number_is_incorrect">Dit kort har et forkert CVC-nummer. Opdater det i Google Pay, og prøv igen.</string>
-  <!--Stripe decline code insufficient funds-->
-  <string name="DeclineCode__your_card_does_not_have_sufficient_funds">Dit kort har ikke tilstrækkelige midler til at gennemføre dette køb. Prøv en anden betalingsmetode.</string>
-  <!--Stripe decline code incorrect expiration month-->
-  <string name="DeclineCode__the_expiration_month">Udløbsmåneden på din betalingsmetode er forkert. Opdater den i Google Pay, og prøv igen.</string>
-  <!--Stripe decline code incorrect expiration year-->
-  <string name="DeclineCode__the_expiration_year">Udløbsåret på din betalingsmetode er forkert. Opdater det i Google Pay, og prøv igen.</string>
-  <!--Stripe decline code issuer not available-->
-  <string name="DeclineCode__try_completing_the_payment_again">Prøv at gennemføre betalingen igen, eller kontakt din bank for at få flere oplysninger.</string>
-  <!--Stripe decline code processing error-->
-  <string name="DeclineCode__try_again">Prøv igen, eller kontakt din bank for at få flere oplysninger.</string>
   <!--Title of create notification profile screen-->
   <string name="EditNotificationProfileFragment__name_your_profile">Navngiv din profil</string>
   <!--Hint text for create/edit notification profile name-->

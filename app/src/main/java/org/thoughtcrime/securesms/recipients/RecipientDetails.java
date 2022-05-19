@@ -12,7 +12,6 @@ import org.thoughtcrime.securesms.conversation.colors.AvatarColor;
 import org.thoughtcrime.securesms.conversation.colors.ChatColors;
 import org.thoughtcrime.securesms.database.RecipientDatabase.InsightsBannerTier;
 import org.thoughtcrime.securesms.database.RecipientDatabase.MentionSetting;
-import org.thoughtcrime.securesms.database.model.DistributionListId;
 import org.thoughtcrime.securesms.database.model.RecipientRecord;
 import org.thoughtcrime.securesms.database.RecipientDatabase.RegisteredState;
 import org.thoughtcrime.securesms.database.RecipientDatabase.UnidentifiedAccessMode;
@@ -26,7 +25,6 @@ import org.thoughtcrime.securesms.wallpaper.ChatWallpaper;
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.push.ACI;
 import org.whispersystems.signalservice.api.push.PNI;
-import org.whispersystems.signalservice.api.push.ServiceId;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -34,13 +32,12 @@ import java.util.List;
 
 public class RecipientDetails {
 
-  final ServiceId                  serviceId;
+  final ACI                        aci;
   final PNI                        pni;
   final String                     username;
   final String                     e164;
   final String                     email;
   final GroupId                    groupId;
-  final DistributionListId         distributionListId;
   final String                     groupName;
   final String                     systemContactName;
   final String                     customLabel;
@@ -74,7 +71,6 @@ public class RecipientDetails {
   final Recipient.Capability       senderKeyCapability;
   final Recipient.Capability       announcementGroupCapability;
   final Recipient.Capability       changeNumberCapability;
-  final Recipient.Capability       storiesCapability;
   final InsightsBannerTier         insightsBannerTier;
   final byte[]                     storageId;
   final MentionSetting             mentionSetting;
@@ -103,13 +99,12 @@ public class RecipientDetails {
     this.systemContactPhoto          = Util.uri(record.getSystemContactPhotoUri());
     this.customLabel                 = record.getSystemPhoneLabel();
     this.contactUri                  = Util.uri(record.getSystemContactUri());
-    this.serviceId                   = record.getServiceId();
+    this.aci                         = record.getAci();
     this.pni                         = record.getPni();
     this.username                    = record.getUsername();
     this.e164                        = record.getE164();
     this.email                       = record.getEmail();
     this.groupId                     = record.getGroupId();
-    this.distributionListId          = record.getDistributionListId();
     this.messageRingtone             = record.getMessageRingtone();
     this.callRingtone                = record.getCallRingtone();
     this.mutedUntil                  = record.getMuteUntil();
@@ -137,7 +132,6 @@ public class RecipientDetails {
     this.senderKeyCapability         = record.getSenderKeyCapability();
     this.announcementGroupCapability = record.getAnnouncementGroupCapability();
     this.changeNumberCapability      = record.getChangeNumberCapability();
-    this.storiesCapability           = record.getStoriesCapability();
     this.insightsBannerTier          = record.getInsightsBannerTier();
     this.storageId                   = record.getStorageId();
     this.mentionSetting              = record.getMentionSetting();
@@ -155,18 +149,20 @@ public class RecipientDetails {
     this.isReleaseChannel            = isReleaseChannel;
   }
 
-  private RecipientDetails() {
+  /**
+   * Only used for {@link Recipient#UNKNOWN}.
+   */
+  RecipientDetails() {
     this.groupAvatarId               = null;
     this.systemContactPhoto          = null;
     this.customLabel                 = null;
-    this.contactUri = null;
-    this.serviceId  = null;
-    this.pni        = null;
+    this.contactUri                  = null;
+    this.aci                         = null;
+    this.pni                         = null;
     this.username                    = null;
     this.e164                        = null;
     this.email                       = null;
     this.groupId                     = null;
-    this.distributionListId          = null;
     this.messageRingtone             = null;
     this.callRingtone                = null;
     this.mutedUntil                  = 0;
@@ -196,7 +192,6 @@ public class RecipientDetails {
     this.senderKeyCapability         = Recipient.Capability.UNKNOWN;
     this.announcementGroupCapability = Recipient.Capability.UNKNOWN;
     this.changeNumberCapability      = Recipient.Capability.UNKNOWN;
-    this.storiesCapability           = Recipient.Capability.UNKNOWN;
     this.storageId                   = null;
     this.mentionSetting              = MentionSetting.ALWAYS_NOTIFY;
     this.wallpaper                   = null;
@@ -215,7 +210,7 @@ public class RecipientDetails {
   public static @NonNull RecipientDetails forIndividual(@NonNull Context context, @NonNull RecipientRecord settings) {
     boolean systemContact    = !settings.getSystemProfileName().isEmpty();
     boolean isSelf           = (settings.getE164() != null && settings.getE164().equals(SignalStore.account().getE164())) ||
-                               (settings.getServiceId() != null && settings.getServiceId().equals(SignalStore.account().getAci()));
+                               (settings.getAci() != null && settings.getAci().equals(SignalStore.account().getAci()));
     boolean isReleaseChannel = settings.getId().equals(SignalStore.releaseChannelValues().getReleaseChannelRecipientId());
 
     RegisteredState registeredState = settings.getRegistered();
@@ -229,13 +224,5 @@ public class RecipientDetails {
     }
 
     return new RecipientDetails(null, settings.getSystemDisplayName(), Optional.absent(), systemContact, isSelf, registeredState, settings, null, isReleaseChannel);
-  }
-
-  public static @NonNull RecipientDetails forDistributionList(String title, @Nullable List<Recipient> members, @NonNull RecipientRecord record) {
-    return new RecipientDetails(title, null, Optional.absent(), false, false, record.getRegistered(), record, members, false);
-  }
-
-  public static @NonNull RecipientDetails forUnknown() {
-    return new RecipientDetails();
   }
 }

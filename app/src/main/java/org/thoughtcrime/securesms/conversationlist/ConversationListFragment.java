@@ -86,7 +86,6 @@ import org.thoughtcrime.securesms.NewConversationActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.badges.BadgeImageView;
 import org.thoughtcrime.securesms.badges.models.Badge;
-import org.thoughtcrime.securesms.badges.self.expired.CantProcessSubscriptionPaymentBottomSheetDialogFragment;
 import org.thoughtcrime.securesms.badges.self.expired.ExpiredBadgeBottomSheetDialogFragment;
 import org.thoughtcrime.securesms.components.RatingManager;
 import org.thoughtcrime.securesms.components.SearchToolbar;
@@ -106,7 +105,6 @@ import org.thoughtcrime.securesms.components.reminder.ServiceOutageReminder;
 import org.thoughtcrime.securesms.components.reminder.UnauthorizedReminder;
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity;
 import org.thoughtcrime.securesms.components.settings.app.notifications.manual.NotificationProfileSelectionFragment;
-import org.thoughtcrime.securesms.components.settings.app.subscription.errors.UnexpectedSubscriptionCancellation;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaControllerOwner;
 import org.thoughtcrime.securesms.components.voice.VoiceNotePlayerView;
 import org.thoughtcrime.securesms.conversation.ConversationFragment;
@@ -361,20 +359,13 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       RecaptchaProofBottomSheetFragment.show(getChildFragmentManager());
     }
 
-    Badge                              expiredBadge                       = SignalStore.donationsValues().getExpiredBadge();
-    String                             subscriptionCancellationReason     = SignalStore.donationsValues().getUnexpectedSubscriptionCancelationReason();
-    UnexpectedSubscriptionCancellation unexpectedSubscriptionCancellation = UnexpectedSubscriptionCancellation.fromStatus(subscriptionCancellationReason);
-
+    Badge expiredBadge = SignalStore.donationsValues().getExpiredBadge();
     if (expiredBadge != null) {
       SignalStore.donationsValues().setExpiredBadge(null);
 
       if (expiredBadge.isBoost() || !SignalStore.donationsValues().isUserManuallyCancelled()) {
-        Log.w(TAG, "Displaying bottom sheet for an expired badge", true);
-        ExpiredBadgeBottomSheetDialogFragment.show(expiredBadge, unexpectedSubscriptionCancellation, getParentFragmentManager());
+        ExpiredBadgeBottomSheetDialogFragment.show(expiredBadge, getParentFragmentManager());
       }
-    } else if (unexpectedSubscriptionCancellation != null && !SignalStore.donationsValues().isUserManuallyCancelled() && SignalStore.donationsValues().getShowCantProcessDialog()) {
-      Log.w(TAG, "Displaying bottom sheet for unexpected cancellation: " + unexpectedSubscriptionCancellation, true);
-      new CantProcessSubscriptionPaymentBottomSheetDialogFragment().show(getChildFragmentManager(), BottomSheetUtil.STANDARD_BOTTOM_SHEET_FRAGMENT_TAG);
     }
   }
 
@@ -765,7 +756,9 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   }
 
   private void onMegaphoneChanged(@Nullable Megaphone megaphone) {
-    if (megaphone == null) {
+
+    /*if (megaphone == null) {
+      return;
       if (megaphoneContainer.resolved()) {
         megaphoneContainer.get().setVisibility(View.GONE);
         megaphoneContainer.get().removeAllViews();
@@ -788,7 +781,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       }
     }
 
-    viewModel.onMegaphoneVisible(megaphone);
+    viewModel.onMegaphoneVisible(megaphone);*/
   }
 
   private void updateReminders() {
@@ -1468,9 +1461,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     private final int archiveColorStart;
     private final int archiveColorEnd;
 
-    private final float ESCAPE_VELOCITY    = ViewUtil.dpToPx(1000);
-    private final float VELOCITY_THRESHOLD = ViewUtil.dpToPx(1000);
-
     private WeakReference<RecyclerView.ViewHolder> lastTouched;
 
     ArchiveListenerCallback(@ColorInt int archiveColorStart, @ColorInt int archiveColorEnd) {
@@ -1485,16 +1475,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
                           @NonNull RecyclerView.ViewHolder target)
     {
       return false;
-    }
-
-    @Override
-    public float getSwipeEscapeVelocity(float defaultValue) {
-      return Math.min(ESCAPE_VELOCITY, VELOCITY_THRESHOLD);
-    }
-
-    @Override
-    public float getSwipeVelocityThreshold(float defaultValue) {
-      return VELOCITY_THRESHOLD;
     }
 
     @Override

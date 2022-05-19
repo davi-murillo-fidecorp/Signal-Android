@@ -20,7 +20,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -124,12 +123,12 @@ public abstract class ContactSelectionActivity extends PassphraseRequiredActivit
   }
 
   @Override
-  public void onBeforeContactSelected(@NonNull Optional<RecipientId> recipientId, String number, @NonNull Consumer<Boolean> callback) {
+  public void onBeforeContactSelected(Optional<RecipientId> recipientId, String number, Consumer<Boolean> callback) {
     callback.accept(true);
   }
 
   @Override
-  public void onContactDeselected(@NonNull Optional<RecipientId> recipientId, String number) {}
+  public void onContactDeselected(Optional<RecipientId> recipientId, String number) {}
 
   @Override
   public void onBeginScroll() {

@@ -29,9 +29,11 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
-public class GroupsV2Api {
+public final class GroupsV2Api {
 
   private final PushServiceSocket  socket;
   private final GroupsV2Operations groupsOperations;
@@ -83,16 +85,6 @@ public class GroupsV2Api {
     socket.putNewGroupsV2Group(group, authorization);
   }
 
-  public PartialDecryptedGroup getPartialDecryptedGroup(GroupSecretParams groupSecretParams,
-                                                        GroupsV2AuthorizationString authorization)
-      throws IOException, InvalidGroupStateException, VerificationFailedException
-  {
-    Group group = socket.getGroupsV2Group(authorization);
-
-    return groupsOperations.forGroup(groupSecretParams)
-                           .partialDecryptGroup(group);
-  }
-
   public DecryptedGroup getGroup(GroupSecretParams groupSecretParams,
                                  GroupsV2AuthorizationString authorization)
       throws IOException, InvalidGroupStateException, VerificationFailedException
@@ -104,18 +96,23 @@ public class GroupsV2Api {
   }
 
   public GroupHistoryPage getGroupHistoryPage(GroupSecretParams groupSecretParams,
-                                              int fromRevision,
-                                              GroupsV2AuthorizationString authorization,
-                                              boolean includeFirstState)
+                                          int fromRevision,
+                                          GroupsV2AuthorizationString authorization)
       throws IOException, InvalidGroupStateException, VerificationFailedException
   {
-    PushServiceSocket.GroupHistory     group           = socket.getGroupsV2GroupHistory(fromRevision, authorization, GroupsV2Operations.HIGHEST_KNOWN_EPOCH, includeFirstState);
-    List<DecryptedGroupHistoryEntry>   result          = new ArrayList<>(group.getGroupChanges().getGroupChangesList().size());
-    GroupsV2Operations.GroupOperations groupOperations = groupsOperations.forGroup(groupSecretParams);
+    List<GroupChanges.GroupChangeState> changesList = new LinkedList<>();
+    PushServiceSocket.GroupHistory      group;
 
-    for (GroupChanges.GroupChangeState change : group.getGroupChanges().getGroupChangesList()) {
-      Optional<DecryptedGroup>       decryptedGroup  = change.hasGroupState() ? Optional.of(groupOperations.decryptGroup(change.getGroupState())) : Optional.absent();
-      Optional<DecryptedGroupChange> decryptedChange = change.hasGroupChange() ? groupOperations.decryptChange(change.getGroupChange(), false) : Optional.absent();
+    group = socket.getGroupsV2GroupHistory(fromRevision, authorization);
+
+    changesList.addAll(group.getGroupChanges().getGroupChangesList());
+
+    ArrayList<DecryptedGroupHistoryEntry> result          = new ArrayList<>(changesList.size());
+    GroupsV2Operations.GroupOperations    groupOperations = groupsOperations.forGroup(groupSecretParams);
+
+    for (GroupChanges.GroupChangeState change : changesList) {
+      Optional<DecryptedGroup>       decryptedGroup  = change.hasGroupState () ? Optional.of(groupOperations.decryptGroup(change.getGroupState())) : Optional.absent();
+      Optional<DecryptedGroupChange> decryptedChange = change.hasGroupChange() ? groupOperations.decryptChange(change.getGroupChange(), false)     : Optional.absent();
 
       result.add(new DecryptedGroupHistoryEntry(decryptedGroup, decryptedChange));
     }
